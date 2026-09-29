@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------ Jetons */
+:root {
+  --night: #120f36;
+  --night-2: #1d1852;
+  --brand: #6d5cff;
+  --brand-2: #8f82ff;
+  --brand-ink: #ffffff;
+
+  --bg: #f3f2ff;
+  --surface: #ffffff;
+  --ink: #17143a;
+  --muted: #625e86;
+  --line: #e1def7;
+
+  --ok: #13865a;
+  --ok-soft: #e0f5ec;
+  --warn-soft: #fff3d1;
+  --warn-ink: #7a5300;
+  --danger: #c0271c;
+  --danger-soft: #fde9e7;
+
+  --shadow-lg: 0 24px 60px -24px rgb(40 30 140 / 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0c29;
+    --surface: #1a1745;
+    --ink: #eeecff;
+    --muted: #a6a1d4;
+    --line: #2d2966;
+    --ok: #4fd49b;
+    --ok-soft: #0f3326;
+    --warn-soft: #3a2e10;
+    --warn-ink: #f3cf73;
+    --danger: #ff8b80;
+    --danger-soft: #3d1519;
+    --shadow-lg: 0 24px 60px -24px rgb(0 0 0 / 0.6);
+  }
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-ink: var(--brand-ink);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Les éléments 3D ne doivent jamais créer de défilement horizontal */
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-body), sans-serif;
+  font-optical-sizing: auto;
+}
+
+/* ------------------------------------------------------------ Scène nocturne */
+.scene {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 70% 10%, var(--night-2) 0%, var(--night) 60%);
+  color: #fff;
+}
+
+/* Halos de couleur qui dérivent */
+.aurora {
+  position: absolute;
+  inset: -20%;
+  z-index: -2;
+  pointer-events: none;
+  filter: blur(70px);
+  opacity: 0.75;
+}
+.aurora span {
+  position: absolute;
+  width: 42vmax;
+  height: 42vmax;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: drift 22s ease-in-out infinite alternate;
+}
+.aurora span:nth-child(1) { background: #6d5cff; left: 5%; top: 10%; }
+.aurora span:nth-child(2) { background: #e5322d; left: 55%; top: 0%; opacity: 0.45; animation-duration: 28s; animation-delay: -6s; }
+.aurora span:nth-child(3) { background: #2b6cf0; left: 35%; top: 45%; opacity: 0.6; animation-duration: 25s; animation-delay: -12s; }
+.aurora span:nth-child(4) { background: #1d9e5a; left: 75%; top: 50%; opacity: 0.35; animation-duration: 31s; animation-delay: -3s; }
+
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(8vmax, -6vmax) scale(1.15); }
+  100% { transform: translate(-6vmax, 5vmax) scale(0.9); }
+}
+
+/* Sol quadrillé en perspective qui avance vers l'utilisateur */
+.floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -2px;
+  height: 55%;
+  z-index: -1;
+  pointer-events: none;
+  perspective: 420px;
+  mask-image: linear-gradient(to top, #000 10%, transparent 95%);
+}
+.floor::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -100% 0;
+  transform: rotateX(62deg);
+  transform-origin: 50% 0;
+  background-image:
+    linear-gradient(to right, rgb(143 130 255 / 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(143 130 255 / 0.35) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: floor-move 3.5s linear infinite;
+}
+@keyframes floor-move {
+  to { background-position: 0 56px; }
+}
+
+/* Grain léger pour éviter l'effet « dégradé numérique » */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------ Anneau 3D interactif */
+.orbit-stage {
+  cursor: grab;
+}
+.orbit-stage[data-grabbing] ,
+.orbit-stage[data-grabbing] .orbit-piece {
+  cursor: grabbing;
+}
+.orbit-piece {
+  cursor: grab;
+  will-change: transform;
+  transform-origin: 50% 50%;
+}
+.orbit-core-btn {
+  cursor: pointer;
+  will-change: transform;
+  border-radius: 1rem;
+}
+
+/* ------------------------------------------------------------ Bandeau défilant des formats */
+.marquee {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 14px;
+  animation: marquee 60s linear infinite;
+}
+.marquee-track.reverse {
+  animation-direction: reverse;
+  animation-duration: 70s;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ------------------------------------------------------------ Cartes outils inclinables */
+.tilt {
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s, border-color 0.35s;
+}
+.tilt:hover {
+  box-shadow: var(--shadow-lg);
+}
+.tilt-glare {
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.35), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tilt:hover .tilt-glare {
+  opacity: 1;
+}
+.tilt-lift {
+  transform: translateZ(28px);
+}
+
+/* ------------------------------------------------------------ Zone de dépôt */
+.drop-ring {
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    conic-gradient(from var(--angle, 0deg), #e5322d, #2b6cf0, #1d9e5a, #f0662b, #a24bf0, #e5322d) border-box;
+  border: 2px dashed transparent;
+}
+.drop-ring.active {
+  animation: ring-rotate 2.5s linear infinite;
+}
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ring-rotate {
+  to { --angle: 360deg; }
+}
+
+/* Documents qui flottent dans la zone de dépôt vide */
+.float-doc {
+  animation: float-doc 5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes float-doc {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50% { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) * -1)); }
+}
+
+/* Arrivée d'un fichier dans la liste */
+.file-in {
+  animation: file-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+@keyframes file-in {
+  from { opacity: 0; transform: perspective(600px) rotateX(-50deg) translateY(-12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Succès */
+.pop {
+  animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: none; }
+}
+
+.progress-stripes {
+  background-image: linear-gradient(45deg, rgb(255 255 255 / 0.25) 25%, transparent 25%, transparent 50%, rgb(255 255 255 / 0.25) 50%, rgb(255 255 255 / 0.25) 75%, transparent 75%);
+  background-size: 18px 18px;
+  animation: stripes 0.7s linear infinite;
+}
+@keyframes stripes {
+  to { background-position: 18px 0; }
+}
+
+/* ------------------------------------------------------------ Mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .tilt { transform: none !important; }
+}
