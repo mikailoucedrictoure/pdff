@@ -21,7 +21,7 @@ function pad(n: number, total: number): string {
 
 function assertPageLimit(count: number) {
   if (count > limits.maxPages) {
-    throw new UserError(`Le document compte ${count} pages, au-delà de la limite de ${limits.maxPages} pages.`);
+    throw new UserError("pageLimitDocument", { count, max: limits.maxPages });
   }
 }
 
@@ -33,15 +33,11 @@ async function open(file: FileData, password?: string) {
     const magic = ext === "md" || ext === "csv" ? "text/plain" : mimeOf(ext);
     doc = m.Document.openDocument(file.data, magic);
   } catch {
-    throw new UserError(`Impossible de lire « ${file.name} » : fichier endommagé ou format non reconnu.`);
+    throw new UserError("unreadable", { name: file.name });
   }
   if (doc.needsPassword()) {
     if (!password || !doc.authenticatePassword(password)) {
-      throw new UserError(
-        password
-          ? `Mot de passe incorrect pour « ${file.name} ».`
-          : `« ${file.name} » est protégé par un mot de passe. Utilisez d'abord l'outil « Déverrouiller ».`,
-      );
+      throw new UserError(password ? "wrongPassword" : "passwordProtected", { name: file.name });
     }
   }
   return { m, doc };
@@ -124,7 +120,7 @@ export async function toPdf(file: FileData): Promise<FileData> {
 export async function rewritePdf(file: FileData, options: string, password?: string): Promise<Uint8Array> {
   const { doc } = await open(file, password);
   const pdf = doc.asPDF();
-  if (!pdf) throw new UserError(`« ${file.name} » n'est pas un PDF.`);
+  if (!pdf) throw new UserError("notPdf", { name: file.name });
   const out = new Uint8Array(pdf.saveToBuffer(options).asUint8Array());
   doc.destroy();
   return out;
@@ -151,7 +147,7 @@ export function encrypt(file: FileData, o: EncryptOptions): Promise<Uint8Array> 
   if (o.noCopy) permissions &= ~(16 | 512);
   // Les options MuPDF sont séparées par des virgules : on les refuse dans les mots de passe.
   if (/,/.test(o.userPassword) || /,/.test(o.ownerPassword)) {
-    throw new UserError("Le mot de passe ne peut pas contenir de virgule.");
+    throw new UserError("passwordComma");
   }
   return rewritePdf(
     file,

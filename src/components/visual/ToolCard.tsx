@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
+import { useI18n } from "@/i18n/client";
 import type { ToolMeta } from "@/lib/core/tools";
 import { ToolIcon } from "./ToolIcon";
 
@@ -16,6 +17,7 @@ const CATEGORY_TINT: Record<ToolMeta["category"], string> = {
 export function ToolCard({ tool }: { tool: ToolMeta }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const tint = CATEGORY_TINT[tool.category];
+  const text = useI18n().messages.tools[tool.id];
 
   function onMove(e: React.PointerEvent) {
     if (e.pointerType !== "mouse") return;
@@ -49,8 +51,8 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
         <ToolIcon id={tool.id} />
       </span>
       <span className="tilt-lift min-w-0">
-        <span className="font-display block text-lg leading-tight font-semibold">{tool.name}</span>
-        <span className="mt-1 block text-sm leading-snug text-muted">{tool.tagline}</span>
+        <span className="font-display block text-lg leading-tight font-semibold">{text.name}</span>
+        <span className="mt-1 block text-sm leading-snug text-muted">{text.tagline}</span>
       </span>
     </Link>
   );

@@ -31,7 +31,7 @@ class Options {
 
 function requirePdf(file: FileData) {
   if (canonicalExt(extOf(file.name)) !== "pdf") {
-    throw new UserError(`« ${file.name} » n'est pas un PDF. Convertissez-le d'abord.`);
+    throw new UserError("notPdfConvertFirst", { name: file.name });
   }
 }
 
@@ -45,7 +45,7 @@ async function eachPdf(files: FileData[], fn: (file: FileData, doc: Awaited<Retu
       const result = await fn(file, doc);
       out.push(...(Array.isArray(result) ? result : [result]));
     } catch (err) {
-      if (err instanceof PageSelectionError) throw new UserError(`${file.name} : ${err.message}`);
+      if (err instanceof PageSelectionError) throw new UserError(err.key, err.params, file.name);
       throw err;
     }
   }
@@ -66,7 +66,7 @@ const runners: Record<string, Runner> = {
 
   async convertir(files, o) {
     const target = o.str("target");
-    if (!target) throw new UserError("Choisissez le format de sortie.");
+    if (!target) throw new UserError("chooseTarget");
     const engines = await availableEngines();
     const settings = { dpi: o.num("dpi", 150), quality: o.num("quality", 90) };
     const out: FileData[] = [];
@@ -102,7 +102,7 @@ const runners: Record<string, Runner> = {
     eachPdf(files, async (file, doc) => {
       const selected = parsePageSet(o.str("pages"), doc.getPageCount());
       const keep = doc.getPageIndices().filter((i) => (o.str("mode") === "remove" ? !selected.has(i) : selected.has(i)));
-      if (!keep.length) throw new UserError("Le document résultant ne contiendrait aucune page.");
+      if (!keep.length) throw new UserError("emptyResult");
       return { name: pdf.pdfName(file, "-extrait"), data: await pdf.pickPages(doc, keep) };
     }),
 
@@ -158,7 +158,7 @@ const runners: Record<string, Runner> = {
   async proteger(files, o) {
     const password = o.str("password");
     const restricted = o.bool("noPrint") || o.bool("noCopy") || o.bool("noEdit");
-    if (!password && !restricted) throw new UserError("Indiquez un mot de passe ou au moins une restriction.");
+    if (!password && !restricted) throw new UserError("passwordOrRestriction");
     const out: FileData[] = [];
     for (const file of files) {
       requirePdf(file);
@@ -198,11 +198,11 @@ const runners: Record<string, Runner> = {
 
 export async function runTool(toolId: string, files: FileData[], values: OptionValues): Promise<FileData[]> {
   const runner = runners[toolId];
-  if (!runner) throw new UserError(`Outil inconnu : ${toolId}`);
+  if (!runner) throw new UserError("unknownTool");
   try {
     return await runner(files, new Options(values));
   } catch (err) {
-    if (err instanceof PageSelectionError) throw new UserError(err.message);
+    if (err instanceof PageSelectionError) throw new UserError(err.key, err.params);
     throw err;
   }
 }

@@ -46,13 +46,13 @@ export async function convertImage(file: FileData, target: string, quality: numb
       img = img.gif();
       break;
     default:
-      throw new UserError(`Format image non pris en charge : ${target}`);
+      throw new UserError("imageFormat", { format: target });
   }
   try {
     const data = await img.toBuffer();
     return { name: `${baseName(file.name)}.${target}`, data: new Uint8Array(data) };
   } catch {
-    throw new UserError(`Impossible de convertir « ${file.name} » : image illisible ou endommagée.`);
+    throw new UserError("imageConvert", { name: file.name });
   }
 }
 
@@ -82,11 +82,11 @@ export async function appendImage(pdf: PDFDocument, file: FileData): Promise<voi
   try {
     meta = await input(file).metadata();
   } catch {
-    throw new UserError(`« ${file.name} » n'est pas une image lisible.`);
+    throw new UserError("imageUnreadable", { name: file.name });
   }
   const pages = ext === "tiff" ? meta.pages ?? 1 : 1;
   if (pdf.getPageCount() + pages > limits.maxPages) {
-    throw new UserError(`Limite de ${limits.maxPages} pages dépassée.`);
+    throw new UserError("pageLimit", { max: limits.maxPages });
   }
 
   for (let p = 0; p < pages; p++) {

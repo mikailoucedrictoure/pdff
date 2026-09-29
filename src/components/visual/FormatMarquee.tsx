@@ -1,7 +1,9 @@
 import { FORMATS, SHOWCASE_EXTENSIONS } from "@/lib/core/formats";
 import { FileGlyph } from "./FileGlyph";
 
-function Row({ exts, reverse }: { exts: string[]; reverse?: boolean }) {
+type Names = Partial<Record<string, string>>;
+
+function Row({ exts, names, reverse }: { exts: string[]; names: Names; reverse?: boolean }) {
   // Liste doublée pour une boucle sans à-coup
   const items = [...exts, ...exts];
   return (
@@ -14,7 +16,7 @@ function Row({ exts, reverse }: { exts: string[]; reverse?: boolean }) {
             className="flex shrink-0 items-center gap-3 rounded-2xl border border-line bg-surface py-2 pl-2 pr-4 shadow-sm"
           >
             <FileGlyph ext={ext} className="h-10 w-8" />
-            <span className="text-sm font-medium whitespace-nowrap">{FORMATS[ext]?.label ?? ext.toUpperCase()}</span>
+            <span className="text-sm font-medium whitespace-nowrap">{names[ext] ?? FORMATS[ext]?.label ?? ext.toUpperCase()}</span>
           </li>
         ))}
       </ul>
@@ -23,12 +25,12 @@ function Row({ exts, reverse }: { exts: string[]; reverse?: boolean }) {
 }
 
 /** Tous les formats pris en charge, sur deux rangées qui défilent en sens inverse. */
-export function FormatMarquee() {
+export function FormatMarquee({ names }: { names: Names }) {
   const half = Math.ceil(SHOWCASE_EXTENSIONS.length / 2);
   return (
     <div className="space-y-2">
-      <Row exts={SHOWCASE_EXTENSIONS.slice(0, half)} />
-      <Row exts={SHOWCASE_EXTENSIONS.slice(half)} reverse />
+      <Row exts={SHOWCASE_EXTENSIONS.slice(0, half)} names={names} />
+      <Row exts={SHOWCASE_EXTENSIONS.slice(half)} names={names} reverse />
     </div>
   );
 }

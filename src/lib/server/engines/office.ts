@@ -106,7 +106,7 @@ function run(bin: string, args: string[]): Promise<{ code: number | null; output
     child.stderr.on("data", (d) => (output += d));
     const timer = setTimeout(() => {
       child.kill();
-      reject(new UserError("La conversion a pris trop de temps et a été interrompue."));
+      reject(new UserError("officeTimeout"));
     }, TIMEOUT_MS);
     child.on("error", (err) => {
       clearTimeout(timer);
@@ -127,13 +127,11 @@ export interface OfficeConvertOptions {
 export async function convertWithOffice(file: FileData, target: string, opts: OfficeConvertOptions = {}): Promise<FileData> {
   const bin = await findLibreOffice();
   if (!bin) {
-    throw new UserError(
-      "LibreOffice est nécessaire pour cette conversion (Word, Excel, PowerPoint…). Installez-le puis redémarrez pdff.",
-    );
+    throw new UserError("officeMissing");
   }
   const sourceExt = canonicalExt(extOf(file.name));
   const filter = target === "pdf" ? pdfFilter(sourceExt) : EXPORT_FILTERS[target];
-  if (!filter) throw new UserError(`Conversion vers ${target.toUpperCase()} non prise en charge.`);
+  if (!filter) throw new UserError("officeTarget", { target: target.toUpperCase() });
 
   return serialize(async () => {
     const work = await mkdtemp(path.join(tmpdir(), "pdff-"));
@@ -165,7 +163,7 @@ export async function convertWithOffice(file: FileData, target: string, opts: Of
       const produced = (await readdir(outDir)).find((f) => extOf(f) === target);
       if (!produced) {
         console.error("[pdff] LibreOffice :", output);
-        throw new UserError(`LibreOffice n'a pas pu convertir « ${file.name} » en ${target.toUpperCase()}.`);
+        throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
       }
       const data = await readFile(path.join(outDir, produced));
       return { name: `${baseName(file.name)}.${target}`, data: new Uint8Array(data) };

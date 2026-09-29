@@ -38,14 +38,14 @@ export async function loadPdf(file: FileData): Promise<PDFDocument> {
       return await PDFDocument.load(repaired, { updateMetadata: false });
     } catch (err2) {
       if (err2 instanceof UserError) throw err2;
-      throw new UserError(`Impossible de lire « ${file.name} » : PDF endommagé.`);
+      throw new UserError("damagedPdf", { name: file.name });
     }
   }
 }
 
 function assertPageLimit(count: number) {
   if (count > limits.maxPages) {
-    throw new UserError(`Le résultat compterait ${count} pages, au-delà de la limite de ${limits.maxPages} pages.`);
+    throw new UserError("pageLimitResult", { count, max: limits.maxPages });
   }
 }
 
@@ -242,7 +242,7 @@ const COLORS = {
 export async function watermark(doc: PDFDocument, o: WatermarkOptions): Promise<Uint8Array> {
   const font = await doc.embedFont(StandardFonts.HelveticaBold);
   const text = winAnsiSafe(o.text, font);
-  if (!text.trim()) throw new UserError("Indiquez le texte du filigrane.");
+  if (!text.trim()) throw new UserError("watermarkText");
   const rad = (o.rotation * Math.PI) / 180;
   doc.getPages().forEach((page, i) => {
     if (!o.pages.has(i)) return;

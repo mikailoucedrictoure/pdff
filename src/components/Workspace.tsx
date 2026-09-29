@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ALL_EXTENSIONS, CATEGORY_LABELS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
+import { useI18n } from "@/i18n/client";
+import { fmt } from "@/i18n/locales";
+import type { Messages } from "@/i18n/messages/fr";
+import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { useCapabilities } from "./useCapabilities";
@@ -20,11 +23,35 @@ type Status =
   | { kind: "done"; url: string; name: string; size: number; count: number; seconds: number }
   | { kind: "error"; message: string };
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} o`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} Ko`;
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
-  return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} Go`;
+/** Textes d'une option d'outil (voir `tools.<id>.options` dans les traductions). */
+interface OptionText {
+  label: string;
+  help?: string;
+  placeholder?: string;
+  default?: string;
+  choices?: Record<string, string>;
+}
+
+type WorkspaceText = Messages["workspace"];
+
+function formatSize(bytes: number, locale: string): string {
+  const units = [
+    ["byte", 1],
+    ["kilobyte", 1024],
+    ["megabyte", 1024 ** 2],
+    ["gigabyte", 1024 ** 3],
+  ] as const;
+  const [unit, size] = [...units].reverse().find(([, s]) => bytes >= s) ?? units[0];
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "unit",
+      unit,
+      unitDisplay: "short",
+      maximumFractionDigits: unit === "byte" || unit === "kilobyte" ? 0 : 1,
+    }).format(bytes / size);
+  } catch {
+    return `${(bytes / size).toFixed(1)} ${unit}`;
+  }
 }
 
 function filenameFrom(header: string | null, fallback: string): string {
@@ -41,10 +68,18 @@ const newId = () => `f${++uid}-${Date.now()}`;
 export function Workspace({ toolId }: { toolId: string }) {
   const tool = getTool(toolId)!;
   const caps = useCapabilities();
+  const { messages: m, locale } = useI18n();
+  const w = m.workspace;
+  const toolText = m.tools[tool.id];
+  const optionTexts = toolText.options as Record<string, OptionText>;
+  const optText = (name: string): OptionText => optionTexts[name] ?? { label: name };
+
   const engines = useMemo(() => new Set<EngineId>(caps?.engines ?? []), [caps]);
 
   const [items, setItems] = useState<Item[]>([]);
-  const [options, setOptions] = useState<OptionValues>(() => defaultOptions(tool));
+  const [options, setOptions] = useState<OptionValues>(() =>
+    defaultOptions(tool, Object.fromEntries(Object.entries(optionTexts).map(([k, v]) => [k, v.default]))),
+  );
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [rejected, setRejected] = useState<string[]>([]);
   const [dragOver, setDragOver] = useState(false);
@@ -61,6 +96,7 @@ export function Workspace({ toolId }: { toolId: string }) {
 
   const busy = status.kind === "uploading" || status.kind === "processing";
   const maxFiles = Math.min(tool.maxFiles ?? Infinity, caps?.limits.maxFiles ?? Infinity);
+  const size = (bytes: number) => formatSize(bytes, locale);
 
   // Libère l'URL du résultat précédent
   useEffect(() => {
@@ -94,11 +130,10 @@ export function Workspace({ toolId }: { toolId: string }) {
   // Formats de sortie possibles pour la conversion
   const exts = useMemo(() => [...new Set(items.map((i) => canonicalExt(extOf(i.file.name))))], [items]);
   const targets = useMemo(() => (caps ? commonTargets(exts, engines) : []), [caps, engines, exts]);
-  // Format choisi, ignoré s’il n’est plus possible avec les fichiers actuels
+  // Format choisi, ignoré s'il n'est plus possible avec les fichiers actuels
   const target = targets.includes(String(options.target ?? "")) ? String(options.target) : "";
 
-  const approximate =
-    !!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate));
+  const approximate = !!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate));
 
   function visible(opt: ToolOption) {
     if (!opt.showIf) return true;
@@ -114,25 +149,25 @@ export function Workspace({ toolId }: { toolId: string }) {
     const xhr = new XMLHttpRequest();
     xhrRef.current = xhr;
     const started = performance.now();
-    xhr.open("POST", `/api/tools/${tool.id}`);
+    xhr.open("POST", `/api/tools/${tool.id}?lang=${encodeURIComponent(locale)}`);
     xhr.responseType = "blob";
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) setStatus({ kind: "uploading", progress: e.loaded / e.total });
     };
     xhr.upload.onload = () => setStatus({ kind: "processing" });
-    xhr.onerror = () => setStatus({ kind: "error", message: "Connexion au serveur impossible." });
+    xhr.onerror = () => setStatus({ kind: "error", message: w.errorConnection });
     xhr.onabort = () => setStatus({ kind: "idle" });
     xhr.onload = async () => {
       const blob: Blob = xhr.response;
       if (xhr.status !== 200) {
-        let message = "Le traitement a échoué.";
+        let message = w.errorGeneric;
         try {
           message = JSON.parse(await blob.text()).error ?? message;
         } catch {}
         setStatus({ kind: "error", message });
         return;
       }
-      const name = filenameFrom(xhr.getResponseHeader("Content-Disposition"), "resultat");
+      const name = filenameFrom(xhr.getResponseHeader("Content-Disposition"), "pdff");
       const url = URL.createObjectURL(blob);
       setStatus({
         kind: "done",
@@ -159,8 +194,6 @@ export function Workspace({ toolId }: { toolId: string }) {
 
   const totalSize = items.reduce((n, i) => n + i.file.size, 0);
   const canRun = items.length >= tool.minFiles && !busy && (!tool.options.some((o) => o.type === "target") || !!target);
-
-
   const emptyDecor = tool.accepts === "pdf" ? ["pdf", "pdf", "pdf"] : ["docx", "pdf", "xlsx", "pptx", "jpg"];
 
   return (
@@ -198,7 +231,7 @@ export function Workspace({ toolId }: { toolId: string }) {
 
           {!items.length ? (
             <div className="text-center">
-              <div className="relative mx-auto h-28 w-60" aria-hidden="true">
+              <div className="relative mx-auto h-28 w-60" aria-hidden="true" dir="ltr">
                 {emptyDecor.map((ext, i) => {
                   const mid = (emptyDecor.length - 1) / 2;
                   return (
@@ -220,44 +253,37 @@ export function Workspace({ toolId }: { toolId: string }) {
                   );
                 })}
               </div>
-              <p className="font-display mt-6 text-2xl font-bold tracking-tight">
-                {dragOver ? "Lâchez, c'est parti" : "Déposez vos fichiers ici"}
-              </p>
-              <p className="mt-1.5 text-muted">
-                {tool.accepts === "pdf" ? "Fichiers PDF" : "PDF, Word, Excel, PowerPoint, images, EPUB, texte…"}
-              </p>
+              <p className="font-display mt-6 text-2xl font-bold tracking-tight">{dragOver ? w.dropActive : w.dropTitle}</p>
+              <p className="mt-1.5 text-muted">{tool.accepts === "pdf" ? w.dropPdfOnly : w.dropAny}</p>
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
                 className="mt-7 rounded-full bg-brand px-8 py-3.5 font-semibold text-brand-ink shadow-[0_12px_40px_-10px_#6d5cff] transition hover:-translate-y-0.5 hover:bg-brand-2 active:translate-y-0"
               >
-                Choisir des fichiers
+                {w.choose}
               </button>
             </div>
           ) : (
             <>
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2 px-1">
                 <p className="text-sm text-muted">
-                  <strong className="text-ink">
-                    {items.length} fichier{items.length > 1 ? "s" : ""}
-                  </strong>
-                  , {formatSize(totalSize)}
-                  {tool.ordered && items.length > 1 && <span className="hidden sm:inline">. Glissez pour changer l&apos;ordre.</span>}
+                  <strong className="text-ink">{fmt(w.fileCount, { n: items.length })}</strong>, {size(totalSize)}
+                  {tool.ordered && items.length > 1 && <span className="hidden sm:inline"> {w.dragHint}</span>}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {tool.ordered && items.length > 1 && (
                     <>
                       <SmallButton
                         onClick={() =>
-                          setItems((p) => [...p].sort((a, b) => a.file.name.localeCompare(b.file.name, "fr", { numeric: true })))
+                          setItems((p) => [...p].sort((a, b) => a.file.name.localeCompare(b.file.name, locale, { numeric: true })))
                         }
                       >
-                        Trier A→Z
+                        {w.sortAZ}
                       </SmallButton>
-                      <SmallButton onClick={() => setItems((p) => [...p].reverse())}>Inverser</SmallButton>
+                      <SmallButton onClick={() => setItems((p) => [...p].reverse())}>{w.reverse}</SmallButton>
                     </>
                   )}
-                  <SmallButton onClick={reset}>Tout retirer</SmallButton>
+                  <SmallButton onClick={reset}>{w.clear}</SmallButton>
                 </div>
               </div>
 
@@ -276,31 +302,29 @@ export function Workspace({ toolId }: { toolId: string }) {
                         setDragIndex(index);
                       }
                     }}
-                    className={`file-in flex items-center gap-3 rounded-2xl border bg-bg py-2 pr-2 pl-2 transition-[border-color,opacity,transform] sm:pl-3 ${
+                    className={`file-in flex items-center gap-3 rounded-2xl border bg-bg py-2 ps-2 pe-2 transition-[border-color,opacity,transform] sm:ps-3 ${
                       dragIndex === index ? "scale-[0.98] border-brand opacity-60" : "border-line hover:border-brand/40"
                     } ${tool.ordered ? "cursor-grab active:cursor-grabbing" : ""}`}
                   >
-                    {tool.ordered && (
-                      <span className="font-display w-5 shrink-0 text-center text-sm font-bold text-muted">{index + 1}</span>
-                    )}
+                    {tool.ordered && <span className="font-display w-5 shrink-0 text-center text-sm font-bold text-muted">{index + 1}</span>}
                     <FileGlyph ext={extOf(item.file.name)} className="h-11 w-9 shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold" title={item.file.name}>
+                      <p className="truncate text-sm font-semibold" title={item.file.name} dir="auto">
                         {item.file.name}
                       </p>
-                      <p className="text-xs text-muted">{formatSize(item.file.size)}</p>
+                      <p className="text-xs text-muted">{size(item.file.size)}</p>
                     </div>
                     {tool.ordered && items.length > 1 && (
                       <div className="flex">
-                        <IconButton label="Monter" disabled={index === 0 || busy} onClick={() => move(index, index - 1)}>
+                        <IconButton label={w.moveUp} disabled={index === 0 || busy} onClick={() => move(index, index - 1)}>
                           ↑
                         </IconButton>
-                        <IconButton label="Descendre" disabled={index === items.length - 1 || busy} onClick={() => move(index, index + 1)}>
+                        <IconButton label={w.moveDown} disabled={index === items.length - 1 || busy} onClick={() => move(index, index + 1)}>
                           ↓
                         </IconButton>
                       </div>
                     )}
-                    <IconButton label="Retirer" disabled={busy} onClick={() => setItems((p) => p.filter((i) => i.id !== item.id))}>
+                    <IconButton label={w.remove} disabled={busy} onClick={() => setItems((p) => p.filter((i) => i.id !== item.id))}>
                       ✕
                     </IconButton>
                   </li>
@@ -313,7 +337,7 @@ export function Workspace({ toolId }: { toolId: string }) {
                   onClick={() => inputRef.current?.click()}
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line py-3.5 text-sm font-semibold text-muted transition hover:border-brand hover:text-brand"
                 >
-                  <span className="text-lg leading-none">+</span> Ajouter des fichiers
+                  <span className="text-lg leading-none">+</span> {w.addMore}
                 </button>
               )}
             </>
@@ -321,9 +345,7 @@ export function Workspace({ toolId }: { toolId: string }) {
         </div>
 
         {rejected.length > 0 && (
-          <p className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">
-            Format non pris en charge par cet outil : {rejected.join(", ")}
-          </p>
+          <p className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
         )}
       </section>
 
@@ -333,7 +355,7 @@ export function Workspace({ toolId }: { toolId: string }) {
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
             <ToolIcon id={tool.id} className="h-5 w-5" />
           </span>
-          <h2 className="font-display text-xl font-bold">Réglages</h2>
+          <h2 className="font-display text-xl font-bold">{w.settings}</h2>
         </div>
 
         {tool.options.length > 0 ? (
@@ -342,31 +364,28 @@ export function Workspace({ toolId }: { toolId: string }) {
               <OptionField
                 key={opt.name}
                 option={opt}
+                text={optText(opt.name)}
                 value={opt.type === "target" ? target : options[opt.name]}
                 targets={targets}
                 hasFiles={items.length > 0}
+                messages={m}
                 onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
               />
             ))}
           </div>
         ) : (
-          <p className="mt-4 text-sm text-muted">Aucun réglage nécessaire.</p>
+          <p className="mt-4 text-sm text-muted">{w.noSettings}</p>
         )}
 
-        {approximate && (
-          <p className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">
-            Depuis un PDF, la mise en page est reconstruite : le résultat peut demander des retouches, surtout pour un
-            document scanné.
-          </p>
-        )}
+        {approximate && <p className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">{w.approximate}</p>}
 
-        <RunButton label={tool.name} busy={busy} disabled={!canRun} onClick={run} className="mt-6 hidden lg:flex" />
+        <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="mt-6 hidden lg:flex" />
 
-        <StatusPanel status={status} onCancel={() => xhrRef.current?.abort()} onReset={reset} />
+        <StatusPanel status={status} onCancel={() => xhrRef.current?.abort()} onReset={reset} w={w} size={size} />
 
         {caps && (
           <p className="mt-4 text-xs text-muted">
-            Jusqu&apos;à {caps.limits.maxPages.toLocaleString("fr-FR")} pages et {caps.limits.maxFiles} fichiers par opération.
+            {fmt(w.limits, { pages: caps.limits.maxPages.toLocaleString(locale), files: caps.limits.maxFiles.toLocaleString(locale) })}
           </p>
         )}
       </aside>
@@ -380,10 +399,10 @@ export function Workspace({ toolId }: { toolId: string }) {
               download={status.name}
               className="pop flex w-full items-center justify-center gap-2 rounded-full bg-ok py-4 font-semibold text-white"
             >
-              ✓ Télécharger le résultat
+              {w.downloadResult}
             </a>
           ) : (
-            <RunButton label={tool.name} busy={busy} disabled={!canRun} onClick={run} className="flex" progress={status} />
+            <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="flex" progress={status} />
           )}
         </div>
       )}
@@ -396,6 +415,7 @@ function RunButton({
   busy,
   disabled,
   onClick,
+  w,
   className = "",
   progress,
 }: {
@@ -403,6 +423,7 @@ function RunButton({
   busy: boolean;
   disabled: boolean;
   onClick: () => void;
+  w: WorkspaceText;
   className?: string;
   progress?: Status;
 }) {
@@ -414,15 +435,25 @@ function RunButton({
       disabled={disabled}
       className={`relative w-full items-center justify-center overflow-hidden rounded-full bg-brand py-4 font-semibold text-brand-ink shadow-[0_12px_40px_-12px_#6d5cff] transition hover:bg-brand-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none ${className}`}
     >
-      {busy && (
-        <span className="progress-stripes absolute inset-y-0 left-0 bg-white/15 transition-[width] duration-300" style={{ width: `${pct || 100}%` }} />
-      )}
-      <span className="relative">{busy ? (progress?.kind === "uploading" ? `Envoi… ${pct} %` : "Traitement en cours…") : label}</span>
+      {busy && <span className="progress-stripes absolute inset-y-0 start-0 bg-white/15 transition-[width] duration-300" style={{ width: `${pct || 100}%` }} />}
+      <span className="relative">{busy ? (progress?.kind === "uploading" ? fmt(w.uploading, { pct }) : w.processing) : label}</span>
     </button>
   );
 }
 
-function StatusPanel({ status, onCancel, onReset }: { status: Status; onCancel: () => void; onReset: () => void }) {
+function StatusPanel({
+  status,
+  onCancel,
+  onReset,
+  w,
+  size,
+}: {
+  status: Status;
+  onCancel: () => void;
+  onReset: () => void;
+  w: WorkspaceText;
+  size: (bytes: number) => string;
+}) {
   if (status.kind === "idle") return null;
   if (status.kind === "uploading" || status.kind === "processing") {
     const pct = status.kind === "uploading" ? Math.round(status.progress * 100) : 100;
@@ -432,9 +463,9 @@ function StatusPanel({ status, onCancel, onReset }: { status: Status; onCancel: 
           <div className="progress-stripes h-full rounded-full bg-brand transition-all" style={{ width: `${pct}%` }} />
         </div>
         <div className="mt-2 flex items-center justify-between text-xs text-muted">
-          <span>{status.kind === "uploading" ? `Envoi… ${pct} %` : "Traitement…"}</span>
+          <span>{status.kind === "uploading" ? fmt(w.uploading, { pct }) : w.processingShort}</span>
           <button type="button" onClick={onCancel} className="underline hover:text-ink">
-            Annuler
+            {w.cancel}
           </button>
         </div>
       </div>
@@ -443,25 +474,26 @@ function StatusPanel({ status, onCancel, onReset }: { status: Status; onCancel: 
   if (status.kind === "error") {
     return <p className="pop mt-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">{status.message}</p>;
   }
+  const seconds = status.seconds.toFixed(1);
   return (
     <div className="pop mt-4 rounded-2xl bg-ok-soft p-4">
       <div className="flex items-center gap-3">
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ok text-lg text-white">✓</span>
         <div className="min-w-0">
           <p className="font-semibold text-ok">
-            Terminé en {status.seconds.toFixed(1)} s{status.count > 1 ? `, ${status.count} fichiers (ZIP)` : ""}
+            {status.count > 1 ? fmt(w.doneMany, { s: seconds, n: status.count }) : fmt(w.done, { s: seconds })}
           </p>
-          <p className="truncate text-xs text-muted" title={status.name}>
-            {status.name}, {formatSize(status.size)}
+          <p className="truncate text-xs text-muted" title={status.name} dir="auto">
+            {status.name}, {size(status.size)}
           </p>
         </div>
       </div>
       <div className="mt-3 flex gap-2">
         <a href={status.url} download={status.name} className="flex-1 rounded-full bg-ok px-4 py-2.5 text-center text-sm font-semibold text-white hover:opacity-90">
-          Télécharger
+          {w.download}
         </a>
         <button type="button" onClick={onReset} className="rounded-full border border-line bg-surface px-4 py-2.5 text-sm font-medium hover:border-ink/30">
-          Recommencer
+          {w.restart}
         </button>
       </div>
     </div>
@@ -470,15 +502,19 @@ function StatusPanel({ status, onCancel, onReset }: { status: Status; onCancel: 
 
 function OptionField({
   option,
+  text,
   value,
   targets,
   hasFiles,
+  messages,
   onChange,
 }: {
   option: ToolOption;
+  text: OptionText;
   value: OptionValues[string] | undefined;
   targets: string[];
   hasFiles: boolean;
+  messages: Messages;
   onChange: (v: string | number | boolean) => void;
 }) {
   const labelCls = "mb-1.5 block text-sm font-semibold";
@@ -490,17 +526,17 @@ function OptionField({
       return (
         <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-bg px-3.5 py-3 text-sm">
           <input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-[var(--brand)]" />
-          {option.label}
+          {text.label}
         </label>
       );
     case "select":
       return (
         <label className="block">
-          <span className={labelCls}>{option.label}</span>
+          <span className={labelCls}>{text.label}</span>
           <select value={String(value)} onChange={(e) => onChange(e.target.value)} className={inputCls}>
             {option.choices.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
+              <option key={c} value={c}>
+                {text.choices?.[c] ?? c}
               </option>
             ))}
           </select>
@@ -509,7 +545,7 @@ function OptionField({
     case "number":
       return (
         <label className="block">
-          <span className={labelCls}>{option.label}</span>
+          <span className={labelCls}>{text.label}</span>
           <input
             type="number"
             inputMode="numeric"
@@ -523,20 +559,21 @@ function OptionField({
         </label>
       );
     case "target":
-      return <TargetPicker label={option.label} value={String(value ?? "")} targets={targets} hasFiles={hasFiles} onChange={onChange} />;
+      return <TargetPicker label={text.label} value={String(value ?? "")} targets={targets} hasFiles={hasFiles} messages={messages} onChange={onChange} />;
     default:
       return (
         <label className="block">
-          <span className={labelCls}>{option.label}</span>
+          <span className={labelCls}>{text.label}</span>
           <input
             type={option.type === "password" ? "password" : "text"}
             value={String(value ?? "")}
-            placeholder={option.type === "text" ? option.placeholder : undefined}
+            placeholder={text.placeholder}
             autoComplete={option.type === "password" ? "new-password" : "off"}
             onChange={(e) => onChange(e.target.value)}
             className={inputCls}
+            dir="auto"
           />
-          {option.help && <span className="mt-1 block text-xs text-muted">{option.help}</span>}
+          {text.help && <span className="mt-1 block text-xs text-muted">{text.help}</span>}
         </label>
       );
   }
@@ -548,14 +585,18 @@ function TargetPicker({
   value,
   targets,
   hasFiles,
+  messages,
   onChange,
 }: {
   label: string;
   value: string;
   targets: string[];
   hasFiles: boolean;
+  messages: Messages;
   onChange: (v: string) => void;
 }) {
+  const w = messages.workspace;
+  const names = messages.formatNames as Partial<Record<string, string>>;
   const groups = new Map<FormatCategory, string[]>();
   for (const t of targets) {
     const cat = FORMATS[t]?.category ?? "text";
@@ -565,16 +606,14 @@ function TargetPicker({
     <fieldset>
       <legend className="mb-2 block text-sm font-semibold">{label}</legend>
       {!hasFiles ? (
-        <p className="rounded-xl border border-dashed border-line px-3 py-4 text-center text-sm text-muted">
-          Ajoutez un fichier pour voir les formats possibles.
-        </p>
+        <p className="rounded-xl border border-dashed border-line px-3 py-4 text-center text-sm text-muted">{w.targetEmpty}</p>
       ) : !targets.length ? (
-        <p className="rounded-xl bg-warn-soft px-3 py-3 text-sm text-warn-ink">Ces fichiers n&apos;ont aucun format de sortie en commun.</p>
+        <p className="rounded-xl bg-warn-soft px-3 py-3 text-sm text-warn-ink">{w.targetNone}</p>
       ) : (
         <div className="space-y-3">
           {[...groups].map(([cat, exts]) => (
             <div key={cat}>
-              <p className="mb-1.5 text-xs text-muted">{CATEGORY_LABELS[cat]}</p>
+              <p className="mb-1.5 text-xs text-muted">{messages.formatCategories[cat]}</p>
               <div className="grid grid-cols-4 gap-2">
                 {exts.map((e) => {
                   const selected = value === e;
@@ -583,10 +622,10 @@ function TargetPicker({
                       key={e}
                       type="button"
                       aria-pressed={selected}
-                      title={FORMATS[e]?.label ?? e}
+                      title={names[e] ?? FORMATS[e]?.label ?? e}
                       onClick={() => onChange(e)}
                       className={`flex flex-col items-center gap-1 rounded-xl border px-1 py-2 transition active:scale-95 ${
-                        selected ? "border-brand bg-brand/10 ring-2 ring-brand/30" : "border-line bg-bg hover:border-brand/50 hover:-translate-y-0.5"
+                        selected ? "border-brand bg-brand/10 ring-2 ring-brand/30" : "border-line bg-bg hover:-translate-y-0.5 hover:border-brand/50"
                       }`}
                     >
                       <FileGlyph ext={e} className="h-9 w-7" />

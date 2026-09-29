@@ -1,5 +1,7 @@
 import JSZip from "jszip";
 import { limits } from "@/config/limits";
+import { formatError, loadMessages, localeFromRequest } from "@/i18n/server";
+import type { ErrorKey } from "@/i18n/messages/fr";
 import { mimeOf, extOf } from "@/lib/core/formats";
 import { getTool, type OptionValues } from "@/lib/core/tools";
 import { runTool } from "@/lib/server/runners";
@@ -24,37 +26,38 @@ function uniqueNames(files: FileData[]): FileData[] {
   });
 }
 
-function fail(message: string, status = 400) {
-  return Response.json({ error: message }, { status });
-}
-
 export async function POST(request: Request, { params }: { params: Promise<{ tool: string }> }) {
   const { tool: toolId } = await params;
+  const url = new URL(request.url);
+  const { messages } = await loadMessages(localeFromRequest(request, url.searchParams.get("lang")));
+  const fail = (key: ErrorKey, status = 400, values: Record<string, string | number> = {}, file?: string) =>
+    Response.json({ error: formatError(messages, key, values, file) }, { status });
+
   const tool = getTool(toolId);
-  if (!tool) return fail("Outil inconnu.", 404);
+  if (!tool) return fail("unknownTool", 404);
 
   const declared = Number(request.headers.get("content-length") ?? 0);
   if (declared > limits.maxUploadBytes) {
-    return fail(`Envoi trop volumineux (max. ${Math.round(limits.maxUploadBytes / 1024 / 1024)} Mo).`, 413);
+    return fail("tooLarge", 413, { mb: Math.round(limits.maxUploadBytes / 1024 / 1024) });
   }
 
   let form: FormData;
   try {
     form = await request.formData();
   } catch {
-    return fail("Requête invalide.");
+    return fail("badRequest");
   }
 
   const uploads = form.getAll("files").filter((v): v is File => v instanceof File);
-  if (uploads.length < tool.minFiles) return fail("Ajoutez au moins un fichier.");
+  if (uploads.length < tool.minFiles) return fail("noFiles");
   const maxFiles = Math.min(tool.maxFiles ?? Infinity, limits.maxFiles);
-  if (uploads.length > maxFiles) return fail(`Trop de fichiers : ${maxFiles} maximum pour cet outil.`);
+  if (uploads.length > maxFiles) return fail("tooManyFiles", 400, { max: maxFiles });
 
   let options: OptionValues = {};
   try {
     options = JSON.parse(String(form.get("options") ?? "{}"));
   } catch {
-    return fail("Options invalides.");
+    return fail("badOptions");
   }
 
   const files: FileData[] = await Promise.all(
@@ -64,7 +67,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ too
   const started = Date.now();
   try {
     const results = uniqueNames(await runTool(tool.id, files, options));
-    if (!results.length) return fail("Aucun fichier produit.");
+    if (!results.length) return fail("noOutput");
 
     const headers = new Headers({
       "X-Pdff-Count": String(results.length),
@@ -86,8 +89,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ too
     headers.set("Content-Disposition", contentDisposition(`pdff-${tool.id}.zip`));
     return new Response(archive as BodyInit, { headers });
   } catch (err) {
-    if (err instanceof UserError) return fail(err.message, 422);
+    if (err instanceof UserError) return fail(err.key, 422, err.params, err.file);
     console.error(`[pdff] ${tool.id}:`, err);
-    return fail("Une erreur inattendue est survenue pendant le traitement.", 500);
+    return fail("unexpected", 500);
   }
 }

@@ -1,6 +1,9 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# =============================================================================
+# pdff — .gitignore préventif
+# Règle d'or : aucun secret, aucun fichier d'utilisateur, aucun fichier généré.
+# =============================================================================
 
-# dependencies
+# ---------------------------------------------------------------- Dépendances
 /node_modules
 /.pnp
 .pnp.*
@@ -9,34 +12,123 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.pnpm-store/
+bower_components/
+jspm_packages/
 
-# testing
-/coverage
-
-# next.js
+# ---------------------------------------------------------------- Builds Next.js / Vercel
 /.next/
 /out/
-
-# production
 /build
+/dist
+.vercel
+.turbo
+*.tsbuildinfo
+next-env.d.ts
 
-# misc
-.DS_Store
+# ---------------------------------------------------------------- Secrets et configuration locale
+# Variables d'environnement : seul le modèle .env.example est versionné
+.env
+.env.*
+!.env.example
+# Clés, certificats, identifiants
 *.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.jks
+*.keystore
+*.gpg
+*.asc
+id_rsa*
+id_ed25519*
+*.ovpn
+secrets/
+.secrets/
+credentials.json
+service-account*.json
+*-credentials.json
+.npmrc
+.netrc
+.pgpass
+# Bases de données locales
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.dump
 
-# debug
+# ---------------------------------------------------------------- Fichiers des utilisateurs
+# Documents traités localement : ne jamais les publier
+/uploads/
+/tmp/
+/temp/
+/storage/
+/documents/
+/fixtures-private/
+*.tmp
+
+# ---------------------------------------------------------------- Caches pdff
+# Traductions automatiques générées à la demande
+/.cache/
+/.pdff-cache/
+
+# ---------------------------------------------------------------- Tests et qualité
+/coverage
+/.nyc_output
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+*.lcov
+
+# ---------------------------------------------------------------- Journaux
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
+# ---------------------------------------------------------------- Systèmes d'exploitation
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.directory
+.Trash-*
 
-# vercel
-.vercel
+# ---------------------------------------------------------------- Éditeurs et IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+.history/
+.fleet/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ---------------------------------------------------------------- Outils IA locaux
+.claude/settings.local.json
+
+# ---------------------------------------------------------------- Divers
+*.pid
+*.seed
+*.pid.lock
+.eslintcache
+.stylelintcache
+*.bak
+*.orig

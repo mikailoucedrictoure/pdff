@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useI18n } from "@/i18n/client";
 import { FileGlyph } from "./FileGlyph";
 
 /**
@@ -56,6 +57,7 @@ interface Body {
 }
 
 export function FormatOrbit() {
+  const t = useI18n().messages.home;
   const rootRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const coreRef = useRef<HTMLButtonElement>(null);
@@ -358,7 +360,7 @@ export function FormatOrbit() {
         <button
           ref={coreRef}
           type="button"
-          aria-label="Faire exploser l'anneau"
+          aria-label={t.orbitCore}
           className="orbit-core-btn absolute top-1/2 left-1/2 z-[1000] w-32"
         >
           <CoreSheet />
@@ -375,7 +377,7 @@ export function FormatOrbit() {
           </div>
         ))}
       </div>
-      <p className="mt-1 text-center text-xs text-white/50">Attrapez une icône, lancez l&apos;anneau, touchez la feuille centrale.</p>
+      <p className="mt-1 text-center text-xs text-white/50">{t.orbitHint}</p>
     </div>
   );
 }

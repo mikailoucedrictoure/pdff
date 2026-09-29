@@ -51,8 +51,8 @@ export async function convertFile(
   const to = canonicalExt(target);
   const path = findPath(from, to, engines ?? (await availableEngines()));
   if (!path) {
-    const hint = (await findLibreOffice()) ? "" : " (installer LibreOffice ajoute les formats Word, Excel et PowerPoint)";
-    throw new UserError(`Conversion ${from.toUpperCase() || "?"} → ${to.toUpperCase()} impossible${hint}.`);
+    const key = (await findLibreOffice()) ? "conversionImpossible" : "conversionImpossibleOffice";
+    throw new UserError(key, { from: from.toUpperCase() || "?", to: to.toUpperCase() });
   }
   if (!path.length) return [file];
 
