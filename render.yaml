@@ -1,0 +1,19 @@
+# Service Office de pdff sur Render (offre gratuite, sans carte bancaire).
+# Render → New → Blueprint → ce dépôt : le service est créé à partir de ce fichier.
+services:
+  - type: web
+    name: pdff-office
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerContext: ./services/office
+    dockerfilePath: ./services/office/Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - services/office/**
+    envVars:
+      # Secret partagé avec pdff (PDFF_OFFICE_TOKEN dans Vercel) : demandé à la création
+      - key: OFFICE_TOKEN
+        sync: false

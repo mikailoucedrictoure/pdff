@@ -46,23 +46,23 @@ describe.skipIf(!available)(`formats Office (${remote ? "service distant" : "Lib
     const [pdf] = await runTool("convertir", [await docx("lettre.docx", "Bonjour é à ç — مرحبا — 你好")], { target: "pdf" });
     expect(pdf.name).toBe("lettre.pdf");
     expect(isPdf(pdf)).toBe(true);
-  }, 120_000);
+  }, 300_000);
 
   it("fusion Word + Word → PDF de 2 pages", async () => {
     const [pdf] = await runTool("fusionner", [await docx("a.docx", "Premier"), await docx("b.docx", "Second")], { bookmarks: true });
     expect(await pageCount(pdf)).toBe(2);
-  }, 120_000);
+  }, 300_000);
 
   it("PDF → Word (import PDF)", async () => {
     const [pdf] = await runTool("convertir", [await docx("x.docx", "Aller-retour")], { target: "pdf" });
     const [back] = await runTool("convertir", [pdf], { target: "docx" });
     expect(back.name).toBe("x.docx");
     expect(Buffer.from(back.data.subarray(0, 2)).toString()).toBe("PK");
-  }, 120_000);
+  }, 300_000);
 
   it("tableur CSV → Excel", async () => {
     const [xlsx] = await runTool("convertir", [csv("budget.csv")], { target: "xlsx" });
     expect(xlsx.name).toBe("budget.xlsx");
     expect(Buffer.from(xlsx.data.subarray(0, 2)).toString()).toBe("PK");
-  }, 120_000);
+  }, 300_000);
 });

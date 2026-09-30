@@ -23,7 +23,7 @@ winget install TheDocumentFoundation.LibreOffice
 ```
 
 Redémarrez ensuite `npm run dev`. LibreOffice est détecté automatiquement ; sinon renseignez `LIBREOFFICE_PATH` dans `.env.local`.
-En ligne, c'est le service `services/office` (Google Cloud Run) qui s'en charge : voir `services/office/README.md`.
+En ligne, c'est le service `services/office` (Render) qui s'en charge : voir `services/office/README.md`.
 
 ## Langues
 
@@ -52,7 +52,7 @@ Le projet Vercel `pdff` est relié au dépôt GitHub : **chaque envoi sur `main`
 | Élément | Où | Rôle |
 | --- | --- | --- |
 | Site + outils PDF / images | Vercel (région Paris `cdg1`, voir `vercel.json`) | pages, API, traitements |
-| Word, Excel, PowerPoint | Google Cloud Run (`services/office`) | LibreOffice, que Vercel ne peut pas installer |
+| Word, Excel, PowerPoint | Render, offre gratuite (`services/office`, `render.yaml`) | LibreOffice, que Vercel ne peut pas installer |
 | Fichiers de plus de 4 Mo | Vercel Blob (`pdff-fichiers`) | contourne la limite de 4,5 Mo des requêtes Vercel ; tout est effacé après usage |
 | Nettoyage | tâche planifiée quotidienne `/api/cleanup` | efface tout fichier temporaire de plus d'une heure |
 | Traductions automatiques | Vercel AI Gateway + cache Blob `i18n/` | une langue n'est traduite qu'une fois |

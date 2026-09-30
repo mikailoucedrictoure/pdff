@@ -1,0 +1,20 @@
+name: Réveil du service Office
+
+# Render endort un service gratuit après 15 minutes sans visite (≈ 1 minute pour se réveiller).
+# Un appel toutes les 10 minutes le garde prêt ; 750 h gratuites par mois couvrent un mois entier.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Appeler /health
+        env:
+          OFFICE_URL: ${{ vars.OFFICE_URL }}
+        run: |
+          if [ -z "$OFFICE_URL" ]; then echo "Variable OFFICE_URL non définie : rien à faire."; exit 0; fi
+          curl -sS --max-time 180 --retry 2 "$OFFICE_URL/health"
