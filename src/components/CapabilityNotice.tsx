@@ -3,11 +3,11 @@
 import { useI18n } from "@/i18n/client";
 import { useCapabilities } from "./useCapabilities";
 
-/** Avertit quand LibreOffice est absent (formats Office indisponibles). */
+/** Avertit quand LibreOffice est absent (formats Office indisponibles). Message destiné au développeur : jamais en production. */
 export function CapabilityNotice() {
   const caps = useCapabilities();
   const t = useI18n().messages.notice;
-  if (!caps || caps.libreOffice) return null;
+  if (process.env.NODE_ENV === "production" || !caps || caps.libreOffice) return null;
   return (
     <div className="rounded-2xl border border-line bg-warn-soft p-4 text-sm text-warn-ink">
       <strong>{t.officeMissingTitle}</strong> {t.officeMissingText}{" "}

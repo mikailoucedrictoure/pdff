@@ -7,10 +7,10 @@ import { canonicalExt, extOf, FORMATS } from "@/lib/core/formats";
 import { type FileData, UserError } from "./types";
 import { convertImage, imagesToPdf } from "./engines/image";
 import { extractText, renderPages, toPdf as mupdfToPdf } from "./engines/mupdf";
-import { convertWithOffice, findLibreOffice } from "./engines/office";
+import { convertWithOffice, officeAvailable } from "./engines/office";
 
 export async function availableEngines(): Promise<Set<EngineId>> {
-  const hasOffice = !!(await findLibreOffice());
+  const hasOffice = await officeAvailable();
   return new Set(ALL_ENGINES.filter((e) => hasOffice || (e !== "office" && e !== "office-pdf-import")));
 }
 
@@ -51,7 +51,7 @@ export async function convertFile(
   const to = canonicalExt(target);
   const path = findPath(from, to, engines ?? (await availableEngines()));
   if (!path) {
-    const key = (await findLibreOffice()) ? "conversionImpossible" : "conversionImpossibleOffice";
+    const key = (await officeAvailable()) ? "conversionImpossible" : "conversionImpossibleOffice";
     throw new UserError(key, { from: from.toUpperCase() || "?", to: to.toUpperCase() });
   }
   if (!path.length) return [file];

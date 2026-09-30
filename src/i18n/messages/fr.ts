@@ -5,8 +5,9 @@
  */
 const fr = {
   meta: {
-    title: "pdff — fusionner, convertir et modifier vos documents",
-    description: "Fusionnez, convertissez et modifiez PDF, Word, Excel, PowerPoint et images. Gratuit et sans inscription.",
+    title: "pdff — Fusionner, convertir et modifier PDF, Word, Excel gratuitement",
+    description: "Outil en ligne gratuit pour fusionner, convertir, compresser, diviser et protéger vos PDF, Word, Excel, PowerPoint et images. Sans inscription, fichiers supprimés aussitôt.",
+    keywords: "fusionner pdf, convertir pdf, pdf en word, word en pdf, jpg en pdf, pdf en jpg, compresser pdf, diviser pdf, excel en pdf, outil pdf gratuit",
   },
   nav: {
     merge: "Fusionner",
@@ -111,10 +112,97 @@ const fr = {
     close: "Fermer",
     auto: "Automatique (langue du navigateur)",
   },
+  seo: {
+    whyTitle: "Pourquoi pdff ?",
+    why: [
+      {
+        title: "100 % gratuit",
+        text: "Aucun abonnement, aucune carte bancaire, aucun filigrane ajouté sur vos documents.",
+      },
+      {
+        title: "Sans inscription",
+        text: "Pas de compte à créer : ouvrez la page, déposez vos fichiers, c'est tout.",
+      },
+      {
+        title: "Vos fichiers restent à vous",
+        text: "Traités puis supprimés aussitôt. Nous ne gardons ni vos documents ni vos données.",
+      },
+      {
+        title: "Tous les formats",
+        text: "PDF, Word, Excel, PowerPoint, OpenDocument, images, EPUB… depuis un ordinateur ou un téléphone.",
+      },
+    ],
+    howTitle: "Comment faire ?",
+    faqTitle: "Questions fréquentes",
+    faq: [
+      {
+        q: "pdff est-il vraiment gratuit ?",
+        a: "Oui. Tous les outils sont gratuits, sans filigrane ni fonction cachée derrière un abonnement. Aucune carte bancaire n'est demandée.",
+      },
+      {
+        q: "Faut-il créer un compte ?",
+        a: "Non. Aucune inscription, aucune adresse e-mail : vous utilisez les outils directement.",
+      },
+      {
+        q: "Mes documents sont-ils conservés ?",
+        a: "Non. Vos fichiers servent uniquement au traitement demandé, puis sont supprimés. Personne ne les lit et ils ne sont partagés avec personne.",
+      },
+      {
+        q: "Est-ce que ça marche sur téléphone ?",
+        a: "Oui. pdff fonctionne dans le navigateur de n'importe quel téléphone, tablette ou ordinateur (Android, iPhone, Windows, Mac, Linux), sans rien installer.",
+      },
+      {
+        q: "Quels formats sont pris en charge ?",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, images (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML et d'autres encore.",
+      },
+      {
+        q: "Y a-t-il une limite ?",
+        a: "Vous pouvez traiter jusqu'à {files} fichiers à la fois, et un document produit peut compter jusqu'à {pages} pages.",
+      },
+    ],
+    moreTools: "Autres outils",
+    privacyLink: "Confidentialité",
+    sourceLink: "Code source ouvert",
+  },
+  privacy: {
+    title: "Confidentialité",
+    description: "Comment pdff traite vos fichiers : aucun compte, aucun document conservé, aucune publicité ni revente de données.",
+    updated: "Dernière mise à jour : {date}",
+    intro: "pdff est conçu pour que vos documents restent à vous. Voici, simplement, ce qui se passe quand vous utilisez l'outil.",
+    sections: [
+      {
+        title: "Vos fichiers",
+        text: "Ils sont envoyés de façon chiffrée (HTTPS), traités automatiquement, puis supprimés dès que le résultat est prêt. Les fichiers volumineux passent par un stockage temporaire, sous un nom aléatoire, et sont effacés dès la fin du traitement ; un nettoyage automatique supprime tout ce qui aurait pu rester, dans les 24 heures au plus tard.",
+      },
+      {
+        title: "Aucun compte, aucune donnée personnelle",
+        text: "pdff ne demande ni inscription, ni adresse e-mail, ni carte bancaire. Vos documents ne sont ni lus, ni analysés, ni partagés, ni utilisés pour entraîner une intelligence artificielle.",
+      },
+      {
+        title: "Mesure d'audience",
+        text: "Nous comptons les visites de façon anonyme et sans cookie (Vercel Web Analytics) pour savoir quels outils sont utiles. Aucune publicité, aucun pistage d'un site à l'autre.",
+      },
+      {
+        title: "Cookies",
+        text: "Un seul cookie, facultatif : il retient la langue que vous avez choisie.",
+      },
+      {
+        title: "Hébergement",
+        text: "Le site est hébergé par Vercel ; les conversions Word, Excel et PowerPoint sont réalisées sur Google Cloud. Ces prestataires traitent les fichiers uniquement le temps de la conversion.",
+      },
+      {
+        title: "Contact",
+        text: "Une question ou une remarque ? Écrivez-nous depuis la page du projet :",
+      },
+    ],
+  },
   tools: {
     fusionner: {
       name: "Fusionner",
       tagline: "Assembler plusieurs fichiers (PDF, Word, images…) en un seul PDF, dans l'ordre choisi.",
+      seoTitle: "Fusionner des PDF en ligne gratuitement (Word, images, PDF)",
+      seoDescription: "Fusionnez PDF, Word, Excel, PowerPoint et images en un seul PDF, dans l'ordre voulu. Gratuit, sans inscription ni filigrane, fichiers supprimés aussitôt.",
+      intro: "Réunissez toutes vos pièces dans un seul fichier : pdff accepte des PDF, mais aussi des documents Word, des tableaux Excel, des présentations et des photos, et les assemble en un PDF propre, avec un signet par fichier.",
       options: {
         bookmarks: { label: "Ajouter un signet par fichier" },
       },
@@ -122,6 +210,9 @@ const fr = {
     convertir: {
       name: "Convertir",
       tagline: "Convertir n'importe quel document ou image vers un autre format.",
+      seoTitle: "Convertir PDF en Word, Word en PDF, JPG en PDF — gratuit",
+      seoDescription: "Convertisseur gratuit : PDF ↔ Word, Excel, PowerPoint, JPG, PNG, EPUB et plus de 40 formats. En ligne, sans inscription, en haute qualité.",
+      intro: "Un seul convertisseur pour tous vos formats : Word en PDF, PDF en Word, JPG en PDF, PDF en JPG, Excel en PDF, PowerPoint en PDF, PNG en JPG, EPUB en PDF… Déposez vos fichiers, pdff vous propose uniquement les formats possibles.",
       options: {
         target: { label: "Convertir en" },
         dpi: { label: "Résolution des images (DPI)" },
@@ -131,6 +222,9 @@ const fr = {
     diviser: {
       name: "Diviser",
       tagline: "Séparer un PDF en plusieurs fichiers : par plages ou page par page.",
+      seoTitle: "Diviser un PDF en ligne gratuitement — séparer les pages",
+      seoDescription: "Séparez un PDF en plusieurs fichiers : par plages de pages, page par page ou toutes les N pages. Gratuit, rapide et sans inscription.",
+      intro: "Envoyez seulement la partie utile d'un gros document : pdff découpe votre PDF selon les plages choisies et vous rend les morceaux dans une archive ZIP.",
       options: {
         mode: {
           label: "Mode",
@@ -143,6 +237,9 @@ const fr = {
     extraire: {
       name: "Extraire / supprimer des pages",
       tagline: "Garder ou retirer certaines pages d'un PDF.",
+      seoTitle: "Extraire ou supprimer des pages d'un PDF — gratuit",
+      seoDescription: "Gardez seulement les pages utiles d'un PDF ou retirez celles qui sont en trop. En ligne, gratuit, sans inscription ni filigrane.",
+      intro: "Une page blanche, une annexe inutile, un doublon ? Indiquez les pages à garder ou à retirer (par exemple 1-3, 7, 10-fin) et récupérez un PDF propre en quelques secondes.",
       options: {
         mode: { label: "Action", choices: { keep: "Garder uniquement ces pages", remove: "Supprimer ces pages" } },
         pages: { label: "Pages", placeholder: "1, 3-5", help: "Ex. : 1-3, 5, 8-fin. Laisser vide = toutes les pages." },
@@ -151,6 +248,9 @@ const fr = {
     organiser: {
       name: "Réorganiser les pages",
       tagline: "Changer l'ordre des pages, dupliquer, inverser.",
+      seoTitle: "Réorganiser les pages d'un PDF en ligne — gratuit",
+      seoDescription: "Changez l'ordre des pages d'un PDF, dupliquez-en ou inversez tout le document. Gratuit, en ligne, sans inscription.",
+      intro: "Des pages scannées dans le désordre ? Donnez le nouvel ordre (par exemple 3, 1, 2, 4-fin) ou inversez le document entier : pdff s'occupe du reste.",
       options: {
         order: { label: "Nouvel ordre", placeholder: "3, 1, 2, 4-fin", help: "Les pages non citées sont retirées." },
         reverse: { label: "Inverser tout le document (ignore l'ordre ci-dessus)" },
@@ -159,6 +259,9 @@ const fr = {
     pivoter: {
       name: "Pivoter",
       tagline: "Faire pivoter toutes les pages ou une sélection.",
+      seoTitle: "Pivoter un PDF en ligne gratuitement",
+      seoDescription: "Faites pivoter toutes les pages d'un PDF ou seulement certaines, de 90°, 180° ou 270°. Gratuit, rapide, sans inscription.",
+      intro: "Un scan à l'envers ou une page en paysage ? Faites pivoter tout le document ou seulement les pages choisies, sans perte de qualité.",
       options: {
         angle: { label: "Rotation", choices: { "90": "90° sens horaire", "180": "180°", "270": "90° sens anti-horaire" } },
         pages: { label: "Pages", placeholder: "toutes", help: "Ex. : 1-3, 5, 8-fin. Laisser vide = toutes les pages." },
@@ -167,6 +270,9 @@ const fr = {
     numeroter: {
       name: "Numéroter les pages",
       tagline: "Ajouter des numéros de page.",
+      seoTitle: "Numéroter les pages d'un PDF — gratuit en ligne",
+      seoDescription: "Ajoutez des numéros de page à un PDF : position, format « 1 / 10 », premier numéro et taille au choix. Gratuit, sans inscription.",
+      intro: "Idéal pour un mémoire, un dossier administratif ou un rapport : choisissez la position, le format et le premier numéro, pdff numérote vos pages proprement.",
       options: {
         position: {
           label: "Position",
@@ -188,6 +294,9 @@ const fr = {
     filigrane: {
       name: "Filigrane",
       tagline: "Apposer un texte en filigrane (CONFIDENTIEL, COPIE…).",
+      seoTitle: "Ajouter un filigrane à un PDF — gratuit en ligne",
+      seoDescription: "Apposez un texte en filigrane (CONFIDENTIEL, COPIE, BROUILLON…) sur un PDF : taille, opacité, angle et couleur réglables. Gratuit.",
+      intro: "Protégez les copies de vos pièces d'identité et justificatifs en y ajoutant une mention claire, par exemple « Copie réservée au dossier de location ».",
       options: {
         text: { label: "Texte", default: "CONFIDENTIEL" },
         size: { label: "Taille" },
@@ -200,6 +309,9 @@ const fr = {
     compresser: {
       name: "Compresser",
       tagline: "Réduire le poids d'un PDF.",
+      seoTitle: "Compresser un PDF en ligne — réduire sa taille gratuitement",
+      seoDescription: "Réduisez le poids d'un PDF pour l'envoyer par e-mail ou le déposer sur un site administratif. Trois niveaux de compression, gratuit.",
+      intro: "Un portail refuse votre fichier parce qu'il est trop lourd ? Compressez votre PDF en gardant un texte net : choisissez sans perte, recommandé ou fort selon la taille visée.",
       options: {
         level: {
           label: "Niveau",
@@ -214,6 +326,9 @@ const fr = {
     proteger: {
       name: "Protéger",
       tagline: "Chiffrer un PDF avec un mot de passe (AES-256).",
+      seoTitle: "Protéger un PDF par mot de passe — gratuit (AES-256)",
+      seoDescription: "Chiffrez un PDF avec un mot de passe (AES-256) et bloquez l'impression, la copie ou la modification. Gratuit, sans inscription.",
+      intro: "Avant d'envoyer un bulletin de salaire ou un document médical, protégez-le par un mot de passe solide : sans lui, personne ne peut l'ouvrir.",
       options: {
         password: { label: "Mot de passe d'ouverture" },
         noPrint: { label: "Interdire l'impression" },
@@ -224,6 +339,9 @@ const fr = {
     deverrouiller: {
       name: "Déverrouiller",
       tagline: "Retirer le mot de passe d'un PDF dont vous connaissez le mot de passe.",
+      seoTitle: "Déverrouiller un PDF — retirer le mot de passe gratuitement",
+      seoDescription: "Retirez le mot de passe d'un PDF dont vous connaissez le mot de passe, pour l'ouvrir, l'imprimer ou le fusionner librement. Gratuit.",
+      intro: "Vous connaissez le mot de passe, mais le taper à chaque ouverture est pénible ? Retirez-le une fois pour toutes. pdff ne contourne jamais un mot de passe inconnu.",
       options: {
         password: { label: "Mot de passe actuel", help: "Laisser vide si le PDF n'a qu'un mot de passe de restrictions." },
       },
@@ -231,6 +349,9 @@ const fr = {
     metadonnees: {
       name: "Métadonnées",
       tagline: "Modifier le titre, l'auteur, le sujet et les mots-clés.",
+      seoTitle: "Modifier les métadonnées d'un PDF (titre, auteur) — gratuit",
+      seoDescription: "Changez le titre, l'auteur, le sujet et les mots-clés d'un PDF, ou effacez-les tous. Gratuit, en ligne, sans inscription.",
+      intro: "Le titre affiché dans l'onglet du navigateur ou le nom d'auteur trahit un ancien modèle ? Corrigez les propriétés du document, ou effacez-les avant de le partager.",
       options: {
         title: { label: "Titre" },
         author: { label: "Auteur" },
@@ -267,6 +388,7 @@ const fr = {
     officeTarget: "Conversion vers {target} non prise en charge.",
     officeTimeout: "La conversion a pris trop de temps et a été interrompue.",
     officeFailed: "LibreOffice n'a pas pu convertir « {name} » en {target}.",
+    officeTooLarge: "« {name} » dépasse {mb} Mo : trop volumineux pour une conversion Word, Excel ou PowerPoint.",
     conversionImpossible: "Conversion {from} → {to} impossible.",
     conversionImpossibleOffice: "Conversion {from} → {to} impossible (installer LibreOffice ajoute les formats Word, Excel et PowerPoint).",
     watermarkText: "Indiquez le texte du filigrane.",

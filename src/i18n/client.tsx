@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { direction, fmt, isVerified, LOCALE_COOKIE, languageName, type TranslationStatus } from "./locales";
+import { direction, fmt, isVerified, LOCALE_COOKIE, languageName, localePath, stripLocalePrefix, type TranslationStatus } from "./locales";
 import type { Messages } from "./messages/fr";
 
 interface I18nContextValue {
@@ -15,6 +15,10 @@ interface I18nContextValue {
   translating: string | null;
   translationFailed: string | null;
   setLocale: (locale: string | null) => Promise<void>;
+  /** Préfixe de langue de l'adresse ("/fr"…), vide si la langue est détectée. */
+  prefix: string;
+  /** Lien interne qui garde la langue de l'adresse. */
+  href: (path: string) => string;
   /** Nom d'une langue dans la langue de l'interface. */
   nameOf: (code: string) => string;
 }
@@ -48,12 +52,14 @@ export function I18nProvider({
   messages,
   status,
   machineEnabled,
+  prefix,
   children,
 }: {
   locale: string;
   messages: Messages;
   status: TranslationStatus;
   machineEnabled: boolean;
+  prefix: string;
   children: React.ReactNode;
 }) {
   const router = useRouter();
@@ -82,13 +88,26 @@ export function I18nProvider({
   const setLocale = useCallback(
     async (next: string | null) => {
       writeCookie(next);
+      if (prefix) {
+        // Adresse dans une langue (/fr/…) : on change d'adresse, préfixée si la langue est vérifiée
+        const page = stripLocalePrefix(window.location.pathname);
+        const target = next && isVerified(next) ? localePath(`/${next}`, page) : page;
+        if (next && !isVerified(next) && machineEnabled) {
+          setTranslating(next);
+          const result = await requestTranslation(next);
+          setTranslating(null);
+          if (result === "failed") setTranslationFailed(next);
+        }
+        router.push(target + window.location.search);
+        return;
+      }
       if (next && !isVerified(next) && machineEnabled) {
         await translateThenRefresh(next);
       } else {
         router.refresh();
       }
     },
-    [machineEnabled, router, translateThenRefresh],
+    [machineEnabled, prefix, router, translateThenRefresh],
   );
 
   const value = useMemo<I18nContextValue>(
@@ -101,9 +120,11 @@ export function I18nProvider({
       translating,
       translationFailed,
       setLocale,
+      prefix,
+      href: (path: string) => localePath(prefix, path),
       nameOf: (code: string) => languageName(code, locale),
     }),
-    [locale, messages, status, machineEnabled, translating, translationFailed, setLocale],
+    [locale, messages, status, machineEnabled, translating, translationFailed, setLocale, prefix],
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
@@ -125,7 +146,8 @@ export function TranslationBanner() {
   else if (translationFailed) {
     text = fmt(t.failed, { lang: nameOf(translationFailed) });
     tone = "bg-danger-soft text-danger";
-  } else if (status === "unavailable") {
+  } else if (status === "unavailable" && process.env.NODE_ENV !== "production") {
+    // Message technique : utile en développement, pas pour les visiteurs
     text = t.unavailable;
     tone = "bg-warn-soft text-warn-ink";
   }

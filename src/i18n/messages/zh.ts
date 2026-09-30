@@ -2,8 +2,9 @@ import type { Messages } from "./fr";
 
 const zh: Messages = {
   meta: {
-    title: "pdff — 合并、转换和编辑您的文档",
-    description: "合并、转换和编辑 PDF、Word、Excel、PowerPoint 和图片。免费，无需注册。",
+    title: "pdff — 免费合并、转换和编辑 PDF、Word、Excel",
+    description: "免费在线工具，可合并、转换、压缩、拆分和加密 PDF、Word、Excel、PowerPoint 及图片文件。无需注册，文件处理后立即删除。",
+    keywords: "合并pdf, pdf转换, pdf转word, word转pdf, jpg转pdf, pdf转jpg, 压缩pdf, 拆分pdf, excel转pdf, 免费pdf工具",
   },
   nav: { merge: "合并", convert: "转换", allTools: "全部工具", back: "← 全部工具" },
   footer: { text: "免费，无需注册。处理完成后，您的文件会立即删除。" },
@@ -95,15 +96,72 @@ const zh: Messages = {
     close: "关闭",
     auto: "自动（浏览器语言）",
   },
+  seo: {
+    whyTitle: "为什么选择 pdff？",
+    why: [
+      { title: "完全免费", text: "无需订阅，无需银行卡，不会在文档上添加水印。" },
+      { title: "无需注册", text: "不用创建账户：打开页面，放入文件，即可完成。" },
+      { title: "文件只属于您", text: "处理完成后立即删除。我们不保留您的文档，也不保留您的数据。" },
+      { title: "支持所有格式", text: "PDF、Word、Excel、PowerPoint、OpenDocument、图片、EPUB……电脑和手机都能用。" },
+    ],
+    howTitle: "如何使用？",
+    faqTitle: "常见问题",
+    faq: [
+      { q: "pdff 真的免费吗？", a: "是的。所有工具都免费，没有水印，也没有需要订阅才能解锁的功能。我们从不要求银行卡。" },
+      { q: "需要创建账户吗？", a: "不需要。无需注册，无需邮箱，直接使用即可。" },
+      { q: "我的文档会被保存吗？", a: "不会。您的文件只用于您请求的操作，完成后即被删除。没有人会查看，也不会与任何人共享。" },
+      {
+        q: "手机上能用吗？",
+        a: "可以。pdff 可在任何手机、平板或电脑（Android、iPhone、Windows、Mac、Linux）的浏览器中运行，无需安装任何软件。",
+      },
+      {
+        q: "支持哪些格式？",
+        a: "PDF、Word（DOCX、DOC）、Excel（XLSX、XLS、CSV）、PowerPoint（PPTX、PPT）、OpenDocument（ODT、ODS、ODP）、RTF、图片（JPG、PNG、WebP、AVIF、TIFF、GIF、SVG）、EPUB、TXT、HTML 等。",
+      },
+      { q: "有什么限制吗？", a: "每次最多可处理 {files} 个文件，生成的文档最多可达 {pages} 页。" },
+    ],
+    moreTools: "更多工具",
+    privacyLink: "隐私",
+    sourceLink: "开源代码",
+  },
+  privacy: {
+    title: "隐私",
+    description: "pdff 如何处理您的文件：无需账户，不保留任何文档，没有广告，也不出售数据。",
+    updated: "最后更新：{date}",
+    intro: "pdff 的设计原则是：您的文档始终属于您。下面用简单的话说明您使用时会发生什么。",
+    sections: [
+      {
+        title: "您的文件",
+        text: "文件通过加密连接（HTTPS）上传，自动处理，结果生成后立即删除。大文件会以随机名称暂存在临时存储中，处理结束后即被清除；自动清理程序最迟在 24 小时内删除任何残留文件。",
+      },
+      { title: "无需账户，不收集个人数据", text: "pdff 不要求注册、邮箱或银行卡。您的文档不会被查看、分析、共享，也不会用于训练人工智能。" },
+      {
+        title: "访问统计",
+        text: "我们以匿名且不使用 Cookie 的方式统计访问量（Vercel Web Analytics），以了解哪些工具有用。没有广告，也没有跨站跟踪。",
+      },
+      { title: "Cookie", text: "只有一个可选的 Cookie：用于记住您选择的语言。" },
+      {
+        title: "托管",
+        text: "网站托管在 Vercel 上；Word、Excel 和 PowerPoint 的转换在 Google Cloud 上完成。这些服务商仅在转换期间处理文件。",
+      },
+      { title: "联系我们", text: "有问题或建议？请通过项目页面联系我们：" },
+    ],
+  },
   tools: {
     fusionner: {
       name: "合并",
       tagline: "按您选择的顺序，把多个文件（PDF、Word、图片……）合并成一个 PDF。",
+      seoTitle: "免费在线合并 PDF（Word、图片、PDF）",
+      seoDescription: "按您想要的顺序，将 PDF、Word、Excel、PowerPoint 和图片合并为一个 PDF。免费、无需注册、无水印，文件立即删除。",
+      intro: "把所有材料放进一个文件：pdff 不仅支持 PDF，还支持 Word 文档、Excel 表格、演示文稿和照片，并将它们合并成一个整洁的 PDF，每个文件都有一个书签。",
       options: { bookmarks: { label: "为每个文件添加书签" } },
     },
     convertir: {
       name: "转换",
       tagline: "把任意文档或图片转换为其他格式。",
+      seoTitle: "PDF 转 Word、Word 转 PDF、JPG 转 PDF — 免费",
+      seoDescription: "免费转换器：PDF ↔ Word、Excel、PowerPoint、JPG、PNG、EPUB 等 40 多种格式。在线使用，无需注册，高质量输出。",
+      intro: "一个转换器搞定所有格式：Word 转 PDF、PDF 转 Word、JPG 转 PDF、PDF 转 JPG、Excel 转 PDF、PowerPoint 转 PDF、PNG 转 JPG、EPUB 转 PDF……放入文件后，pdff 只会显示可以转换的格式。",
       options: {
         target: { label: "转换为" },
         dpi: { label: "图片分辨率（DPI）" },
@@ -113,6 +171,9 @@ const zh: Messages = {
     diviser: {
       name: "拆分",
       tagline: "把一个 PDF 拆成多个文件：按页码范围或逐页拆分。",
+      seoTitle: "免费在线拆分 PDF — 分离页面",
+      seoDescription: "将一个 PDF 拆分为多个文件：按页码范围、逐页或每 N 页拆分。免费、快速、无需注册。",
+      intro: "只发送大文档中有用的部分：pdff 按您选择的范围切分 PDF，并将各部分打包成 ZIP 文件返回。",
       options: {
         mode: { label: "方式", choices: { ranges: "按页码范围", each: "每页一个文件", every: "每 N 页一个文件" } },
         ranges: { label: "页码范围", placeholder: "1-3, 4-10, 11-end", help: "每个范围生成一个文件。" },
@@ -122,6 +183,9 @@ const zh: Messages = {
     extraire: {
       name: "提取 / 删除页面",
       tagline: "保留或删除 PDF 中的部分页面。",
+      seoTitle: "提取或删除 PDF 页面 — 免费",
+      seoDescription: "只保留 PDF 中有用的页面，或删除多余的页面。在线、免费、无需注册、无水印。",
+      intro: "有空白页、无用的附件或重复页？输入要保留或删除的页码（例如 1-3, 7, 10-end），几秒钟即可得到整洁的 PDF。",
       options: {
         mode: { label: "操作", choices: { keep: "仅保留这些页面", remove: "删除这些页面" } },
         pages: { label: "页面", placeholder: "1, 3-5", help: "例如：1-3, 5, 8-end。留空 = 全部页面。" },
@@ -130,6 +194,9 @@ const zh: Messages = {
     organiser: {
       name: "调整页面顺序",
       tagline: "更改页面顺序、复制、倒序。",
+      seoTitle: "在线重新排列 PDF 页面 — 免费",
+      seoDescription: "调整 PDF 页面顺序、复制部分页面或倒序整个文档。免费、在线、无需注册。",
+      intro: "扫描的页面顺序乱了？输入新的顺序（例如 3, 1, 2, 4-end）或将整个文档倒序，其余交给 pdff。",
       options: {
         order: { label: "新顺序", placeholder: "3, 1, 2, 4-end", help: "未列出的页面将被删除。" },
         reverse: { label: "整个文档倒序（忽略上面的顺序）" },
@@ -138,6 +205,9 @@ const zh: Messages = {
     pivoter: {
       name: "旋转",
       tagline: "旋转全部页面或所选页面。",
+      seoTitle: "免费在线旋转 PDF",
+      seoDescription: "将 PDF 的全部或部分页面旋转 90°、180° 或 270°。免费、快速、无需注册。",
+      intro: "扫描件倒过来了，或者有横向页面？旋转整个文档或只旋转选中的页面，画质不受影响。",
       options: {
         angle: { label: "旋转角度", choices: { "90": "顺时针 90°", "180": "180°", "270": "逆时针 90°" } },
         pages: { label: "页面", placeholder: "全部", help: "例如：1-3, 5, 8-end。留空 = 全部页面。" },
@@ -146,6 +216,9 @@ const zh: Messages = {
     numeroter: {
       name: "添加页码",
       tagline: "为页面添加页码。",
+      seoTitle: "给 PDF 添加页码 — 免费在线",
+      seoDescription: "为 PDF 添加页码：可自选位置、“1 / 10”格式、起始页码和字号。免费、无需注册。",
+      intro: "非常适合论文、申请材料或报告：选择位置、格式和起始页码，pdff 会为您整齐地编排页码。",
       options: {
         position: {
           label: "位置",
@@ -167,6 +240,9 @@ const zh: Messages = {
     filigrane: {
       name: "水印",
       tagline: "添加文字水印（机密、副本……）。",
+      seoTitle: "给 PDF 添加水印 — 免费在线",
+      seoDescription: "在 PDF 上添加文字水印（机密、副本、草稿……），可调整大小、透明度、角度和颜色。免费。",
+      intro: "为身份证件和证明材料的复印件加上清晰的说明，例如“仅供租房申请使用”，保护您的信息。",
       options: {
         text: { label: "文字", default: "机密" },
         size: { label: "大小" },
@@ -179,6 +255,9 @@ const zh: Messages = {
     compresser: {
       name: "压缩",
       tagline: "减小 PDF 文件大小。",
+      seoTitle: "在线压缩 PDF — 免费减小文件大小",
+      seoDescription: "减小 PDF 文件大小，方便通过邮件发送或上传到官方网站。三种压缩级别，免费。",
+      intro: "网站因为文件太大而拒绝上传？在保持文字清晰的前提下压缩 PDF：根据目标大小选择无损、推荐或强力压缩。",
       options: {
         level: {
           label: "压缩程度",
@@ -193,6 +272,9 @@ const zh: Messages = {
     proteger: {
       name: "加密保护",
       tagline: "用密码加密 PDF（AES-256）。",
+      seoTitle: "为 PDF 设置密码保护 — 免费（AES-256）",
+      seoDescription: "使用密码（AES-256）加密 PDF，并禁止打印、复制或编辑。免费、无需注册。",
+      intro: "发送工资单或病历之前，用强密码保护它：没有密码，任何人都无法打开。",
       options: {
         password: { label: "打开密码" },
         noPrint: { label: "禁止打印" },
@@ -203,11 +285,17 @@ const zh: Messages = {
     deverrouiller: {
       name: "解除密码",
       tagline: "移除您已知密码的 PDF 的密码。",
+      seoTitle: "解锁 PDF — 免费移除密码",
+      seoDescription: "移除您已知密码的 PDF 的密码，方便自由打开、打印或合并。免费。",
+      intro: "您知道密码，但每次打开都要输入很麻烦？一次性移除它。pdff 绝不会破解您不知道的密码。",
       options: { password: { label: "当前密码", help: "如果 PDF 只有权限密码，请留空。" } },
     },
     metadonnees: {
       name: "元数据",
       tagline: "编辑标题、作者、主题和关键词。",
+      seoTitle: "编辑 PDF 元数据（标题、作者）— 免费",
+      seoDescription: "修改 PDF 的标题、作者、主题和关键词，或全部清除。免费、在线、无需注册。",
+      intro: "浏览器标签上显示的标题或作者名暴露了旧模板？修改文档属性，或在分享前将其清除。",
       options: {
         title: { label: "标题" },
         author: { label: "作者" },
@@ -244,6 +332,7 @@ const zh: Messages = {
     officeTarget: "不支持转换为 {target}。",
     officeTimeout: "转换耗时过长，已中止。",
     officeFailed: "LibreOffice 无法将“{name}”转换为 {target}。",
+    officeTooLarge: "“{name}”超过 {mb} MB：文件太大，无法进行 Word、Excel 或 PowerPoint 转换。",
     conversionImpossible: "无法进行 {from} → {to} 转换。",
     conversionImpossibleOffice: "无法进行 {from} → {to} 转换（安装 LibreOffice 后可支持 Word、Excel 和 PowerPoint 格式）。",
     watermarkText: "请输入水印文字。",

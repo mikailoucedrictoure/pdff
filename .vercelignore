@@ -1,0 +1,13 @@
+# Quand ce fichier existe, Vercel CLI ignore .gitignore : on répète ici l'essentiel.
+# Secrets et fichiers locaux : ne jamais envoyer
+.env
+.env.*
+!.env.example
+.cache/
+.next/
+node_modules/
+*.lnk
+*.tsbuildinfo
+
+# Service LibreOffice : déployé à part sur Google Cloud Run (voir services/office/README.md)
+services/

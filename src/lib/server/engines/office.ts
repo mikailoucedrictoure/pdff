@@ -1,6 +1,11 @@
 /**
  * Moteur bureautique : LibreOffice en mode headless.
  * Word, Excel, PowerPoint, OpenDocument, RTF, CSV, HTML ↔ PDF et entre eux.
+ *
+ * Deux façons de l'exécuter :
+ * - distant : le service `services/office` (Google Cloud Run), si PDFF_OFFICE_URL est défini.
+ *   C'est le mode utilisé en production, Vercel ne pouvant pas installer LibreOffice ;
+ * - local : LibreOffice installé sur la machine (développement).
  */
 import { spawn, execFile } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -51,6 +56,54 @@ export function findLibreOffice(): Promise<string | null> {
   })();
   return detected;
 }
+
+// ---------------------------------------------------------------- Service distant
+
+const REMOTE_URL = process.env.PDFF_OFFICE_URL?.trim().replace(/\/+$/, "") || null;
+const REMOTE_TOKEN = process.env.PDFF_OFFICE_TOKEN?.trim() || "";
+/** Taille maximale d'une requête vers Cloud Run (32 Mo, en-têtes compris). */
+const REMOTE_MAX_BYTES = 31 * 1024 * 1024;
+
+/** Formats Office disponibles (service distant configuré ou LibreOffice local). */
+export async function officeAvailable(): Promise<boolean> {
+  return !!REMOTE_URL || !!(await findLibreOffice());
+}
+
+async function convertRemote(file: FileData, target: string, filter: string, importFilter?: string): Promise<FileData> {
+  if (file.data.byteLength > REMOTE_MAX_BYTES) {
+    throw new UserError("officeTooLarge", { name: file.name, mb: Math.floor(REMOTE_MAX_BYTES / 1024 / 1024) });
+  }
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${REMOTE_TOKEN}`,
+    "Content-Type": "application/octet-stream",
+    "X-Filename": encodeURIComponent(file.name),
+    "X-Target": target,
+    "X-Filter": encodeURIComponent(filter),
+  };
+  if (importFilter) headers["X-Import-Filter"] = importFilter;
+
+  let res: Response;
+  try {
+    res = await fetch(`${REMOTE_URL}/convert`, {
+      method: "POST",
+      headers,
+      body: file.data as BodyInit,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "TimeoutError") throw new UserError("officeTimeout");
+    console.error("[pdff] service Office injoignable :", err);
+    throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
+  }
+  if (res.status === 504) throw new UserError("officeTimeout");
+  if (!res.ok) {
+    console.error(`[pdff] service Office : HTTP ${res.status}`, await res.text().catch(() => ""));
+    throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
+  }
+  return { name: `${baseName(file.name)}.${target}`, data: new Uint8Array(await res.arrayBuffer()) };
+}
+
+// ---------------------------------------------------------------- Filtres
 
 /** Filtre d'export LibreOffice pour chaque format cible. */
 const EXPORT_FILTERS: Record<string, string> = {
@@ -125,13 +178,15 @@ export interface OfficeConvertOptions {
 }
 
 export async function convertWithOffice(file: FileData, target: string, opts: OfficeConvertOptions = {}): Promise<FileData> {
+  const sourceExt = canonicalExt(extOf(file.name));
+  const filter = target === "pdf" ? pdfFilter(sourceExt) : EXPORT_FILTERS[target];
+  if (!filter) throw new UserError("officeTarget", { target: target.toUpperCase() });
+  if (REMOTE_URL) return convertRemote(file, target, filter, opts.importFilter);
+
   const bin = await findLibreOffice();
   if (!bin) {
     throw new UserError("officeMissing");
   }
-  const sourceExt = canonicalExt(extOf(file.name));
-  const filter = target === "pdf" ? pdfFilter(sourceExt) : EXPORT_FILTERS[target];
-  if (!filter) throw new UserError("officeTarget", { target: target.toUpperCase() });
 
   return serialize(async () => {
     const work = await mkdtemp(path.join(tmpdir(), "pdff-"));

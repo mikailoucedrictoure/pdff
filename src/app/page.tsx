@@ -1,18 +1,51 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CapabilityNotice } from "@/components/CapabilityNotice";
+import { SeoSections } from "@/components/SeoSections";
 import { FormatMarquee } from "@/components/visual/FormatMarquee";
 import { FormatOrbit } from "@/components/visual/FormatOrbit";
 import { Scene } from "@/components/visual/Scene";
 import { ToolCard } from "@/components/visual/ToolCard";
-import { fmt } from "@/i18n/locales";
+import { fmt, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
 import { SHOWCASE_EXTENSIONS } from "@/lib/core/formats";
 import { TOOL_CATEGORIES, TOOLS } from "@/lib/core/tools";
+import { jsonLd, pageMetadata, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { messages: t, prefix, locale } = await getI18n();
+  return pageMetadata({ title: t.meta.title, description: t.meta.description, keywords: t.meta.keywords, path: "/", prefix, locale, absoluteTitle: true });
+}
 
 export default async function Home() {
-  const { messages: t } = await getI18n();
+  const { messages: t, prefix, locale } = await getI18n();
+  const href = (path: string) => localePath(prefix, path);
+  const url = siteUrl();
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLd({
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "WebSite", "@id": `${url}/#website`, url, name: SITE_NAME, description: t.meta.description, inLanguage: locale },
+            {
+              "@type": "WebApplication",
+              name: SITE_NAME,
+              url: `${url}${href("/")}`,
+              description: t.meta.description,
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Any",
+              browserRequirements: "Requires JavaScript",
+              isAccessibleForFree: true,
+              inLanguage: locale,
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              featureList: TOOLS.map((tool) => t.tools[tool.id].name),
+              sameAs: [SOURCE_URL],
+            },
+          ],
+        })}
+      />
       <Scene className="-mt-16 pt-16">
         <section className="mx-auto grid max-w-6xl items-center gap-4 px-4 pt-6 pb-20 md:grid-cols-[1.05fr_1fr] md:gap-8 md:pt-16 md:pb-28">
           <div className="order-2 text-center md:order-1 md:text-start">
@@ -20,13 +53,13 @@ export default async function Home() {
             <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/75 md:mx-0">{t.home.subtitle}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
               <Link
-                href="/outils/fusionner"
+                href={href("/outils/fusionner")}
                 className="rounded-full bg-brand px-7 py-3.5 text-center font-semibold text-brand-ink shadow-[0_12px_40px_-10px_#6d5cff] transition hover:-translate-y-0.5 hover:bg-brand-2"
               >
                 {t.home.ctaMerge}
               </Link>
               <Link
-                href="/outils/convertir"
+                href={href("/outils/convertir")}
                 className="rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-center font-semibold backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15"
               >
                 {t.home.ctaConvert}
@@ -70,7 +103,7 @@ export default async function Home() {
           ))}
         </div>
 
-        <section className="mb-16 rounded-[2rem] border border-line bg-surface p-6 sm:p-10">
+        <section className="mb-12 rounded-[2rem] border border-line bg-surface p-6 sm:p-10">
           <h2 className="font-display text-2xl font-bold tracking-tight">{t.home.stepsTitle}</h2>
           <ol className="mt-6 grid gap-6 sm:grid-cols-3">
             {t.home.steps.map((s, i) => (
@@ -86,6 +119,10 @@ export default async function Home() {
             ))}
           </ol>
         </section>
+
+        <div className="mb-16">
+          <SeoSections t={t} prefix={prefix} locale={locale} />
+        </div>
       </div>
     </>
   );

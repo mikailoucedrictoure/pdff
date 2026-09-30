@@ -1,0 +1,54 @@
+name: Vérifications
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    name: Site (lint, types, tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  office:
+    name: Service Office (Docker + LibreOffice)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construire l'image (identique à Cloud Run)
+        run: docker build -t pdff-office services/office
+      - name: Démarrer le service
+        run: |
+          docker run -d --name office -p 8080:8080 -e OFFICE_TOKEN=ci-token pdff-office
+          for i in $(seq 1 30); do curl -sf http://localhost:8080/health && break; sleep 1; done
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:8080/convert)" = "401"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Conversions Word, Excel, PDF via le service
+        run: npx vitest run tests/office.test.ts
+        env:
+          OFFICE_TEST_URL: http://localhost:8080
+          OFFICE_TEST_TOKEN: ci-token
+      - name: Journal du service
+        if: always()
+        run: docker logs office

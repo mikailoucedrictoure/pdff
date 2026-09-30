@@ -6,6 +6,7 @@ import type { EngineId } from "@/lib/core/graph";
 export interface Capabilities {
   engines: EngineId[];
   libreOffice: boolean;
+  blob: boolean;
   limits: { maxPages: number; maxFiles: number; maxUploadMb: number };
 }
 

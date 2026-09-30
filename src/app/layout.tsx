@@ -1,10 +1,12 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Bricolage_Grotesque, Onest } from "next/font/google";
 import { LanguagePicker } from "@/components/LanguagePicker";
 import { I18nProvider, TranslationBanner } from "@/i18n/client";
-import { direction } from "@/i18n/locales";
+import { direction, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
+import { SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin", "latin-ext", "vietnamese"] });
@@ -12,7 +14,14 @@ const body = Onest({ variable: "--font-body", subsets: ["latin", "latin-ext", "c
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages } = await getI18n();
-  return { title: messages.meta.title, description: messages.meta.description };
+  return {
+    metadataBase: new URL(siteUrl()),
+    title: { default: messages.meta.title, template: `%s | ${SITE_NAME}` },
+    description: messages.meta.description,
+    applicationName: SITE_NAME,
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+    formatDetection: { telephone: false },
+  };
 }
 
 export const viewport: Viewport = {
@@ -20,28 +29,29 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const { locale, messages, status, machineEnabled } = await getI18n();
+  const { locale, messages, status, machineEnabled, prefix } = await getI18n();
+  const href = (path: string) => localePath(prefix, path);
   // Tant que la traduction automatique n'est pas prête, la page est en anglais
   const shownLocale = status === "pending" || status === "unavailable" ? "en" : locale;
   const t = messages;
   return (
     <html lang={shownLocale} dir={direction(shownLocale)} className={`${display.variable} ${body.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <I18nProvider locale={locale} messages={messages} status={status} machineEnabled={machineEnabled}>
+        <I18nProvider locale={locale} messages={messages} status={status} machineEnabled={machineEnabled} prefix={prefix}>
           <header className="sticky top-0 z-50 border-b border-white/10 bg-night/75 text-white backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
-              <Link href="/" className="font-display flex items-center gap-2.5 text-xl font-bold tracking-tight">
+              <Link href={href("/")} className="font-display flex items-center gap-2.5 text-xl font-bold tracking-tight">
                 <Logo />
                 pdff
               </Link>
               <nav className="flex items-center gap-1 text-sm font-medium">
-                <Link href="/outils/fusionner" className="hidden rounded-full px-4 py-2 text-white/80 hover:bg-white/10 hover:text-white md:block">
+                <Link href={href("/outils/fusionner")} className="hidden rounded-full px-4 py-2 text-white/80 hover:bg-white/10 hover:text-white md:block">
                   {t.nav.merge}
                 </Link>
-                <Link href="/outils/convertir" className="hidden rounded-full px-4 py-2 text-white/80 hover:bg-white/10 hover:text-white md:block">
+                <Link href={href("/outils/convertir")} className="hidden rounded-full px-4 py-2 text-white/80 hover:bg-white/10 hover:text-white md:block">
                   {t.nav.convert}
                 </Link>
-                <Link href="/#outils" className="rounded-full bg-white/10 px-4 py-2 whitespace-nowrap hover:bg-white/20">
+                <Link href={href("/#outils")} className="rounded-full bg-white/10 px-4 py-2 whitespace-nowrap hover:bg-white/20">
                   {t.nav.allTools}
                 </Link>
                 <LanguagePicker />
@@ -53,8 +63,17 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <footer className="border-t border-line px-4 py-8 text-center text-sm text-muted">
             <p className="font-display text-base font-semibold text-ink">pdff</p>
             <p className="mt-1">{t.footer.text}</p>
+            <p className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1">
+              <Link href={href("/confidentialite")} className="underline-offset-4 hover:text-ink hover:underline">
+                {t.seo.privacyLink}
+              </Link>
+              <a href={SOURCE_URL} className="underline-offset-4 hover:text-ink hover:underline" rel="noopener">
+                {t.seo.sourceLink}
+              </a>
+            </p>
           </footer>
         </I18nProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -3,13 +3,15 @@
  *
  * - Source : le dictionnaire anglais (le plus fiable pour les modèles).
  * - Moteur : Vercel AI Gateway (clé AI_GATEWAY_API_KEY, ou OIDC sur Vercel).
- * - Cache : mémoire + disque, invalidé automatiquement quand les textes source changent.
+ * - Cache : mémoire + disque + Vercel Blob (seul cache durable sur Vercel), invalidé
+ *   automatiquement quand les textes source changent.
  *   Une langue n'est donc traduite qu'une seule fois.
  */
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { head, put } from "@vercel/blob";
 import { generateText } from "ai";
 import { direction, languageName } from "./locales";
 import { VERIFIED_MESSAGES, type Messages } from "./messages";
@@ -18,7 +20,10 @@ const MODEL = process.env.PDFF_TRANSLATION_MODEL || "anthropic/claude-haiku-4.5"
 const CHUNK_SIZE = 70;
 
 export function machineTranslationEnabled(): boolean {
-  return !!(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN);
+  // Interrupteur : PDFF_MACHINE_TRANSLATION=off (ex. AI Gateway pas encore activé)
+  if (process.env.PDFF_MACHINE_TRANSLATION === "off") return false;
+  // Sur Vercel, le jeton OIDC est fourni à chaque requête (pas toujours en variable d'environnement)
+  return !!(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN || process.env.VERCEL);
 }
 
 // ---------------------------------------------------------------- Aplatir / reconstruire
@@ -74,11 +79,41 @@ export async function readCachedTranslation(locale: string): Promise<Messages | 
       // absent de ce dossier
     }
   }
+  const fromBlob = await readBlobCache(locale);
+  if (fromBlob) memory.set(locale, fromBlob);
+  return fromBlob;
+}
+
+// Cache durable partagé par toutes les instances Vercel
+const blobPath = (locale: string) => `i18n/${locale}-${SOURCE_HASH}.json`;
+const blobMisses = new Map<string, number>();
+
+async function readBlobCache(locale: string): Promise<Messages | null> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  // Évite d'interroger Blob à chaque page tant que la langue n'est pas traduite
+  if ((blobMisses.get(locale) ?? 0) > Date.now()) return null;
+  try {
+    const { url } = await head(blobPath(locale));
+    const res = await fetch(url);
+    if (res.ok) return (await res.json()) as Messages;
+  } catch {
+    // pas encore traduite
+  }
+  blobMisses.set(locale, Date.now() + 30_000);
   return null;
 }
 
 async function writeCache(locale: string, messages: Messages) {
   memory.set(locale, messages);
+  blobMisses.delete(locale);
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    await put(blobPath(locale), JSON.stringify(messages), {
+      access: "public",
+      contentType: "application/json",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+    }).catch((err) => console.error("[pdff] cache Blob des traductions :", err));
+  }
   for (const dir of cacheDirs()) {
     try {
       await mkdir(dir, { recursive: true });

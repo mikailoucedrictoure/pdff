@@ -17,7 +17,8 @@ const CATEGORY_TINT: Record<ToolMeta["category"], string> = {
 export function ToolCard({ tool }: { tool: ToolMeta }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const tint = CATEGORY_TINT[tool.category];
-  const text = useI18n().messages.tools[tool.id];
+  const { messages, href } = useI18n();
+  const text = messages.tools[tool.id];
 
   function onMove(e: React.PointerEvent) {
     if (e.pointerType !== "mouse") return;
@@ -38,7 +39,7 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
   return (
     <Link
       ref={ref}
-      href={`/outils/${tool.id}`}
+      href={href(`/outils/${tool.id}`)}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       className="tilt group relative flex items-start gap-4 overflow-hidden rounded-3xl border border-line bg-surface p-5 active:scale-[0.98]"

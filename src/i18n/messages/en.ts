@@ -2,8 +2,9 @@ import type { Messages } from "./fr";
 
 const en: Messages = {
   meta: {
-    title: "pdff — merge, convert and edit your documents",
-    description: "Merge, convert and edit PDF, Word, Excel, PowerPoint and images. Free, no sign-up.",
+    title: "pdff — Merge, convert and edit PDF, Word, Excel for free",
+    description: "Free online tool to merge, convert, compress, split and protect your PDF, Word, Excel, PowerPoint and image files. No sign-up, files deleted right away.",
+    keywords: "merge pdf, convert pdf, pdf to word, word to pdf, jpg to pdf, pdf to jpg, compress pdf, split pdf, excel to pdf, free pdf tools",
   },
   nav: { merge: "Merge", convert: "Convert", allTools: "All tools", back: "← All tools" },
   footer: { text: "Free, no sign-up. Your files are deleted as soon as processing is done." },
@@ -95,15 +96,96 @@ const en: Messages = {
     close: "Close",
     auto: "Automatic (browser language)",
   },
+  seo: {
+    whyTitle: "Why pdff?",
+    why: [
+      {
+        title: "100% free",
+        text: "No subscription, no credit card, no watermark added to your documents.",
+      },
+      { title: "No sign-up", text: "No account to create: open the page, drop your files, done." },
+      {
+        title: "Your files stay yours",
+        text: "Processed, then deleted right away. We keep neither your documents nor your data.",
+      },
+      {
+        title: "Every format",
+        text: "PDF, Word, Excel, PowerPoint, OpenDocument, images, EPUB… from a computer or a phone.",
+      },
+    ],
+    howTitle: "How does it work?",
+    faqTitle: "Frequently asked questions",
+    faq: [
+      {
+        q: "Is pdff really free?",
+        a: "Yes. Every tool is free, with no watermark and nothing locked behind a subscription. No credit card is ever requested.",
+      },
+      {
+        q: "Do I need an account?",
+        a: "No. No sign-up, no email address: you use the tools right away.",
+      },
+      {
+        q: "Are my documents kept?",
+        a: "No. Your files are only used for the task you asked for, then deleted. Nobody reads them and they are never shared.",
+      },
+      {
+        q: "Does it work on a phone?",
+        a: "Yes. pdff runs in the browser of any phone, tablet or computer (Android, iPhone, Windows, Mac, Linux), with nothing to install.",
+      },
+      {
+        q: "Which formats are supported?",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, images (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML and more.",
+      },
+      {
+        q: "Are there any limits?",
+        a: "You can process up to {files} files at once, and a produced document can have up to {pages} pages.",
+      },
+    ],
+    moreTools: "More tools",
+    privacyLink: "Privacy",
+    sourceLink: "Open source code",
+  },
+  privacy: {
+    title: "Privacy",
+    description: "How pdff handles your files: no account, no document kept, no ads and no data resale.",
+    updated: "Last updated: {date}",
+    intro: "pdff is built so that your documents stay yours. Here is, in plain words, what happens when you use it.",
+    sections: [
+      {
+        title: "Your files",
+        text: "They are sent encrypted (HTTPS), processed automatically, then deleted as soon as the result is ready. Large files go through temporary storage under a random name and are erased as soon as processing ends; an automatic cleanup removes anything that might remain within 24 hours at most.",
+      },
+      {
+        title: "No account, no personal data",
+        text: "pdff asks for no sign-up, no email address and no credit card. Your documents are never read, analysed, shared or used to train artificial intelligence.",
+      },
+      {
+        title: "Audience measurement",
+        text: "We count visits anonymously and without cookies (Vercel Web Analytics) to learn which tools are useful. No ads, no cross-site tracking.",
+      },
+      { title: "Cookies", text: "A single, optional cookie: it remembers the language you chose." },
+      {
+        title: "Hosting",
+        text: "The site is hosted by Vercel; Word, Excel and PowerPoint conversions run on Google Cloud. These providers only handle files for the duration of the conversion.",
+      },
+      { title: "Contact", text: "A question or a comment? Reach us from the project page:" },
+    ],
+  },
   tools: {
     fusionner: {
       name: "Merge",
       tagline: "Combine several files (PDF, Word, images…) into one PDF, in the order you choose.",
+      seoTitle: "Merge PDF files online for free (Word, images, PDF)",
+      seoDescription: "Combine PDF, Word, Excel, PowerPoint and image files into one PDF, in the order you want. Free, no sign-up, no watermark, files deleted right away.",
+      intro: "Put all your paperwork in a single file: pdff takes PDFs but also Word documents, Excel sheets, presentations and photos, and combines them into one clean PDF with a bookmark per file.",
       options: { bookmarks: { label: "Add one bookmark per file" } },
     },
     convertir: {
       name: "Convert",
       tagline: "Convert any document or image to another format.",
+      seoTitle: "Convert PDF to Word, Word to PDF, JPG to PDF — free",
+      seoDescription: "Free converter: PDF ↔ Word, Excel, PowerPoint, JPG, PNG, EPUB and 40+ formats. Online, no sign-up, high quality.",
+      intro: "One converter for every format: Word to PDF, PDF to Word, JPG to PDF, PDF to JPG, Excel to PDF, PowerPoint to PDF, PNG to JPG, EPUB to PDF… Drop your files and pdff only offers the formats that are possible.",
       options: {
         target: { label: "Convert to" },
         dpi: { label: "Image resolution (DPI)" },
@@ -113,6 +195,9 @@ const en: Messages = {
     diviser: {
       name: "Split",
       tagline: "Split a PDF into several files: by page ranges or page by page.",
+      seoTitle: "Split a PDF online for free — separate pages",
+      seoDescription: "Split a PDF into several files: by page ranges, page by page or every N pages. Free, fast and no sign-up.",
+      intro: "Send only the part of a big document that matters: pdff cuts your PDF along the ranges you choose and hands the pieces back in a ZIP archive.",
       options: {
         mode: { label: "Mode", choices: { ranges: "By page ranges", each: "One page = one file", every: "Every N pages" } },
         ranges: { label: "Ranges", placeholder: "1-3, 4-10, 11-end", help: "Each range becomes a file." },
@@ -122,6 +207,9 @@ const en: Messages = {
     extraire: {
       name: "Extract / delete pages",
       tagline: "Keep or remove specific pages of a PDF.",
+      seoTitle: "Extract or delete pages from a PDF — free",
+      seoDescription: "Keep only the pages you need from a PDF, or remove the extra ones. Online, free, no sign-up, no watermark.",
+      intro: "A blank page, a useless appendix, a duplicate? Type the pages to keep or remove (for example 1-3, 7, 10-end) and get a clean PDF in seconds.",
       options: {
         mode: { label: "Action", choices: { keep: "Keep only these pages", remove: "Delete these pages" } },
         pages: { label: "Pages", placeholder: "1, 3-5", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
@@ -130,6 +218,9 @@ const en: Messages = {
     organiser: {
       name: "Reorder pages",
       tagline: "Change the page order, duplicate, reverse.",
+      seoTitle: "Reorder PDF pages online — free",
+      seoDescription: "Change the order of a PDF's pages, duplicate some or reverse the whole document. Free, online, no sign-up.",
+      intro: "Pages scanned out of order? Type the new order (for example 3, 1, 2, 4-end) or reverse the whole document: pdff does the rest.",
       options: {
         order: { label: "New order", placeholder: "3, 1, 2, 4-end", help: "Pages not listed are removed." },
         reverse: { label: "Reverse the whole document (ignores the order above)" },
@@ -138,6 +229,9 @@ const en: Messages = {
     pivoter: {
       name: "Rotate",
       tagline: "Rotate all pages or a selection.",
+      seoTitle: "Rotate a PDF online for free",
+      seoDescription: "Rotate all pages of a PDF or only some of them, by 90°, 180° or 270°. Free, fast, no sign-up.",
+      intro: "An upside-down scan or a landscape page? Rotate the whole document or only the pages you pick, with no loss of quality.",
       options: {
         angle: { label: "Rotation", choices: { "90": "90° clockwise", "180": "180°", "270": "90° counter-clockwise" } },
         pages: { label: "Pages", placeholder: "all", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
@@ -146,6 +240,9 @@ const en: Messages = {
     numeroter: {
       name: "Number pages",
       tagline: "Add page numbers.",
+      seoTitle: "Add page numbers to a PDF — free online",
+      seoDescription: "Add page numbers to a PDF: choose the position, the \"1 / 10\" format, the first number and the size. Free, no sign-up.",
+      intro: "Perfect for a thesis, an application file or a report: choose the position, format and first number, and pdff numbers your pages neatly.",
       options: {
         position: {
           label: "Position",
@@ -167,6 +264,9 @@ const en: Messages = {
     filigrane: {
       name: "Watermark",
       tagline: "Stamp a text watermark (CONFIDENTIAL, COPY…).",
+      seoTitle: "Add a watermark to a PDF — free online",
+      seoDescription: "Stamp a text watermark (CONFIDENTIAL, COPY, DRAFT…) on a PDF with adjustable size, opacity, angle and colour. Free.",
+      intro: "Protect copies of your ID and supporting documents by adding a clear notice, such as \"Copy for rental application only\".",
       options: {
         text: { label: "Text", default: "CONFIDENTIAL" },
         size: { label: "Size" },
@@ -179,6 +279,9 @@ const en: Messages = {
     compresser: {
       name: "Compress",
       tagline: "Reduce the size of a PDF.",
+      seoTitle: "Compress a PDF online — reduce file size for free",
+      seoDescription: "Shrink a PDF to send it by email or upload it to an official website. Three compression levels, free.",
+      intro: "A portal rejects your file because it is too heavy? Compress your PDF while keeping text sharp: pick lossless, recommended or strong depending on the size you need.",
       options: {
         level: {
           label: "Level",
@@ -193,6 +296,9 @@ const en: Messages = {
     proteger: {
       name: "Protect",
       tagline: "Encrypt a PDF with a password (AES-256).",
+      seoTitle: "Password protect a PDF — free (AES-256)",
+      seoDescription: "Encrypt a PDF with a password (AES-256) and block printing, copying or editing. Free, no sign-up.",
+      intro: "Before sending a payslip or a medical document, lock it with a strong password: without it, nobody can open it.",
       options: {
         password: { label: "Password to open" },
         noPrint: { label: "Block printing" },
@@ -203,11 +309,17 @@ const en: Messages = {
     deverrouiller: {
       name: "Unlock",
       tagline: "Remove the password from a PDF whose password you know.",
+      seoTitle: "Unlock a PDF — remove the password for free",
+      seoDescription: "Remove the password from a PDF you know the password of, to open, print or merge it freely. Free.",
+      intro: "You know the password, but typing it every time is a pain? Remove it once and for all. pdff never bypasses a password you don't know.",
       options: { password: { label: "Current password", help: "Leave empty if the PDF only has a permissions password." } },
     },
     metadonnees: {
       name: "Metadata",
       tagline: "Edit the title, author, subject and keywords.",
+      seoTitle: "Edit PDF metadata (title, author) — free",
+      seoDescription: "Change the title, author, subject and keywords of a PDF, or clear them all. Free, online, no sign-up.",
+      intro: "The title shown in the browser tab or the author name gives away an old template? Fix the document properties, or wipe them before sharing.",
       options: {
         title: { label: "Title" },
         author: { label: "Author" },
@@ -244,6 +356,7 @@ const en: Messages = {
     officeTarget: "Conversion to {target} isn't supported.",
     officeTimeout: "The conversion took too long and was stopped.",
     officeFailed: "LibreOffice couldn't convert \"{name}\" to {target}.",
+    officeTooLarge: "\"{name}\" is over {mb} MB: too large for a Word, Excel or PowerPoint conversion.",
     conversionImpossible: "{from} → {to} conversion isn't possible.",
     conversionImpossibleOffice: "{from} → {to} conversion isn't possible (installing LibreOffice adds Word, Excel and PowerPoint formats).",
     watermarkText: "Enter the watermark text.",

@@ -23,6 +23,7 @@ winget install TheDocumentFoundation.LibreOffice
 ```
 
 Redémarrez ensuite `npm run dev`. LibreOffice est détecté automatiquement ; sinon renseignez `LIBREOFFICE_PATH` dans `.env.local`.
+En ligne, c'est le service `services/office` (Google Cloud Run) qui s'en charge : voir `services/office/README.md`.
 
 ## Langues
 
@@ -43,6 +44,30 @@ Dans `.env.local` (local) ou dans les variables d'environnement Vercel :
 | `PDFF_MAX_PAGES` | 10000 | Pages maximum d'un document produit |
 | `PDFF_MAX_FILES` | 500 | Fichiers maximum par opération |
 | `PDFF_MAX_UPLOAD_MB` | 2048 | Taille maximum d'un envoi |
+
+## Mise en ligne (Vercel, gratuit)
+
+Le projet Vercel `pdff` est relié au dépôt GitHub : **chaque envoi sur `main` met le site en ligne**.
+
+| Élément | Où | Rôle |
+| --- | --- | --- |
+| Site + outils PDF / images | Vercel (région Paris `cdg1`, voir `vercel.json`) | pages, API, traitements |
+| Word, Excel, PowerPoint | Google Cloud Run (`services/office`) | LibreOffice, que Vercel ne peut pas installer |
+| Fichiers de plus de 4 Mo | Vercel Blob (`pdff-fichiers`) | contourne la limite de 4,5 Mo des requêtes Vercel ; tout est effacé après usage |
+| Nettoyage | tâche planifiée quotidienne `/api/cleanup` | efface tout fichier temporaire de plus d'une heure |
+| Traductions automatiques | Vercel AI Gateway + cache Blob `i18n/` | une langue n'est traduite qu'une fois |
+| Statistiques | Vercel Web Analytics | visites anonymes, sans cookie |
+
+Variables à définir dans Vercel (Settings → Environment Variables) : voir `.env.example`
+(`NEXT_PUBLIC_SITE_URL`, `PDFF_OFFICE_URL`, `PDFF_OFFICE_TOKEN`, `CRON_SECRET`, `PDFF_MAX_UPLOAD_MB`).
+
+### Référencement
+
+- Une adresse par langue vérifiée : `/fr/…`, `/en/…`, `/es/…`, `/pt/…`, `/ar/…`, `/de/…`, `/zh/…` (`src/proxy.ts`).
+  Sans préfixe, la langue reste détectée automatiquement.
+- Balises `hreflang` et `canonical`, plan du site (`/sitemap.xml`), `robots.txt`, images de partage
+  générées pour chaque outil, données structurées (WebApplication, FAQ, fil d'Ariane).
+- Textes SEO de chaque outil : `tools.<id>.seoTitle`, `seoDescription`, `intro` dans les traductions.
 
 ## Outils
 

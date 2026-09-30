@@ -17,6 +17,20 @@ export type TranslationStatus = "verified" | "machine" | "pending" | "unavailabl
 export const SOURCE_LOCALE = "fr";
 export const FALLBACK_LOCALE = "en";
 export const LOCALE_COOKIE = "pdff-lang";
+/** En-tête posé par `src/proxy.ts` quand l'adresse commence par une langue (/fr/…). */
+export const LOCALE_HEADER = "x-pdff-locale";
+
+/** Adresse d'une page dans une langue donnée (préfixe vide = langue détectée). */
+export function localePath(prefix: string, path: string): string {
+  if (!prefix) return path;
+  return path === "/" ? prefix : `${prefix}${path}`;
+}
+
+/** Retire le préfixe de langue d'une adresse : "/fr/outils/x" → "/outils/x". */
+export function stripLocalePrefix(pathname: string): string {
+  const [, first, ...rest] = pathname.split("/");
+  return (VERIFIED_LOCALES as readonly string[]).includes(first) ? `/${rest.join("/")}` : pathname;
+}
 
 export const VERIFIED_LOCALES = ["fr", "en", "es", "pt", "ar", "de", "zh"] as const;
 export type VerifiedLocale = (typeof VERIFIED_LOCALES)[number];

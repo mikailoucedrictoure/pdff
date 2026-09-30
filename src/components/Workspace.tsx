@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { fmt } from "@/i18n/locales";
@@ -7,6 +8,7 @@ import type { Messages } from "@/i18n/messages/fr";
 import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
+import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
 import { useCapabilities } from "./useCapabilities";
 import { FileGlyph } from "./visual/FileGlyph";
 import { ToolIcon } from "./visual/ToolIcon";
@@ -62,6 +64,20 @@ function filenameFrom(header: string | null, fallback: string): string {
   return plain?.[1] ?? fallback;
 }
 
+/** Exécute `fn` sur chaque élément, au plus `limit` à la fois, en gardant l'ordre. */
+async function mapLimit<T, R>(list: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const out = new Array<R>(list.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < list.length) {
+      const i = next++;
+      out[i] = await fn(list[i]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, list.length) }, worker));
+  return out;
+}
+
 let uid = 0;
 const newId = () => `f${++uid}-${Date.now()}`;
 
@@ -86,6 +102,7 @@ export function Workspace({ toolId }: { toolId: string }) {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const xhrRef = useRef<XMLHttpRequest | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   const acceptedExts = useMemo(() => {
     if (tool.accepts === "pdf") return ["pdf"];
@@ -142,14 +159,59 @@ export function Workspace({ toolId }: { toolId: string }) {
 
   function run() {
     if (!items.length || busy) return;
+    const total = items.reduce((n, i) => n + i.file.size, 0);
+    if (caps && total > caps.limits.maxUploadMb * 1024 * 1024) {
+      setStatus({ kind: "error", message: fmt(m.errors.tooLarge, { mb: caps.limits.maxUploadMb }) });
+      return;
+    }
+    const opts = { ...options, target };
+    // Au-delà de ~4 Mo, les fichiers passent par le stockage temporaire (limite des requêtes Vercel)
+    if (caps?.blob && total > DIRECT_TRANSFER_BYTES) void runViaBlob(opts, total);
+    else runDirect(opts);
+  }
+
+  const endpoint = `/api/tools/${tool.id}?lang=${encodeURIComponent(locale)}`;
+
+  /** Affiche le résultat et lance le téléchargement. */
+  function deliver(url: string, name: string, size: number, count: number, started: number) {
+    setStatus({ kind: "done", url, name, size, count, seconds: (performance.now() - started) / 1000 });
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.click();
+  }
+
+  /** Résultat volumineux déposé dans le stockage temporaire : on le récupère puis on l'efface. */
+  async function deliverFromBlob(result: BlobResult, started: number) {
+    try {
+      const res = await fetch(result.url, { cache: "no-store" });
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      void fetch("/api/upload", { method: "DELETE", body: JSON.stringify({ urls: [result.url] }), keepalive: true });
+      deliver(URL.createObjectURL(blob), result.name, result.size, result.count, started);
+    } catch {
+      // Téléchargement direct par le navigateur ; le nettoyage automatique effacera le fichier
+      deliver(result.downloadUrl, result.name, result.size, result.count, started);
+    }
+  }
+
+  async function errorMessage(body: Blob | Response): Promise<string> {
+    try {
+      return JSON.parse(await body.text()).error ?? w.errorGeneric;
+    } catch {
+      return w.errorGeneric;
+    }
+  }
+
+  function runDirect(opts: OptionValues) {
+    const started = performance.now();
     const form = new FormData();
     items.forEach((i) => form.append("files", i.file, i.file.name));
-    form.append("options", JSON.stringify({ ...options, target }));
+    form.append("options", JSON.stringify(opts));
 
     const xhr = new XMLHttpRequest();
     xhrRef.current = xhr;
-    const started = performance.now();
-    xhr.open("POST", `/api/tools/${tool.id}?lang=${encodeURIComponent(locale)}`);
+    xhr.open("POST", endpoint);
     xhr.responseType = "blob";
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) setStatus({ kind: "uploading", progress: e.loaded / e.total });
@@ -160,30 +222,69 @@ export function Workspace({ toolId }: { toolId: string }) {
     xhr.onload = async () => {
       const blob: Blob = xhr.response;
       if (xhr.status !== 200) {
-        let message = w.errorGeneric;
-        try {
-          message = JSON.parse(await blob.text()).error ?? message;
-        } catch {}
-        setStatus({ kind: "error", message });
+        setStatus({ kind: "error", message: await errorMessage(blob) });
+        return;
+      }
+      if (xhr.getResponseHeader("Content-Type")?.startsWith("application/json")) {
+        await deliverFromBlob(JSON.parse(await blob.text()) as BlobResult, started);
         return;
       }
       const name = filenameFrom(xhr.getResponseHeader("Content-Disposition"), "pdff");
-      const url = URL.createObjectURL(blob);
-      setStatus({
-        kind: "done",
-        url,
-        name,
-        size: blob.size,
-        count: Number(xhr.getResponseHeader("X-Pdff-Count") ?? 1),
-        seconds: (performance.now() - started) / 1000,
-      });
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
-      a.click();
+      deliver(URL.createObjectURL(blob), name, blob.size, Number(xhr.getResponseHeader("X-Pdff-Count") ?? 1), started);
     };
     setStatus({ kind: "uploading", progress: 0 });
     xhr.send(form);
+  }
+
+  async function runViaBlob(opts: OptionValues, total: number) {
+    const started = performance.now();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const loaded = new Map<string, number>();
+    setStatus({ kind: "uploading", progress: 0 });
+    try {
+      const refs = await mapLimit(items, 4, async (item) => {
+        const ext = extOf(item.file.name) || "bin";
+        const blob = await upload(`${BLOB_INPUT_PREFIX}${crypto.randomUUID()}.${ext}`, item.file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+          contentType: item.file.type || "application/octet-stream",
+          multipart: item.file.size > 50 * 1024 * 1024,
+          abortSignal: controller.signal,
+          onUploadProgress: ({ loaded: done }) => {
+            loaded.set(item.id, done);
+            const sum = [...loaded.values()].reduce((a, b) => a + b, 0);
+            setStatus({ kind: "uploading", progress: Math.min(1, sum / total) });
+          },
+        });
+        return { url: blob.url, name: item.file.name };
+      });
+      setStatus({ kind: "processing" });
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ files: refs, options: opts }),
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        setStatus({ kind: "error", message: await errorMessage(res) });
+        return;
+      }
+      if (res.headers.get("Content-Type")?.startsWith("application/json")) {
+        await deliverFromBlob((await res.json()) as BlobResult, started);
+        return;
+      }
+      const blob = await res.blob();
+      const name = filenameFrom(res.headers.get("Content-Disposition"), "pdff");
+      deliver(URL.createObjectURL(blob), name, blob.size, Number(res.headers.get("X-Pdff-Count") ?? 1), started);
+    } catch {
+      setStatus(controller.signal.aborted ? { kind: "idle" } : { kind: "error", message: w.errorConnection });
+    }
+  }
+
+  function cancel() {
+    xhrRef.current?.abort();
+    abortRef.current?.abort();
   }
 
   function reset() {
@@ -381,7 +482,7 @@ export function Workspace({ toolId }: { toolId: string }) {
 
         <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="mt-6 hidden lg:flex" />
 
-        <StatusPanel status={status} onCancel={() => xhrRef.current?.abort()} onReset={reset} w={w} size={size} />
+        <StatusPanel status={status} onCancel={cancel} onReset={reset} w={w} size={size} />
 
         {caps && (
           <p className="mt-4 text-xs text-muted">

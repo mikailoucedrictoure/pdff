@@ -2,8 +2,9 @@ import type { Messages } from "./fr";
 
 const de: Messages = {
   meta: {
-    title: "pdff — Dokumente zusammenführen, umwandeln und bearbeiten",
-    description: "PDF, Word, Excel, PowerPoint und Bilder zusammenführen, umwandeln und bearbeiten. Kostenlos, ohne Anmeldung.",
+    title: "pdff — PDF, Word, Excel kostenlos zusammenfügen, umwandeln, bearbeiten",
+    description: "Kostenloses Online-Tool zum Zusammenfügen, Umwandeln, Komprimieren, Teilen und Schützen von PDF, Word, Excel, PowerPoint und Bildern. Ohne Anmeldung, Dateien sofort gelöscht.",
+    keywords: "pdf zusammenfügen, pdf umwandeln, pdf in word, word in pdf, jpg in pdf, pdf in jpg, pdf komprimieren, pdf teilen, excel in pdf, kostenlose pdf tools",
   },
   nav: { merge: "Zusammenführen", convert: "Umwandeln", allTools: "Alle Werkzeuge", back: "← Alle Werkzeuge" },
   footer: { text: "Kostenlos, ohne Anmeldung. Ihre Dateien werden gelöscht, sobald die Verarbeitung abgeschlossen ist." },
@@ -95,15 +96,102 @@ const de: Messages = {
     close: "Schließen",
     auto: "Automatisch (Browsersprache)",
   },
+  seo: {
+    whyTitle: "Warum pdff?",
+    why: [
+      {
+        title: "100 % kostenlos",
+        text: "Kein Abo, keine Kreditkarte, kein Wasserzeichen auf Ihren Dokumenten.",
+      },
+      { title: "Ohne Anmeldung", text: "Kein Konto nötig: Seite öffnen, Dateien ablegen, fertig." },
+      {
+        title: "Ihre Dateien bleiben Ihre",
+        text: "Verarbeitet und sofort gelöscht. Wir speichern weder Ihre Dokumente noch Ihre Daten.",
+      },
+      {
+        title: "Alle Formate",
+        text: "PDF, Word, Excel, PowerPoint, OpenDocument, Bilder, EPUB … am Computer oder auf dem Handy.",
+      },
+    ],
+    howTitle: "So funktioniert's",
+    faqTitle: "Häufige Fragen",
+    faq: [
+      {
+        q: "Ist pdff wirklich kostenlos?",
+        a: "Ja. Alle Werkzeuge sind kostenlos, ohne Wasserzeichen und ohne Funktionen hinter einem Abo. Es wird nie eine Kreditkarte verlangt.",
+      },
+      {
+        q: "Brauche ich ein Konto?",
+        a: "Nein. Keine Anmeldung, keine E-Mail-Adresse: Sie nutzen die Werkzeuge sofort.",
+      },
+      {
+        q: "Werden meine Dokumente gespeichert?",
+        a: "Nein. Ihre Dateien dienen nur der gewünschten Aufgabe und werden danach gelöscht. Niemand liest sie, und sie werden mit niemandem geteilt.",
+      },
+      {
+        q: "Funktioniert es auf dem Handy?",
+        a: "Ja. pdff läuft im Browser jedes Handys, Tablets oder Computers (Android, iPhone, Windows, Mac, Linux), ohne Installation.",
+      },
+      {
+        q: "Welche Formate werden unterstützt?",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, Bilder (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML und mehr.",
+      },
+      {
+        q: "Gibt es Grenzen?",
+        a: "Sie können bis zu {files} Dateien auf einmal verarbeiten, und ein erzeugtes Dokument kann bis zu {pages} Seiten haben.",
+      },
+    ],
+    moreTools: "Weitere Werkzeuge",
+    privacyLink: "Datenschutz",
+    sourceLink: "Offener Quellcode",
+  },
+  privacy: {
+    title: "Datenschutz",
+    description: "Wie pdff mit Ihren Dateien umgeht: kein Konto, keine gespeicherten Dokumente, keine Werbung und kein Datenverkauf.",
+    updated: "Zuletzt aktualisiert: {date}",
+    intro: "pdff ist so gebaut, dass Ihre Dokumente Ihnen gehören. Hier steht in einfachen Worten, was passiert, wenn Sie es nutzen.",
+    sections: [
+      {
+        title: "Ihre Dateien",
+        text: "Sie werden verschlüsselt (HTTPS) übertragen, automatisch verarbeitet und gelöscht, sobald das Ergebnis fertig ist. Große Dateien laufen über einen temporären Speicher unter einem zufälligen Namen und werden nach der Verarbeitung gelöscht; eine automatische Bereinigung entfernt eventuelle Reste spätestens nach 24 Stunden.",
+      },
+      {
+        title: "Kein Konto, keine persönlichen Daten",
+        text: "pdff verlangt keine Anmeldung, keine E-Mail-Adresse und keine Kreditkarte. Ihre Dokumente werden weder gelesen noch analysiert, geteilt oder zum Training künstlicher Intelligenz verwendet.",
+      },
+      {
+        title: "Reichweitenmessung",
+        text: "Wir zählen Besuche anonym und ohne Cookies (Vercel Web Analytics), um zu erfahren, welche Werkzeuge nützlich sind. Keine Werbung, kein seitenübergreifendes Tracking.",
+      },
+      {
+        title: "Cookies",
+        text: "Ein einziges, optionales Cookie: Es merkt sich die gewählte Sprache.",
+      },
+      {
+        title: "Hosting",
+        text: "Die Website wird von Vercel gehostet; Word-, Excel- und PowerPoint-Umwandlungen laufen bei Google Cloud. Diese Anbieter verarbeiten Dateien nur für die Dauer der Umwandlung.",
+      },
+      {
+        title: "Kontakt",
+        text: "Eine Frage oder Anmerkung? Schreiben Sie uns über die Projektseite:",
+      },
+    ],
+  },
   tools: {
     fusionner: {
       name: "Zusammenführen",
       tagline: "Mehrere Dateien (PDF, Word, Bilder…) in der gewünschten Reihenfolge zu einem PDF vereinen.",
+      seoTitle: "PDF online kostenlos zusammenfügen (Word, Bilder, PDF)",
+      seoDescription: "Fügen Sie PDF, Word, Excel, PowerPoint und Bilder in der gewünschten Reihenfolge zu einem PDF zusammen. Kostenlos, ohne Anmeldung und Wasserzeichen.",
+      intro: "Alle Unterlagen in einer Datei: pdff nimmt PDFs, aber auch Word-Dokumente, Excel-Tabellen, Präsentationen und Fotos an und fügt sie zu einem sauberen PDF mit einem Lesezeichen pro Datei zusammen.",
       options: { bookmarks: { label: "Ein Lesezeichen pro Datei hinzufügen" } },
     },
     convertir: {
       name: "Umwandeln",
       tagline: "Beliebige Dokumente oder Bilder in ein anderes Format umwandeln.",
+      seoTitle: "PDF in Word, Word in PDF, JPG in PDF umwandeln — kostenlos",
+      seoDescription: "Kostenloser Konverter: PDF ↔ Word, Excel, PowerPoint, JPG, PNG, EPUB und über 40 Formate. Online, ohne Anmeldung, in hoher Qualität.",
+      intro: "Ein Konverter für alle Formate: Word in PDF, PDF in Word, JPG in PDF, PDF in JPG, Excel in PDF, PowerPoint in PDF, PNG in JPG, EPUB in PDF … Dateien ablegen, und pdff zeigt nur die möglichen Formate an.",
       options: {
         target: { label: "Umwandeln in" },
         dpi: { label: "Bildauflösung (DPI)" },
@@ -113,6 +201,9 @@ const de: Messages = {
     diviser: {
       name: "Teilen",
       tagline: "Ein PDF in mehrere Dateien aufteilen: nach Seitenbereichen oder Seite für Seite.",
+      seoTitle: "PDF online kostenlos teilen — Seiten trennen",
+      seoDescription: "Teilen Sie ein PDF in mehrere Dateien: nach Seitenbereichen, Seite für Seite oder alle N Seiten. Kostenlos, schnell, ohne Anmeldung.",
+      intro: "Senden Sie nur den wichtigen Teil eines großen Dokuments: pdff schneidet Ihr PDF entlang der gewählten Bereiche und gibt die Teile als ZIP-Archiv zurück.",
       options: {
         mode: { label: "Modus", choices: { ranges: "Nach Seitenbereichen", each: "Eine Seite = eine Datei", every: "Alle N Seiten" } },
         ranges: { label: "Bereiche", placeholder: "1-3, 4-10, 11-ende", help: "Jeder Bereich wird zu einer Datei." },
@@ -122,6 +213,9 @@ const de: Messages = {
     extraire: {
       name: "Seiten extrahieren / löschen",
       tagline: "Bestimmte Seiten eines PDFs behalten oder entfernen.",
+      seoTitle: "Seiten aus PDF extrahieren oder löschen — kostenlos",
+      seoDescription: "Behalten Sie nur die nötigen Seiten eines PDFs oder entfernen Sie überflüssige. Online, kostenlos, ohne Anmeldung und Wasserzeichen.",
+      intro: "Eine leere Seite, ein unnötiger Anhang, ein Duplikat? Geben Sie die Seiten an, die bleiben oder weg sollen (zum Beispiel 1-3, 7, 10-ende), und erhalten Sie in Sekunden ein sauberes PDF.",
       options: {
         mode: { label: "Aktion", choices: { keep: "Nur diese Seiten behalten", remove: "Diese Seiten löschen" } },
         pages: { label: "Seiten", placeholder: "1, 3-5", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
@@ -130,6 +224,9 @@ const de: Messages = {
     organiser: {
       name: "Seiten neu anordnen",
       tagline: "Seitenreihenfolge ändern, duplizieren, umkehren.",
+      seoTitle: "PDF-Seiten online neu anordnen — kostenlos",
+      seoDescription: "Ändern Sie die Reihenfolge der Seiten eines PDFs, duplizieren Sie Seiten oder kehren Sie das ganze Dokument um. Kostenlos, ohne Anmeldung.",
+      intro: "Seiten in falscher Reihenfolge gescannt? Geben Sie die neue Reihenfolge an (zum Beispiel 3, 1, 2, 4-ende) oder kehren Sie das Dokument um: pdff erledigt den Rest.",
       options: {
         order: { label: "Neue Reihenfolge", placeholder: "3, 1, 2, 4-ende", help: "Nicht genannte Seiten werden entfernt." },
         reverse: { label: "Gesamtes Dokument umkehren (ignoriert die Reihenfolge oben)" },
@@ -138,6 +235,9 @@ const de: Messages = {
     pivoter: {
       name: "Drehen",
       tagline: "Alle oder ausgewählte Seiten drehen.",
+      seoTitle: "PDF online kostenlos drehen",
+      seoDescription: "Drehen Sie alle Seiten eines PDFs oder nur einige um 90°, 180° oder 270°. Kostenlos, schnell, ohne Anmeldung.",
+      intro: "Ein Scan steht auf dem Kopf oder eine Seite ist quer? Drehen Sie das ganze Dokument oder nur ausgewählte Seiten, ohne Qualitätsverlust.",
       options: {
         angle: { label: "Drehung", choices: { "90": "90° im Uhrzeigersinn", "180": "180°", "270": "90° gegen den Uhrzeigersinn" } },
         pages: { label: "Seiten", placeholder: "alle", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
@@ -146,6 +246,9 @@ const de: Messages = {
     numeroter: {
       name: "Seiten nummerieren",
       tagline: "Seitenzahlen hinzufügen.",
+      seoTitle: "Seitenzahlen in PDF einfügen — kostenlos online",
+      seoDescription: "Fügen Sie einem PDF Seitenzahlen hinzu: Position, Format „1 / 10“, Startnummer und Größe frei wählbar. Kostenlos, ohne Anmeldung.",
+      intro: "Ideal für Abschlussarbeiten, Bewerbungsmappen oder Berichte: Position, Format und Startnummer wählen, und pdff nummeriert Ihre Seiten sauber.",
       options: {
         position: {
           label: "Position",
@@ -167,6 +270,9 @@ const de: Messages = {
     filigrane: {
       name: "Wasserzeichen",
       tagline: "Einen Text als Wasserzeichen aufbringen (VERTRAULICH, KOPIE…).",
+      seoTitle: "Wasserzeichen zu PDF hinzufügen — kostenlos online",
+      seoDescription: "Setzen Sie ein Text-Wasserzeichen (VERTRAULICH, KOPIE, ENTWURF …) auf ein PDF, mit einstellbarer Größe, Deckkraft, Winkel und Farbe. Kostenlos.",
+      intro: "Schützen Sie Kopien Ihres Ausweises und Ihrer Nachweise mit einem klaren Vermerk, etwa „Kopie nur für die Wohnungsbewerbung“.",
       options: {
         text: { label: "Text", default: "VERTRAULICH" },
         size: { label: "Größe" },
@@ -179,6 +285,9 @@ const de: Messages = {
     compresser: {
       name: "Komprimieren",
       tagline: "Die Dateigröße eines PDFs verringern.",
+      seoTitle: "PDF online komprimieren — Dateigröße kostenlos verkleinern",
+      seoDescription: "Verkleinern Sie ein PDF, um es per E-Mail zu senden oder auf einem Behördenportal hochzuladen. Drei Kompressionsstufen, kostenlos.",
+      intro: "Ein Portal lehnt Ihre Datei ab, weil sie zu groß ist? Komprimieren Sie Ihr PDF bei scharfem Text: verlustfrei, empfohlen oder stark, je nach Zielgröße.",
       options: {
         level: {
           label: "Stufe",
@@ -193,6 +302,9 @@ const de: Messages = {
     proteger: {
       name: "Schützen",
       tagline: "Ein PDF mit Passwort verschlüsseln (AES-256).",
+      seoTitle: "PDF mit Passwort schützen — kostenlos (AES-256)",
+      seoDescription: "Verschlüsseln Sie ein PDF mit Passwort (AES-256) und sperren Sie Drucken, Kopieren oder Bearbeiten. Kostenlos, ohne Anmeldung.",
+      intro: "Bevor Sie eine Gehaltsabrechnung oder ein medizinisches Dokument verschicken, sichern Sie es mit einem starken Passwort: Ohne es kann niemand die Datei öffnen.",
       options: {
         password: { label: "Passwort zum Öffnen" },
         noPrint: { label: "Drucken verbieten" },
@@ -203,11 +315,17 @@ const de: Messages = {
     deverrouiller: {
       name: "Entsperren",
       tagline: "Das Passwort eines PDFs entfernen, dessen Passwort Sie kennen.",
+      seoTitle: "PDF entsperren — Passwort kostenlos entfernen",
+      seoDescription: "Entfernen Sie das Passwort eines PDFs, dessen Passwort Sie kennen, um es frei zu öffnen, zu drucken oder zusammenzufügen. Kostenlos.",
+      intro: "Sie kennen das Passwort, aber es jedes Mal einzugeben nervt? Entfernen Sie es ein für alle Mal. pdff umgeht niemals ein unbekanntes Passwort.",
       options: { password: { label: "Aktuelles Passwort", help: "Leer lassen, wenn das PDF nur ein Berechtigungspasswort hat." } },
     },
     metadonnees: {
       name: "Metadaten",
       tagline: "Titel, Autor, Betreff und Schlüsselwörter bearbeiten.",
+      seoTitle: "PDF-Metadaten bearbeiten (Titel, Autor) — kostenlos",
+      seoDescription: "Ändern Sie Titel, Autor, Betreff und Stichwörter eines PDFs oder löschen Sie sie alle. Kostenlos, online, ohne Anmeldung.",
+      intro: "Der Titel im Browser-Tab oder der Autorname verrät eine alte Vorlage? Korrigieren Sie die Dokumenteigenschaften oder löschen Sie sie vor dem Teilen.",
       options: {
         title: { label: "Titel" },
         author: { label: "Autor" },
@@ -244,6 +362,7 @@ const de: Messages = {
     officeTarget: "Umwandlung in {target} wird nicht unterstützt.",
     officeTimeout: "Die Umwandlung hat zu lange gedauert und wurde abgebrochen.",
     officeFailed: "LibreOffice konnte „{name}“ nicht in {target} umwandeln.",
+    officeTooLarge: "„{name}“ ist größer als {mb} MB: zu groß für eine Word-, Excel- oder PowerPoint-Umwandlung.",
     conversionImpossible: "Umwandlung {from} → {to} nicht möglich.",
     conversionImpossibleOffice: "Umwandlung {from} → {to} nicht möglich (mit LibreOffice kommen die Formate Word, Excel und PowerPoint hinzu).",
     watermarkText: "Geben Sie den Text des Wasserzeichens ein.",

@@ -2,19 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CapabilityNotice } from "@/components/CapabilityNotice";
+import { SeoSections } from "@/components/SeoSections";
 import { Workspace } from "@/components/Workspace";
 import { FileGlyph } from "@/components/visual/FileGlyph";
 import { Scene } from "@/components/visual/Scene";
 import { ToolIcon } from "@/components/visual/ToolIcon";
 import { getI18n } from "@/i18n/server";
+import { localePath } from "@/i18n/locales";
 import { getTool } from "@/lib/core/tools";
+import { jsonLd, pageMetadata, SITE_NAME, siteUrl } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/outils/[tool]">): Promise<Metadata> {
   const tool = getTool((await params).tool);
   if (!tool) return {};
-  const { messages } = await getI18n();
+  const { messages, prefix, locale } = await getI18n();
   const text = messages.tools[tool.id];
-  return { title: `${text.name} — pdff`, description: text.tagline };
+  return pageMetadata({ title: text.seoTitle, description: text.seoDescription, path: `/outils/${tool.id}`, prefix, locale });
 }
 
 const DECOR_ANY = ["pdf", "docx", "xlsx", "pptx", "jpg"];
@@ -22,16 +25,45 @@ const DECOR_ANY = ["pdf", "docx", "xlsx", "pptx", "jpg"];
 export default async function ToolPage({ params }: PageProps<"/outils/[tool]">) {
   const tool = getTool((await params).tool);
   if (!tool) notFound();
-  const { messages: t } = await getI18n();
+  const { messages: t, prefix, locale } = await getI18n();
   const text = t.tools[tool.id];
+  const url = siteUrl();
+  const home = `${url}${localePath(prefix, "/")}`;
+  const page = `${url}${localePath(prefix, `/outils/${tool.id}`)}`;
   const decor = tool.accepts === "pdf" ? ["pdf", "pdf", "pdf"] : DECOR_ANY;
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLd({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebApplication",
+              name: `${text.name} — ${SITE_NAME}`,
+              url: page,
+              description: text.seoDescription,
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Any",
+              isAccessibleForFree: true,
+              inLanguage: locale,
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: SITE_NAME, item: home },
+                { "@type": "ListItem", position: 2, name: text.name, item: page },
+              ],
+            },
+          ],
+        })}
+      />
       <Scene className="-mt-16 pt-16" floor>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 pt-6 pb-20 sm:pt-10 sm:pb-24">
           <div>
-            <Link href="/#outils" className="text-sm text-white/60 hover:text-white">
+            <Link href={localePath(prefix, "/#outils")} className="text-sm text-white/60 hover:text-white">
               {t.nav.back}
             </Link>
             <div className="mt-4 flex items-center gap-4">
@@ -71,6 +103,9 @@ export default async function ToolPage({ params }: PageProps<"/outils/[tool]">) 
             </div>
           )}
           <Workspace toolId={tool.id} />
+          <div className="mt-16">
+            <SeoSections t={t} prefix={prefix} toolId={tool.id} locale={locale} />
+          </div>
         </div>
       </div>
     </>
