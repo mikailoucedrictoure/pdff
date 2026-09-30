@@ -165,6 +165,8 @@ body {
 /* ------------------------------------------------------------ Anneau 3D interactif */
 .orbit-stage {
   cursor: grab;
+  /* Taille d'une icône : même formule que layout() dans FormatOrbit.tsx (cqw = largeur du conteneur) */
+  --card: clamp(44px, min(12cqw, 76.8px), 72px);
 }
 .orbit-stage[data-grabbing] ,
 .orbit-stage[data-grabbing] .orbit-piece {
@@ -172,13 +174,21 @@ body {
 }
 .orbit-piece {
   cursor: grab;
-  will-change: transform;
+  will-change: transform, opacity;
   transform-origin: 50% 50%;
+  width: var(--w);
+  margin-left: calc(var(--w) / -2);
+  margin-top: calc(var(--w) * -0.625);
+  /* Invisible tant que l'animation ne l'a pas placée sur l'anneau */
+  opacity: 0;
 }
 .orbit-core-btn {
   cursor: pointer;
   will-change: transform;
   border-radius: 1rem;
+  width: calc(var(--card) * 1.9);
+  margin-left: calc(var(--card) * -0.95);
+  margin-top: calc(var(--card) * -1.292);
 }
 
 /* ------------------------------------------------------------ Bandeau défilant des formats */

@@ -90,24 +90,12 @@ export function FormatOrbit() {
       | { kind: "ring"; id: number; lastX: number; lastT: number; vel: number };
     let drag: Drag | null = null;
 
+    // Tailles et hauteur sont posées par le CSS (globals.css, .orbit-*) dès le premier affichage ;
+    // ici on ne fait que relire les mêmes valeurs pour les calculs de trajectoire.
     function layout() {
       width = root.clientWidth;
       radius = Math.min(Math.max(width * 0.4, 118), 270);
       card = Math.min(Math.max(width * 0.12, 44), 72);
-      root.style.height = `${Math.round(radius * 1.05 + card * 2.4)}px`;
-      itemRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const w = ITEMS[i].ring === 0 ? card : card * 0.74;
-        el.style.width = `${w}px`;
-        el.style.marginLeft = `${-w / 2}px`;
-        el.style.marginTop = `${-w * 0.625}px`;
-      });
-      if (coreRef.current) {
-        const w = card * 1.9;
-        coreRef.current.style.width = `${w}px`;
-        coreRef.current.style.marginLeft = `${-w / 2}px`;
-        coreRef.current.style.marginTop = `${-w * 0.68}px`;
-      }
     }
     layout();
     const ro = new ResizeObserver(layout);
@@ -260,12 +248,20 @@ export function FormatOrbit() {
     }
 
     // ---- Boucle d'animation
+    // Économe : démarre quand la page est prête, s'arrête hors écran, 30 images/s au repos
+    // (60 quand on manipule l'anneau). Un seul rendu immédiat place les icônes.
     let raf = 0;
     let visible = true;
+    let started = false;
     let last = performance.now();
+    let lastDraw = 0;
+    const zIndexes: string[] = [];
+    const IDLE_FRAME_MS = 1000 / 30 - 2;
+
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
-      if (visible) {
+      if (visible && started) {
+        cancelAnimationFrame(raf);
         last = performance.now();
         raf = requestAnimationFrame(frame);
       }
@@ -274,7 +270,13 @@ export function FormatOrbit() {
 
     function frame(now: number) {
       if (!visible) return;
-      const dt = Math.min(0.033, (now - last) / 1000);
+      const active = !!drag || coreKick > 0.01 || Math.abs(spin - (reduced ? 0 : BASE_SPIN)) > 0.02;
+      if (!active && now - lastDraw < IDLE_FRAME_MS) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      lastDraw = now;
+      const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const t = now / 1000;
       const ease = (rate: number) => 1 - Math.exp(-dt * rate);
@@ -327,7 +329,8 @@ export function FormatOrbit() {
         const depth = (h.z + radius) / (2 * radius); // 0 = fond, 1 = devant
         const s = h.s * b.scale;
         el.style.transform = `translate3d(${(h.x + b.dx).toFixed(1)}px, ${(h.y + b.dy).toFixed(1)}px, 0) rotate(${b.rot.toFixed(2)}deg) scale(${s.toFixed(3)})`;
-        el.style.zIndex = String(dragged ? 3000 : Math.round(1000 + h.z));
+        const z = String(dragged ? 3000 : Math.round(1000 + h.z));
+        if (zIndexes[i] !== z) el.style.zIndex = zIndexes[i] = z;
         el.style.opacity = String(dragged ? 1 : (0.5 + 0.5 * depth).toFixed(3));
       });
 
@@ -338,11 +341,24 @@ export function FormatOrbit() {
         core.style.transform = `translate3d(${(shiftX * 0.6).toFixed(1)}px, ${(bob - coreKick * 14).toFixed(1)}px, 0) perspective(600px) rotateY(${(yaw * 40 + kick).toFixed(2)}deg) rotateX(${((pitch - PITCH) * -40).toFixed(2)}deg) scale(${(1 + coreKick * 0.12).toFixed(3)})`;
       }
 
-      raf = requestAnimationFrame(frame);
+      if (started) raf = requestAnimationFrame(frame);
     }
-    raf = requestAnimationFrame(frame);
+    // Premier rendu tout de suite (icônes à leur place), animation continue une fois la page prête
+    frame(performance.now());
+    const start = () => {
+      started = true;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+    // Toucher l'anneau avant la fin du chargement le réveille aussitôt
+    listen(root, "pointerdown", () => started || start());
+    listen(root, "pointerenter", () => started || start());
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    const idle = hasIdle ? window.requestIdleCallback(start, { timeout: 2500 }) : window.setTimeout(start, 1200);
 
     return () => {
+      if (hasIdle) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       cancelAnimationFrame(raf);
       io.disconnect();
       ro.disconnect();
@@ -361,8 +377,8 @@ export function FormatOrbit() {
         <button
           ref={coreRef}
           type="button"
-          aria-label={t.orbitCore}
-          className="orbit-core-btn absolute top-1/2 left-1/2 z-[1000] w-32"
+          aria-label={`pdff : ${t.orbitCore}`}
+          className="orbit-core-btn absolute top-1/2 left-1/2 z-[1000]"
         >
           <CoreSheet />
         </button>
@@ -372,7 +388,8 @@ export function FormatOrbit() {
             ref={(el) => {
               itemRefs.current[i] = el;
             }}
-            className="orbit-piece absolute top-1/2 left-1/2 w-16 touch-none"
+            className="orbit-piece absolute top-1/2 left-1/2 touch-none"
+            style={{ "--w": it.ring === 0 ? "var(--card)" : "calc(var(--card) * 0.74)" } as React.CSSProperties}
           >
             <FileGlyph ext={it.ext} className="pointer-events-none w-full" glow={it.ring === 0} />
           </div>
