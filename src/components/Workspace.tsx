@@ -1,10 +1,9 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { fmt } from "@/i18n/locales";
-import type { Messages } from "@/i18n/messages/fr";
+import type { ClientMessages as Messages } from "@/i18n/client-messages";
 import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
 import type { Capabilities } from "@/lib/core/capabilities";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
@@ -242,6 +241,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     const loaded = new Map<string, number>();
     setStatus({ kind: "uploading", progress: 0 });
     try {
+      // Chargée seulement pour les gros fichiers : les autres visiteurs ne la téléchargent jamais
+      const { upload } = await import("@vercel/blob/client");
       const refs = await mapLimit(items, 4, async (item) => {
         const ext = extOf(item.file.name) || "bin";
         const blob = await upload(`${BLOB_INPUT_PREFIX}${crypto.randomUUID()}.${ext}`, item.file, {

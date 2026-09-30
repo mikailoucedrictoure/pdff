@@ -3,7 +3,9 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Bricolage_Grotesque, Onest } from "next/font/google";
 import { LanguagePicker } from "@/components/LanguagePicker";
+import { FileGlyphSprite } from "@/components/visual/FileGlyph";
 import { I18nProvider, TranslationBanner } from "@/i18n/client";
+import { toClientMessages } from "@/i18n/client-messages";
 import { direction, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
 import { SUPPORTED_LOCALES } from "@/i18n/supported";
@@ -46,7 +48,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   return (
     <html lang={shownLocale} dir={direction(shownLocale)} className={`${display.variable} ${body.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <I18nProvider locale={locale} messages={messages} status={status} machineEnabled={machineEnabled} prefix={prefix}>
+        <FileGlyphSprite />
+        <I18nProvider locale={locale} messages={toClientMessages(messages)} status={status} machineEnabled={machineEnabled} prefix={prefix}>
           <header className="sticky top-0 z-50 border-b border-white/10 bg-night/75 text-white backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
               <Link href={href("/")} className="font-display flex items-center gap-2.5 text-xl font-bold tracking-tight">

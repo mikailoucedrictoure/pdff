@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { direction, fmt, LOCALE_COOKIE, languageName, localePath, type TranslationStatus } from "./locales";
 import { isSupported, stripLocale } from "./supported";
-import type { Messages } from "./messages/fr";
+import type { ClientMessages } from "./client-messages";
 
 interface I18nContextValue {
   locale: string;
-  messages: Messages;
+  messages: ClientMessages;
   status: TranslationStatus;
   machineEnabled: boolean;
   dir: "ltr" | "rtl";
@@ -59,7 +59,7 @@ export function I18nProvider({
   children,
 }: {
   locale: string;
-  messages: Messages;
+  messages: ClientMessages;
   status: TranslationStatus;
   machineEnabled: boolean;
   prefix: string;
