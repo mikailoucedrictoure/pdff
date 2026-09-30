@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Construire l'image (identique à Cloud Run)
         run: docker build -t pdff-office services/office
-      - name: Démarrer le service (mêmes limites que Render gratuit : 512 Mo, 0,1 processeur)
+      - name: "Démarrer le service (limites de Render gratuit, 512 Mo et 0,1 processeur)"
         run: |
           docker run -d --name office -p 8080:8080 --memory=512m --cpus=0.1 -e OFFICE_TOKEN=ci-token pdff-office
           for i in $(seq 1 90); do curl -sf http://localhost:8080/health && break; sleep 1; done
