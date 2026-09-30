@@ -6,11 +6,20 @@ import { LanguagePicker } from "@/components/LanguagePicker";
 import { I18nProvider, TranslationBanner } from "@/i18n/client";
 import { direction, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
+import { SUPPORTED_LOCALES } from "@/i18n/supported";
 import { SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
-import "./globals.css";
+import "../globals.css";
 
-const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin", "latin-ext", "vietnamese"] });
-const body = Onest({ variable: "--font-body", subsets: ["latin", "latin-ext", "cyrillic"] });
+/** Chaque page est fabriquée à l'avance dans chaque langue, puis servie depuis le CDN. */
+export function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
+}
+export const dynamicParams = false;
+
+// Seul l'alphabet latin de base est préchargé ; les autres (latin étendu, vietnamien, cyrillique)
+// ne sont téléchargés que si la page contient ces caractères.
+const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin"] });
+const body = Onest({ variable: "--font-body", subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages } = await getI18n();
@@ -28,7 +37,7 @@ export const viewport: Viewport = {
   themeColor: "#120f36",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const { locale, messages, status, machineEnabled, prefix } = await getI18n();
   const href = (path: string) => localePath(prefix, path);
   // Tant que la traduction automatique n'est pas prête, la page est en anglais

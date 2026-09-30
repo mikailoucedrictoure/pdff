@@ -66,6 +66,14 @@ Le projet Vercel `pdff` est relié au dépôt GitHub : **chaque envoi sur `main`
 Variables à définir dans Vercel (Settings → Environment Variables) : voir `.env.example`
 (`NEXT_PUBLIC_SITE_URL`, `PDFF_OFFICE_URL`, `PDFF_OFFICE_TOKEN`, `CRON_SECRET`, `PDFF_MAX_UPLOAD_MB`).
 
+### Vitesse
+
+- **Toutes les pages sont fabriquées à l'avance**, dans chacune des 160 langues (`src/app/[lang]`, environ 2 300 pages),
+  puis servies depuis le CDN de Vercel : réponse en quelques millisecondes, sans calcul serveur.
+- `src/proxy.ts` réécrit les adresses sans langue (`/`, `/outils/…`) vers la langue du visiteur (choix mémorisé, puis navigateur).
+- Changer de langue ouvre directement la version déjà fabriquée de la page (préchargée au survol).
+- Les capacités du serveur sont calculées à la fabrication des pages : aucune requête au chargement d'un outil.
+
 ### Référencement
 
 - Une adresse par langue vérifiée : `/fr/…`, `/en/…`, `/es/…`, `/pt/…`, `/ar/…`, `/de/…`, `/zh/…` (`src/proxy.ts`).

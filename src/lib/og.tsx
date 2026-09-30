@@ -3,16 +3,24 @@
  */
 import { ImageResponse } from "next/og";
 import { VERIFIED_MESSAGES, type Messages } from "@/i18n/messages";
-import { getI18n } from "@/i18n/server";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
-/** La police intégrée ne couvre que l'alphabet latin : l'arabe et le chinois passent en anglais. */
-const LATIN = new Set(["fr", "en", "es", "pt", "de"]);
+/** La police intégrée ne couvre que l'alphabet latin : les autres langues utilisent l'image anglaise. */
+export const OG_LANGS = ["fr", "en", "es", "pt", "de"] as const;
+type OgLang = (typeof OG_LANGS)[number];
 
-export async function ogMessages(): Promise<Messages> {
-  const { locale, messages } = await getI18n();
-  return LATIN.has(locale) ? messages : VERIFIED_MESSAGES.en;
+export function ogLang(locale: string): OgLang {
+  return (OG_LANGS as readonly string[]).includes(locale) ? (locale as OgLang) : "en";
+}
+
+/** Adresse de l'image de partage d'une page (« accueil » ou identifiant d'outil). */
+export function ogImagePath(locale: string, name: string): string {
+  return `/og/${ogLang(locale)}/${name}`;
+}
+
+export function ogMessages(lang: string): Messages {
+  return VERIFIED_MESSAGES[ogLang(lang)];
 }
 
 export function ogImage({ title, subtitle, badge }: { title: string; subtitle: string; badge: string }) {

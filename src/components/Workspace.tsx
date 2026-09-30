@@ -6,10 +6,10 @@ import { useI18n } from "@/i18n/client";
 import { fmt } from "@/i18n/locales";
 import type { Messages } from "@/i18n/messages/fr";
 import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
+import type { Capabilities } from "@/lib/core/capabilities";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
-import { useCapabilities } from "./useCapabilities";
 import { FileGlyph } from "./visual/FileGlyph";
 import { ToolIcon } from "./visual/ToolIcon";
 
@@ -81,9 +81,8 @@ async function mapLimit<T, R>(list: T[], limit: number, fn: (item: T) => Promise
 let uid = 0;
 const newId = () => `f${++uid}-${Date.now()}`;
 
-export function Workspace({ toolId }: { toolId: string }) {
+export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities }) {
   const tool = getTool(toolId)!;
-  const caps = useCapabilities();
   const { messages: m, locale } = useI18n();
   const w = m.workspace;
   const toolText = m.tools[tool.id];

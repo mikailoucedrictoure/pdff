@@ -3,6 +3,7 @@
  */
 import type { Metadata } from "next";
 import { localePath, VERIFIED_LOCALES } from "@/i18n/locales";
+import { OG_SIZE, ogImagePath } from "./og";
 
 export const SITE_NAME = "pdff";
 export const SOURCE_URL = "https://github.com/mikailoucedrictoure/pdff";
@@ -40,8 +41,11 @@ export function pageMetadata(opts: {
   /** Titre affiché tel quel (sans « | pdff »). */
   absoluteTitle?: boolean;
   keywords?: string;
+  /** Image de partage : « accueil » ou identifiant d'outil. */
+  image?: string;
 }): Metadata {
   const url = localePath(opts.prefix, opts.path);
+  const image = { url: ogImagePath(opts.locale, opts.image ?? "accueil"), ...OG_SIZE, alt: opts.title };
   return {
     title: opts.absoluteTitle ? { absolute: opts.title } : opts.title,
     description: opts.description,
@@ -54,8 +58,9 @@ export function pageMetadata(opts: {
       description: opts.description,
       url,
       locale: OG_LOCALE[opts.locale] ?? opts.locale,
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title: opts.title, description: opts.description },
+    twitter: { card: "summary_large_image", title: opts.title, description: opts.description, images: [image.url] },
   };
 }
 

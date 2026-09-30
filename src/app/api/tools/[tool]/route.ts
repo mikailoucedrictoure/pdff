@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 import { limits } from "@/config/limits";
-import { formatError, loadMessages, localeFromRequest } from "@/i18n/server";
+import { formatError, loadMessages, localeFromRequest } from "@/i18n/load";
 import type { ErrorKey } from "@/i18n/messages/fr";
 import { mimeOf, extOf } from "@/lib/core/formats";
 import { getTool, type OptionValues, type ToolId } from "@/lib/core/tools";

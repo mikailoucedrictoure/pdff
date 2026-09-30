@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { direction, fmt, isVerified, LOCALE_COOKIE, languageName, localePath, stripLocalePrefix, type TranslationStatus } from "./locales";
+import { direction, fmt, LOCALE_COOKIE, languageName, localePath, type TranslationStatus } from "./locales";
+import { isSupported, stripLocale } from "./supported";
 import type { Messages } from "./messages/fr";
 
 interface I18nContextValue {
@@ -15,6 +16,8 @@ interface I18nContextValue {
   translating: string | null;
   translationFailed: string | null;
   setLocale: (locale: string | null) => Promise<void>;
+  /** Précharge la page en cours dans une autre langue (changement instantané). */
+  prefetchLocale: (locale: string) => void;
   /** Préfixe de langue de l'adresse ("/fr"…), vide si la langue est détectée. */
   prefix: string;
   /** Lien interne qui garde la langue de l'adresse. */
@@ -85,29 +88,25 @@ export function I18nProvider({
     return () => window.clearTimeout(id);
   }, [status, locale, translateThenRefresh]);
 
+  /** Adresse de la page en cours dans une autre langue (sans langue = détection automatique). */
+  const pageIn = useCallback((next: string | null) => {
+    const page = stripLocale(window.location.pathname);
+    return (next && isSupported(next) ? localePath(`/${next}`, page) : page) + window.location.search;
+  }, []);
+
+  const prefetchLocale = useCallback((next: string) => router.prefetch(pageIn(next)), [router, pageIn]);
+
   const setLocale = useCallback(
     async (next: string | null) => {
       writeCookie(next);
-      if (prefix) {
-        // Adresse dans une langue (/fr/…) : on change d'adresse, préfixée si la langue est vérifiée
-        const page = stripLocalePrefix(window.location.pathname);
-        const target = next && isVerified(next) ? localePath(`/${next}`, page) : page;
-        if (next && !isVerified(next) && machineEnabled) {
-          setTranslating(next);
-          const result = await requestTranslation(next);
-          setTranslating(null);
-          if (result === "failed") setTranslationFailed(next);
-        }
-        router.push(target + window.location.search);
+      // Chaque langue a ses pages fabriquées à l'avance : on y va directement
+      if (next && !isSupported(next) && machineEnabled) {
+        await translateThenRefresh(next);
         return;
       }
-      if (next && !isVerified(next) && machineEnabled) {
-        await translateThenRefresh(next);
-      } else {
-        router.refresh();
-      }
+      router.push(pageIn(next));
     },
-    [machineEnabled, prefix, router, translateThenRefresh],
+    [machineEnabled, router, pageIn, translateThenRefresh],
   );
 
   const value = useMemo<I18nContextValue>(
@@ -120,11 +119,12 @@ export function I18nProvider({
       translating,
       translationFailed,
       setLocale,
+      prefetchLocale,
       prefix,
       href: (path: string) => localePath(prefix, path),
       nameOf: (code: string) => languageName(code, locale),
     }),
-    [locale, messages, status, machineEnabled, translating, translationFailed, setLocale, prefix],
+    [locale, messages, status, machineEnabled, translating, translationFailed, setLocale, prefetchLocale, prefix],
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

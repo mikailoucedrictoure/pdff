@@ -57,3 +57,18 @@ describe("langues et adresses", () => {
     expect(resolveLocale(undefined, null)).toBe("en");
   });
 });
+
+describe("choix de la langue des pages fabriquées à l'avance", () => {
+  it("cookie, puis navigateur, puis anglais ; seulement des langues disponibles", async () => {
+    const { pickLocale, stripLocale, isSupported, SUPPORTED_LOCALES } = await import("@/i18n/supported");
+    expect(SUPPORTED_LOCALES.length).toBeGreaterThanOrEqual(160);
+    expect(pickLocale("wo", "fr-FR,fr")).toBe("wo");
+    expect(pickLocale(undefined, "it-IT,it;q=0.9,en;q=0.8")).toBe("it");
+    expect(pickLocale("xx", "zz,de;q=0.5")).toBe("de");
+    expect(pickLocale(undefined, null)).toBe("en");
+    expect(stripLocale("/it/outils/diviser")).toBe("/outils/diviser");
+    expect(stripLocale("/wo")).toBe("/");
+    expect(stripLocale("/outils/diviser")).toBe("/outils/diviser");
+    expect(isSupported("outils")).toBe(false);
+  });
+});

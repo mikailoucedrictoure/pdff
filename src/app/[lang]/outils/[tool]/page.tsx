@@ -9,23 +9,29 @@ import { Scene } from "@/components/visual/Scene";
 import { ToolIcon } from "@/components/visual/ToolIcon";
 import { getI18n } from "@/i18n/server";
 import { localePath } from "@/i18n/locales";
-import { getTool } from "@/lib/core/tools";
+import { getTool, TOOL_IDS } from "@/lib/core/tools";
+import { getCapabilities } from "@/lib/server/capabilities";
 import { jsonLd, pageMetadata, SITE_NAME, siteUrl } from "@/lib/seo";
 
-export async function generateMetadata({ params }: PageProps<"/outils/[tool]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[lang]/outils/[tool]">): Promise<Metadata> {
   const tool = getTool((await params).tool);
   if (!tool) return {};
   const { messages, prefix, locale } = await getI18n();
   const text = messages.tools[tool.id];
-  return pageMetadata({ title: text.seoTitle, description: text.seoDescription, path: `/outils/${tool.id}`, prefix, locale });
+  return pageMetadata({ title: text.seoTitle, description: text.seoDescription, path: `/outils/${tool.id}`, prefix, locale, image: tool.id });
 }
 
 const DECOR_ANY = ["pdf", "docx", "xlsx", "pptx", "jpg"];
 
-export default async function ToolPage({ params }: PageProps<"/outils/[tool]">) {
+export function generateStaticParams() {
+  return TOOL_IDS.map((tool) => ({ tool }));
+}
+export const dynamicParams = false;
+
+export default async function ToolPage({ params }: PageProps<"/[lang]/outils/[tool]">) {
   const tool = getTool((await params).tool);
   if (!tool) notFound();
-  const { messages: t, prefix, locale } = await getI18n();
+  const [{ messages: t, prefix, locale }, caps] = await Promise.all([getI18n(), getCapabilities()]);
   const text = t.tools[tool.id];
   const url = siteUrl();
   const home = `${url}${localePath(prefix, "/")}`;
@@ -99,10 +105,10 @@ export default async function ToolPage({ params }: PageProps<"/outils/[tool]">) 
         <div className="mx-auto max-w-6xl px-4 pt-8 pb-28 lg:pb-16">
           {tool.accepts === "any" && (
             <div className="mb-6">
-              <CapabilityNotice />
+              <CapabilityNotice caps={caps} />
             </div>
           )}
-          <Workspace toolId={tool.id} />
+          <Workspace toolId={tool.id} caps={caps} />
           <div className="mt-16">
             <SeoSections t={t} prefix={prefix} toolId={tool.id} locale={locale} />
           </div>

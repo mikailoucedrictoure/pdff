@@ -13,7 +13,7 @@ interface Entry {
 
 /** Bouton « globe » + fenêtre de choix parmi toutes les langues du monde. */
 export function LanguagePicker() {
-  const { locale, messages, setLocale, nameOf, translating } = useI18n();
+  const { locale, messages, setLocale, prefetchLocale, nameOf, translating } = useI18n();
   const t = messages.language;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -120,8 +120,8 @@ export function LanguagePicker() {
                 <span className="font-medium">{t.auto}</span>
               </button>
             )}
-            <Group title={t.verified} list={verifiedList} current={locale} onPick={choose} />
-            <Group title={t.automatic} list={autoList} current={locale} onPick={choose} />
+            <Group title={t.verified} list={verifiedList} current={locale} onPick={choose} onIntent={prefetchLocale} />
+            <Group title={t.automatic} list={autoList} current={locale} onPick={choose} onIntent={prefetchLocale} />
             {!filtered.length && <p className="px-4 py-6 text-center text-sm text-muted">{t.noResult}</p>}
           </div>
         </div>
@@ -130,7 +130,20 @@ export function LanguagePicker() {
   );
 }
 
-function Group({ title, list, current, onPick }: { title: string; list: Entry[]; current: string; onPick: (code: string) => void }) {
+function Group({
+  title,
+  list,
+  current,
+  onPick,
+  onIntent,
+}: {
+  title: string;
+  list: Entry[];
+  current: string;
+  onPick: (code: string) => void;
+  /** Survol ou focus : la page est préchargée, le clic l'affiche aussitôt. */
+  onIntent: (code: string) => void;
+}) {
   if (!list.length) return null;
   return (
     <section className="mt-2">
@@ -144,6 +157,8 @@ function Group({ title, list, current, onPick }: { title: string; list: Entry[];
                 type="button"
                 lang={e.code}
                 onClick={() => onPick(e.code)}
+                onPointerEnter={() => onIntent(e.code)}
+                onFocus={() => onIntent(e.code)}
                 aria-current={selected ? "true" : undefined}
                 className={`mx-2 flex w-[calc(100%-1rem)] items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-start transition ${
                   selected ? "bg-brand/10 text-brand" : "hover:bg-bg"

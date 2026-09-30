@@ -351,11 +351,12 @@ export function FormatOrbit() {
   }, []);
 
   return (
-    <div className="select-none">
+    <div className="select-none" style={{ containerType: "inline-size" }}>
       <div
         ref={rootRef}
         className="orbit-stage relative mx-auto w-full max-w-[640px] touch-pan-y"
-        style={{ height: 360 }}
+        // Même formule que layout() : la hauteur est juste dès le premier affichage (pas de saut de page)
+        style={{ height: "calc(1.05 * clamp(118px, min(40cqw, 256px), 270px) + 2.4 * clamp(44px, min(12cqw, 76.8px), 72px))" }}
       >
         <button
           ref={coreRef}

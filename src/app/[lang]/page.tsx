@@ -10,6 +10,7 @@ import { fmt, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
 import { SHOWCASE_EXTENSIONS } from "@/lib/core/formats";
 import { TOOL_CATEGORIES, TOOLS } from "@/lib/core/tools";
+import { getCapabilities } from "@/lib/server/capabilities";
 import { jsonLd, pageMetadata, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const { messages: t, prefix, locale } = await getI18n();
+  const [{ messages: t, prefix, locale }, caps] = await Promise.all([getI18n(), getCapabilities()]);
   const href = (path: string) => localePath(prefix, path);
   const url = siteUrl();
   return (
@@ -87,7 +88,7 @@ export default async function Home() {
 
       <div className="mx-auto max-w-6xl px-4">
         <div className="mt-10">
-          <CapabilityNotice />
+          <CapabilityNotice caps={caps} />
         </div>
 
         <div id="outils" className="scroll-mt-20 space-y-12 py-12">

@@ -1,74 +1,22 @@
 /**
- * Langue et textes côté serveur (layouts, pages, routes API).
+ * Langue et textes des pages (Server Components).
+ *
+ * Les pages vivent sous /[lang]/… : la langue vient de l'adresse (et non d'un cookie),
+ * ce qui permet de fabriquer chaque page à l'avance et de la servir depuis le CDN.
+ * Les adresses sans langue sont réécrites par `src/proxy.ts` vers la bonne langue.
+ * Routes API : utiliser `./load`.
  */
-import { cookies, headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { lang } from "next/root-params";
 import { cache } from "react";
-import { FALLBACK_LOCALE, fmt, type TranslationStatus, isVerified, LOCALE_COOKIE, LOCALE_HEADER, normalizeLocale, resolveLocale } from "./locales";
-import { machineTranslationEnabled, readCachedTranslation } from "./machine";
-import { VERIFIED_MESSAGES, type Messages } from "./messages";
-import { loadStaticTranslation } from "./static";
+import { type I18nState, loadMessages } from "./load";
+import { isSupported } from "./supported";
 
-export type { TranslationStatus } from "./locales";
+export type { I18nState, TranslationStatus } from "./load";
 
-export interface I18nState {
-  locale: string;
-  messages: Messages;
-  status: TranslationStatus;
-  machineEnabled: boolean;
-  /** Préfixe de l'adresse ("/fr"…) quand la langue vient de l'URL, sinon "". */
-  prefix: string;
-}
-
-export async function loadMessages(locale: string, prefix = ""): Promise<I18nState> {
-  const machineEnabled = machineTranslationEnabled();
-  if (isVerified(locale)) return { locale, messages: VERIFIED_MESSAGES[locale], status: "verified", machineEnabled, prefix };
-  // Traduction générée à l'avance et embarquée dans le site
-  const generated = await loadStaticTranslation(locale);
-  if (generated) return { locale, messages: generated, status: "machine", machineEnabled, prefix };
-  const cached = await readCachedTranslation(locale);
-  if (cached) return { locale, messages: cached, status: "machine", machineEnabled, prefix };
-  return {
-    locale,
-    messages: VERIFIED_MESSAGES[FALLBACK_LOCALE],
-    status: machineEnabled ? "pending" : "unavailable",
-    machineEnabled,
-    prefix,
-  };
-}
-
-/** Langue imposée par l'adresse (/fr/…), posée par `src/proxy.ts`. */
-export const getUrlLocale = cache(async (): Promise<string | null> => {
-  const value = (await headers()).get(LOCALE_HEADER);
-  return value && isVerified(value) ? value : null;
-});
-
-/** Langue de la requête : adresse (/fr/…), puis cookie de choix, puis langue du navigateur. */
-export const getLocale = cache(async (): Promise<string> => {
-  const fromUrl = await getUrlLocale();
-  if (fromUrl) return fromUrl;
-  const [c, h] = await Promise.all([cookies(), headers()]);
-  return resolveLocale(c.get(LOCALE_COOKIE)?.value, h.get("accept-language"));
-});
-
-/** Langue + textes pour la requête en cours (mis en cache pendant le rendu). */
+/** Langue + textes de la page en cours (langue de l'adresse /[lang]/…). */
 export const getI18n = cache(async (): Promise<I18nState> => {
-  const fromUrl = await getUrlLocale();
-  return loadMessages(await getLocale(), fromUrl ? `/${fromUrl}` : "");
+  const locale = await lang();
+  if (!isSupported(locale)) notFound();
+  return loadMessages(locale, `/${locale}`);
 });
-
-/** Langue d'une requête API : champ explicite, sinon cookie / navigateur. */
-export function localeFromRequest(request: Request, explicit?: string | null): string {
-  const chosen = normalizeLocale(explicit);
-  if (chosen) return chosen;
-  const cookie = request.headers
-    .get("cookie")
-    ?.split(";")
-    .map((c) => c.trim().split("="))
-    .find(([k]) => k === LOCALE_COOKIE)?.[1];
-  return resolveLocale(cookie, request.headers.get("accept-language"));
-}
-
-export function formatError(messages: Messages, key: keyof Messages["errors"], params: Record<string, string | number> = {}, file?: string) {
-  const message = fmt(messages.errors[key], params);
-  return file ? fmt(messages.errors.inFile, { file, message }) : message;
-}

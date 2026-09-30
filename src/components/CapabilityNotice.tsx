@@ -1,11 +1,10 @@
 "use client";
 
 import { useI18n } from "@/i18n/client";
-import { useCapabilities } from "./useCapabilities";
+import type { Capabilities } from "@/lib/core/capabilities";
 
 /** Avertit quand LibreOffice est absent (formats Office indisponibles). Message destiné au développeur : jamais en production. */
-export function CapabilityNotice() {
-  const caps = useCapabilities();
+export function CapabilityNotice({ caps }: { caps: Capabilities }) {
   const t = useI18n().messages.notice;
   if (process.env.NODE_ENV === "production" || !caps || caps.libreOffice) return null;
   return (

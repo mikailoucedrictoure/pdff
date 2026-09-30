@@ -214,4 +214,12 @@ ${available.map((l) => `  ${JSON.stringify(l)}: () => import("./${l}.json"),`).j
 };
 `,
 );
+// Liste légère des langues (utilisée par le proxy et les pages fabriquées à l'avance)
+writeFileSync(
+  path.join(OUT, "locales.ts"),
+  `// Généré par scripts/translate-languages.mjs : ne pas modifier à la main.
+// Langues disponibles en traduction générée (liste légère, utilisable partout, y compris dans le proxy).
+export const GENERATED_LOCALES: readonly string[] = ${JSON.stringify(available)};
+`,
+);
 console.log(`\n${done} langue(s) traduite(s), ${skipped} déjà à jour, ${available.length} disponible(s) dans le site.`);
