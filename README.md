@@ -29,7 +29,12 @@ En ligne, c'est le service `services/office` (Render) qui s'en charge : voir `se
 
 - La langue est **détectée automatiquement** (langue du navigateur), et chacun peut la changer avec le bouton 🌐 en haut de la page. Le choix est mémorisé.
 - **Traductions vérifiées**, embarquées dans le site : français, anglais, espagnol, portugais, arabe (de droite à gauche), allemand, chinois — `src/i18n/messages/`.
-- **Toutes les autres langues** (160 au total) sont traduites automatiquement par IA la première fois qu’on les choisit, puis gardées en cache. Il faut une clé Vercel AI Gateway : `AI_GATEWAY_API_KEY` dans `.env.local` (sur Vercel, l’authentification est automatique). Sans clé, ces langues s’affichent en anglais.
+- **Toutes les autres langues** (153) sont traduites à l’avance par IA et embarquées dans le site : `src/i18n/generated/`.
+  Aucune IA n’est appelée quand un visiteur arrive. Pour (re)générer après une modification des textes anglais :
+  `GEMINI_API_KEY=… node scripts/translate-languages.mjs` (clé gratuite sur https://aistudio.google.com/apikey, sans carte).
+  Seuls les textes modifiés sont retraduits ; le quota gratuit (~20 demandes par jour et par modèle) peut étaler le travail sur plusieurs jours, le script reprend où il s’est arrêté.
+  Un texte anglais modifié mais pas encore retraduit s’affiche en anglais.
+- Traduction à la volée (secours, désactivée en production par `PDFF_MACHINE_TRANSLATION=off`) : Vercel AI Gateway, qui demande une carte bancaire sur le compte Vercel.
 - Les messages d’erreur du serveur sont eux aussi traduits.
 
 **Ajouter ou modifier un texte** : l’écrire dans `src/i18n/messages/fr.ts`, puis dans les 6 autres fichiers (TypeScript signale toute clé manquante). Les traductions automatiques se régénèrent d’elles-mêmes.

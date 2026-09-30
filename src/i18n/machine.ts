@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { head, put } from "@vercel/blob";
 import { generateText } from "ai";
+import { flatten, placeholders, rebuild, type Flat } from "./flat";
 import { direction, languageName } from "./locales";
 import { VERIFIED_MESSAGES, type Messages } from "./messages";
 
@@ -25,32 +26,6 @@ export function machineTranslationEnabled(): boolean {
   // Sur Vercel, le jeton OIDC est fourni à chaque requête (pas toujours en variable d'environnement)
   return !!(process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN || process.env.VERCEL);
 }
-
-// ---------------------------------------------------------------- Aplatir / reconstruire
-
-type Flat = Record<string, string>;
-
-function flatten(value: unknown, prefix = "", out: Flat = {}): Flat {
-  if (typeof value === "string") out[prefix] = value;
-  else if (Array.isArray(value)) value.forEach((v, i) => flatten(v, `${prefix}[${i}]`, out));
-  else if (value && typeof value === "object")
-    for (const [k, v] of Object.entries(value)) flatten(v, prefix ? `${prefix}.${k}` : k, out);
-  return out;
-}
-
-/** Reconstruit la structure de `shape` avec les textes de `flat` (repli sur `shape`). */
-function rebuild<T>(shape: T, flat: Flat, prefix = ""): T {
-  if (typeof shape === "string") return (flat[prefix] ?? shape) as T;
-  if (Array.isArray(shape)) return shape.map((v, i) => rebuild(v, flat, `${prefix}[${i}]`)) as T;
-  if (shape && typeof shape === "object") {
-    const out: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(shape)) out[k] = rebuild(v, flat, prefix ? `${prefix}.${k}` : k);
-    return out as T;
-  }
-  return shape;
-}
-
-const placeholders = (s: string) => (s.match(/\{\w+\}/g) ?? []).sort().join("|");
 
 // ---------------------------------------------------------------- Cache
 

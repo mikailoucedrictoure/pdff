@@ -6,6 +6,7 @@ import { cache } from "react";
 import { FALLBACK_LOCALE, fmt, type TranslationStatus, isVerified, LOCALE_COOKIE, LOCALE_HEADER, normalizeLocale, resolveLocale } from "./locales";
 import { machineTranslationEnabled, readCachedTranslation } from "./machine";
 import { VERIFIED_MESSAGES, type Messages } from "./messages";
+import { loadStaticTranslation } from "./static";
 
 export type { TranslationStatus } from "./locales";
 
@@ -21,6 +22,9 @@ export interface I18nState {
 export async function loadMessages(locale: string, prefix = ""): Promise<I18nState> {
   const machineEnabled = machineTranslationEnabled();
   if (isVerified(locale)) return { locale, messages: VERIFIED_MESSAGES[locale], status: "verified", machineEnabled, prefix };
+  // Traduction générée à l'avance et embarquée dans le site
+  const generated = await loadStaticTranslation(locale);
+  if (generated) return { locale, messages: generated, status: "machine", machineEnabled, prefix };
   const cached = await readCachedTranslation(locale);
   if (cached) return { locale, messages: cached, status: "machine", machineEnabled, prefix };
   return {
