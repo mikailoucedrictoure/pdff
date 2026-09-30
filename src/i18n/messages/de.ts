@@ -169,7 +169,7 @@ const de: Messages = {
       },
       {
         title: "Hosting",
-        text: "Die Website wird von Vercel gehostet; Word-, Excel- und PowerPoint-Umwandlungen laufen bei Google Cloud. Diese Anbieter verarbeiten Dateien nur für die Dauer der Umwandlung.",
+        text: "Die Website wird von Vercel auf Servern in Paris gehostet; Word-, Excel- und PowerPoint-Umwandlungen übernimmt Render in Frankfurt. Diese Anbieter verarbeiten Dateien nur für die Dauer der Umwandlung.",
       },
       {
         title: "Kontakt",

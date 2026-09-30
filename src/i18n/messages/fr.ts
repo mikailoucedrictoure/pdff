@@ -188,7 +188,7 @@ const fr = {
       },
       {
         title: "Hébergement",
-        text: "Le site est hébergé par Vercel ; les conversions Word, Excel et PowerPoint sont réalisées sur Google Cloud. Ces prestataires traitent les fichiers uniquement le temps de la conversion.",
+        text: "Le site est hébergé par Vercel, sur des serveurs situés à Paris ; les conversions Word, Excel et PowerPoint sont réalisées par Render, à Francfort. Ces prestataires traitent les fichiers uniquement le temps de la conversion.",
       },
       {
         title: "Contact",

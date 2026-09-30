@@ -172,7 +172,7 @@ const pt: Messages = {
       },
       {
         title: "Hospedagem",
-        text: "O site é hospedado pela Vercel; as conversões de Word, Excel e PowerPoint são feitas no Google Cloud. Esses fornecedores só tratam os arquivos durante a conversão.",
+        text: "O site é hospedado pela Vercel, em servidores localizados em Paris; as conversões de Word, Excel e PowerPoint são feitas pela Render, em Frankfurt. Esses fornecedores só tratam os arquivos durante a conversão.",
       },
       {
         title: "Contato",

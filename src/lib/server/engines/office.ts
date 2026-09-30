@@ -3,7 +3,7 @@
  * Word, Excel, PowerPoint, OpenDocument, RTF, CSV, HTML ↔ PDF et entre eux.
  *
  * Deux façons de l'exécuter :
- * - distant : le service `services/office` (Google Cloud Run), si PDFF_OFFICE_URL est défini.
+ * - distant : le service `services/office` (Render), si PDFF_OFFICE_URL est défini.
  *   C'est le mode utilisé en production, Vercel ne pouvant pas installer LibreOffice ;
  * - local : LibreOffice installé sur la machine (développement).
  */

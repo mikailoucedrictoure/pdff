@@ -166,7 +166,7 @@ const en: Messages = {
       { title: "Cookies", text: "A single, optional cookie: it remembers the language you chose." },
       {
         title: "Hosting",
-        text: "The site is hosted by Vercel; Word, Excel and PowerPoint conversions run on Google Cloud. These providers only handle files for the duration of the conversion.",
+        text: "The site is hosted by Vercel on servers in Paris; Word, Excel and PowerPoint conversions are handled by Render in Frankfurt. These providers only handle files for the duration of the conversion.",
       },
       { title: "Contact", text: "A question or a comment? Reach us from the project page:" },
     ],

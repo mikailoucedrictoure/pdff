@@ -169,7 +169,7 @@ const es: Messages = {
       { title: "Cookies", text: "Una sola cookie, opcional: recuerda el idioma que elegiste." },
       {
         title: "Alojamiento",
-        text: "El sitio está alojado en Vercel; las conversiones de Word, Excel y PowerPoint se realizan en Google Cloud. Estos proveedores solo tratan los archivos durante la conversión.",
+        text: "El sitio está alojado en Vercel, en servidores situados en París; las conversiones de Word, Excel y PowerPoint las realiza Render, en Fráncfort. Estos proveedores solo tratan los archivos durante la conversión.",
       },
       {
         title: "Contacto",

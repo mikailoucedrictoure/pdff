@@ -4,7 +4,7 @@ import { getI18n } from "@/i18n/server";
 import { pageMetadata, SOURCE_URL } from "@/lib/seo";
 
 /** Date de la dernière modification réelle de cette page. */
-const UPDATED = "2026-09-29";
+const UPDATED = "2026-09-30";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages: t, prefix, locale } = await getI18n();

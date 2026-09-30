@@ -142,7 +142,7 @@ const zh: Messages = {
       { title: "Cookie", text: "只有一个可选的 Cookie：用于记住您选择的语言。" },
       {
         title: "托管",
-        text: "网站托管在 Vercel 上；Word、Excel 和 PowerPoint 的转换在 Google Cloud 上完成。这些服务商仅在转换期间处理文件。",
+        text: "网站托管在 Vercel 位于巴黎的服务器上；Word、Excel 和 PowerPoint 的转换由位于法兰克福的 Render 完成。这些服务商仅在转换期间处理文件。",
       },
       { title: "联系我们", text: "有问题或建议？请通过项目页面联系我们：" },
     ],
