@@ -121,8 +121,10 @@ $RECYCLE.BIN/
 .history/
 .fleet/
 
-# ---------------------------------------------------------------- Outils IA locaux
-.claude/settings.local.json
+# ---------------------------------------------------------------- Outils de développement locaux
+.claude/
+CLAUDE.md
+AGENTS.md
 
 # ---------------------------------------------------------------- Divers
 *.pid

@@ -8,6 +8,9 @@
 node_modules/
 *.lnk
 *.tsbuildinfo
+.claude/
+CLAUDE.md
+AGENTS.md
 
 # Service LibreOffice : déployé à part sur Google Cloud Run (voir services/office/README.md)
 services/
