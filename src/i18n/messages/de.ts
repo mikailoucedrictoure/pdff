@@ -86,6 +86,10 @@ const de: Messages = {
     limits: "Bis zu {pages} Seiten und {files} Dateien pro Vorgang.",
     errorConnection: "Keine Verbindung zum Server.",
     errorGeneric: "Die Verarbeitung ist fehlgeschlagen.",
+    advanced: "Weitere Einstellungen (optional)",
+    preview: "Vorschau",
+    saved: "{before} → {after}: {pct} kleiner",
+    savedNone: "Diese Datei war bereits gut optimiert: Sie lässt sich nicht weiter verkleinern.",
   },
   language: {
     button: "Sprache",
@@ -331,14 +335,32 @@ const de: Messages = {
     },
     diviser: {
       name: "Teilen",
-      tagline: "Ein PDF in mehrere Dateien aufteilen: nach Seitenbereichen oder Seite für Seite.",
+      tagline: "Ein PDF in mehrere kleine Dateien aufteilen.",
       seoTitle: "PDF online kostenlos teilen — Seiten trennen",
       seoDescription: "Teilen Sie ein PDF in mehrere Dateien: nach Seitenbereichen, Seite für Seite oder alle N Seiten. Kostenlos, schnell, ohne Anmeldung.",
-      intro: "Senden Sie nur den wichtigen Teil eines großen Dokuments: pdff schneidet Ihr PDF entlang der gewählten Bereiche und gibt die Teile als ZIP-Archiv zurück.",
+      intro: "Legen Sie Ihr PDF ab, wählen Sie, wie es geteilt wird, und klicken Sie auf Teilen: Sie erhalten alle Teile in einer einzigen ZIP-Datei.",
       options: {
-        mode: { label: "Modus", choices: { ranges: "Nach Seitenbereichen", each: "Eine Seite = eine Datei", every: "Alle N Seiten" } },
-        ranges: { label: "Bereiche", placeholder: "1-3, 4-10, 11-ende", help: "Jeder Bereich wird zu einer Datei." },
-        every: { label: "Seiten pro Datei" },
+        mode: {
+          label: "Wie aufteilen?",
+          choices: {
+            each: "Jede Seite einzeln",
+            ranges: "Ich wähle die Seiten",
+            every: "In Paketen",
+          },
+          hints: {
+            each: "1 Seite = 1 Datei. Am einfachsten.",
+            ranges: "Z. B. Seiten 1 bis 3 in eine Datei, 4 bis 10 in eine andere.",
+            every: "Z. B. alle 5 Seiten eine neue Datei.",
+          },
+        },
+        ranges: {
+          label: "Welche Seiten?",
+          placeholder: "1-3, 4-10",
+          help: "Ein Komma trennt die Dateien: „1-3, 4-10“ ergibt 2 Dateien (Seiten 1 bis 3, dann 4 bis 10). Schreiben Sie „ende“ für die letzte Seite.",
+        },
+        every: {
+          label: "Wie viele Seiten pro Datei?",
+        },
       },
     },
     extraire: {
@@ -376,56 +398,116 @@ const de: Messages = {
     },
     numeroter: {
       name: "Seiten nummerieren",
-      tagline: "Seitenzahlen hinzufügen.",
+      tagline: "Die Nummer auf jede Seite schreiben.",
       seoTitle: "Seitenzahlen in PDF einfügen — kostenlos online",
       seoDescription: "Fügen Sie einem PDF Seitenzahlen hinzu: Position, Format „1 / 10“, Startnummer und Größe frei wählbar. Kostenlos, ohne Anmeldung.",
-      intro: "Ideal für Abschlussarbeiten, Bewerbungsmappen oder Berichte: Position, Format und Startnummer wählen, und pdff nummeriert Ihre Seiten sauber.",
+      intro: "Legen Sie Ihr PDF ab, klicken Sie auf die Stelle der Seite, an der die Nummer stehen soll, wählen Sie einen Stil und klicken Sie auf Nummerieren. Die Vorschau zeigt das Ergebnis vorab.",
       options: {
         position: {
-          label: "Position",
+          label: "Wo soll die Nummer stehen?",
           choices: {
-            "bottom-center": "Unten, zentriert",
+            "bottom-center": "Unten, Mitte",
             "bottom-right": "Unten, rechts",
             "bottom-left": "Unten, links",
-            "top-center": "Oben, zentriert",
+            "top-center": "Oben, Mitte",
             "top-right": "Oben, rechts",
             "top-left": "Oben, links",
           },
         },
-        format: { label: "Format", help: "{n} = Nummer, {total} = Seitenanzahl.", default: "{n} / {total}" },
-        start: { label: "Erste Nummer" },
-        size: { label: "Textgröße" },
-        pages: { label: "Zu nummerierende Seiten", placeholder: "alle", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
+        format: {
+          label: "Stil",
+          choices: {
+            nTotal: "1 / 10",
+            n: "1",
+            page: "Seite 1",
+            dash: "- 1 -",
+          },
+          templates: {
+            nTotal: "{n} / {total}",
+            n: "{n}",
+            page: "Seite {n}",
+            dash: "- {n} -",
+          },
+        },
+        start: {
+          label: "Erste Nummer",
+          help: "Z. B. 3, um bei 3 zu beginnen.",
+        },
+        size: {
+          label: "Größe der Zahlen",
+        },
+        pages: {
+          label: "Zu nummerierende Seiten",
+          placeholder: "alle",
+          help: "Leer lassen für alle Seiten. „2-ende“ überspringt die erste Seite.",
+        },
       },
     },
     filigrane: {
       name: "Wasserzeichen",
-      tagline: "Einen Text als Wasserzeichen aufbringen (VERTRAULICH, KOPIE…).",
+      tagline: "„KOPIE“ oder „VERTRAULICH“ groß auf jede Seite schreiben.",
       seoTitle: "Wasserzeichen zu PDF hinzufügen — kostenlos online",
       seoDescription: "Setzen Sie ein Text-Wasserzeichen (VERTRAULICH, KOPIE, ENTWURF …) auf ein PDF, mit einstellbarer Größe, Deckkraft, Winkel und Farbe. Kostenlos.",
-      intro: "Schützen Sie Kopien Ihres Ausweises und Ihrer Nachweise mit einem klaren Vermerk, etwa „Kopie nur für die Wohnungsbewerbung“.",
+      intro: "Legen Sie Ihr PDF ab, wählen Sie einen Text (oder schreiben Sie Ihren eigenen), prüfen Sie die Vorschau und klicken Sie auf Wasserzeichen. Praktisch, um die Kopie eines Ausweises zu schützen.",
       options: {
-        text: { label: "Text", default: "VERTRAULICH" },
-        size: { label: "Größe" },
-        opacity: { label: "Deckkraft (%)" },
-        rotation: { label: "Winkel (°)" },
-        color: { label: "Farbe", choices: { gray: "Grau", red: "Rot", blue: "Blau", black: "Schwarz" } },
-        pages: { label: "Seiten", placeholder: "alle", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
+        text: {
+          label: "Text",
+          default: "VERTRAULICH",
+          suggestions: ["VERTRAULICH", "KOPIE", "ENTWURF", "NICHT WEITERGEBEN"],
+        },
+        color: {
+          label: "Farbe",
+          choices: {
+            gray: "Grau",
+            red: "Rot",
+            blue: "Blau",
+            black: "Schwarz",
+          },
+        },
+        opacity: {
+          label: "Sichtbarkeit",
+          choices: {
+            "12": "Dezent",
+            "25": "Normal",
+            "45": "Gut sichtbar",
+          },
+        },
+        rotation: {
+          label: "Textrichtung",
+          choices: {
+            "0": "Waagerecht",
+            "45": "Diagonal",
+          },
+        },
+        size: {
+          label: "Maximale Textgröße",
+          help: "Der Text wird automatisch verkleinert, wenn er zu lang für die Seite ist.",
+        },
+        pages: {
+          label: "Seiten",
+          placeholder: "alle",
+          help: "Leer lassen für alle Seiten. Z. B. 1-3, 5, 8-ende.",
+        },
       },
     },
     compresser: {
       name: "Komprimieren",
-      tagline: "Die Dateigröße eines PDFs verringern.",
+      tagline: "Ein PDF leichter machen, damit es sich einfach versenden lässt.",
       seoTitle: "PDF online komprimieren — Dateigröße kostenlos verkleinern",
       seoDescription: "Verkleinern Sie ein PDF, um es per E-Mail zu senden oder auf einem Behördenportal hochzuladen. Drei Kompressionsstufen, kostenlos.",
-      intro: "Ein Portal lehnt Ihre Datei ab, weil sie zu groß ist? Komprimieren Sie Ihr PDF bei scharfem Text: verlustfrei, empfohlen oder stark, je nach Zielgröße.",
+      intro: "Ist Ihre Datei zu groß für eine E-Mail oder eine Website? Legen Sie sie ab, lassen Sie „Empfohlen“ gewählt und klicken Sie auf Komprimieren. Der Text bleibt scharf.",
       options: {
         level: {
-          label: "Stufe",
+          label: "Wie stark verkleinern?",
           choices: {
-            lossless: "Verlustfrei (Struktur bereinigen)",
-            recommended: "Empfohlen (Bilder mit 150 DPI)",
-            strong: "Stark (Bilder mit 96 DPI)",
+            lossless: "Leicht",
+            recommended: "Empfohlen",
+            strong: "Maximal",
+          },
+          hints: {
+            lossless: "Gleiche Qualität, kleiner Gewinn.",
+            recommended: "In den meisten Fällen die richtige Wahl.",
+            strong: "So klein wie möglich; Fotos werden etwas unscharf.",
           },
         },
       },

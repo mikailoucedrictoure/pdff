@@ -6,12 +6,20 @@
  * (les autres langues suivent), et son exécuteur dans `src/lib/server/runners.ts`.
  */
 
-/** Affiche l'option seulement si une autre option a l'une des valeurs données. */
-export interface ShowIf {
+/** Présentation d'une option dans l'interface. */
+export interface OptionUi {
+  /** Affiche l'option seulement si une autre option a l'une des valeurs données. */
   showIf?: { name: string; in: string[] };
+  /** Rangée dans « Plus de réglages », fermé par défaut : l'essentiel reste visible. */
+  advanced?: boolean;
+  /**
+   * Liste de choix affichée en grandes cartes cliquables (cards), sur une page miniature
+   * (position) ou en pastilles de couleur (swatches) plutôt qu'en liste déroulante.
+   */
+  display?: "cards" | "position" | "swatches";
 }
 
-export type ToolOption = ShowIf &
+export type ToolOption = OptionUi &
   (
     | { type: "select"; name: string; default: string; choices: string[] }
     | { type: "text"; name: string; default: string }
@@ -81,7 +89,7 @@ export const TOOLS: ToolMeta[] = [
     accepts: "pdf",
     minFiles: 1,
     options: [
-      { type: "select", name: "mode", default: "ranges", choices: ["ranges", "each", "every"] },
+      { type: "select", name: "mode", default: "each", choices: ["each", "ranges", "every"], display: "cards" },
       { type: "text", name: "ranges", default: "", showIf: { name: "mode", in: ["ranges"] } },
       { type: "number", name: "every", default: 10, min: 1, showIf: { name: "mode", in: ["every"] } },
     ],
@@ -127,12 +135,14 @@ export const TOOLS: ToolMeta[] = [
         type: "select",
         name: "position",
         default: "bottom-center",
-        choices: ["bottom-center", "bottom-right", "bottom-left", "top-center", "top-right", "top-left"],
+        choices: ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"],
+        display: "position",
       },
-      { type: "text", name: "format", default: "{n} / {total}" },
-      { type: "number", name: "start", default: 1, min: 0 },
-      { type: "number", name: "size", default: 10, min: 4, max: 72 },
-      { type: "text", name: "pages", default: "" },
+      // Styles prêts à l'emploi ; le modèle envoyé au serveur ({n} / {total}…) vient des traductions (templates)
+      { type: "select", name: "format", default: "nTotal", choices: ["nTotal", "n", "page", "dash"], display: "cards" },
+      { type: "number", name: "start", default: 1, min: 0, advanced: true },
+      { type: "number", name: "size", default: 10, min: 4, max: 72, advanced: true },
+      { type: "text", name: "pages", default: "", advanced: true },
     ],
   },
   {
@@ -142,11 +152,12 @@ export const TOOLS: ToolMeta[] = [
     minFiles: 1,
     options: [
       { type: "text", name: "text", default: "CONFIDENTIEL" },
-      { type: "number", name: "size", default: 60, min: 8, max: 300 },
-      { type: "number", name: "opacity", default: 20, min: 1, max: 100 },
-      { type: "number", name: "rotation", default: 45, min: -180, max: 180 },
-      { type: "select", name: "color", default: "gray", choices: ["gray", "red", "blue", "black"] },
-      { type: "text", name: "pages", default: "" },
+      { type: "select", name: "color", default: "gray", choices: ["gray", "red", "blue", "black"], display: "swatches" },
+      // Opacité en % et angle en degrés : trois niveaux et deux sens suffisent à presque tout le monde
+      { type: "select", name: "opacity", default: "25", choices: ["12", "25", "45"], display: "cards" },
+      { type: "select", name: "rotation", default: "45", choices: ["45", "0"], display: "cards" },
+      { type: "number", name: "size", default: 60, min: 8, max: 300, advanced: true },
+      { type: "text", name: "pages", default: "", advanced: true },
     ],
   },
   {
@@ -154,7 +165,7 @@ export const TOOLS: ToolMeta[] = [
     category: "modifier",
     accepts: "pdf",
     minFiles: 1,
-    options: [{ type: "select", name: "level", default: "recommended", choices: ["lossless", "recommended", "strong"] }],
+    options: [{ type: "select", name: "level", default: "recommended", choices: ["lossless", "recommended", "strong"], display: "cards" }],
   },
   {
     id: "proteger",

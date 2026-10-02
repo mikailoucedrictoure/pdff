@@ -86,6 +86,10 @@ const zh: Messages = {
     limits: "每次最多 {pages} 页、{files} 个文件。",
     errorConnection: "无法连接服务器。",
     errorGeneric: "处理失败。",
+    advanced: "更多设置（可选）",
+    preview: "预览",
+    saved: "{before} → {after}：减小了 {pct}",
+    savedNone: "该文件已经优化得很好，无法再缩小。",
   },
   language: {
     button: "语言",
@@ -301,14 +305,32 @@ const zh: Messages = {
     },
     diviser: {
       name: "拆分",
-      tagline: "把一个 PDF 拆成多个文件：按页码范围或逐页拆分。",
+      tagline: "把一个 PDF 拆成几个小文件。",
       seoTitle: "免费在线拆分 PDF — 分离页面",
       seoDescription: "将一个 PDF 拆分为多个文件：按页码范围、逐页或每 N 页拆分。免费、快速、无需注册。",
-      intro: "只发送大文档中有用的部分：pdff 按您选择的范围切分 PDF，并将各部分打包成 ZIP 文件返回。",
+      intro: "放入 PDF，选择拆分方式，然后点击“拆分”：所有部分会打包在一个 ZIP 文件里给您。",
       options: {
-        mode: { label: "方式", choices: { ranges: "按页码范围", each: "每页一个文件", every: "每 N 页一个文件" } },
-        ranges: { label: "页码范围", placeholder: "1-3, 4-10, 11-end", help: "每个范围生成一个文件。" },
-        every: { label: "每个文件的页数" },
+        mode: {
+          label: "怎么拆分？",
+          choices: {
+            each: "每页单独一个",
+            ranges: "我来选页面",
+            every: "按固定页数",
+          },
+          hints: {
+            each: "1 页 = 1 个文件。最简单。",
+            ranges: "例如：第 1–3 页一个文件，第 4–10 页另一个。",
+            every: "例如：每 5 页一个新文件。",
+          },
+        },
+        ranges: {
+          label: "哪些页面？",
+          placeholder: "1-3, 4-10",
+          help: "用逗号分隔每个文件：“1-3, 4-10”会得到 2 个文件（第 1–3 页，然后第 4–10 页）。最后一页可写“end”。",
+        },
+        every: {
+          label: "每个文件多少页？",
+        },
       },
     },
     extraire: {
@@ -346,13 +368,13 @@ const zh: Messages = {
     },
     numeroter: {
       name: "添加页码",
-      tagline: "为页面添加页码。",
+      tagline: "在每一页上写上页码。",
       seoTitle: "给 PDF 添加页码 — 免费在线",
       seoDescription: "为 PDF 添加页码：可自选位置、“1 / 10”格式、起始页码和字号。免费、无需注册。",
-      intro: "非常适合论文、申请材料或报告：选择位置、格式和起始页码，pdff 会为您整齐地编排页码。",
+      intro: "放入 PDF，点击页面上要放页码的位置，选一种样式，然后点击“添加页码”。开始前可以在预览中看到效果。",
       options: {
         position: {
-          label: "位置",
+          label: "页码放在哪里？",
           choices: {
             "bottom-center": "底部居中",
             "bottom-right": "底部靠右",
@@ -362,40 +384,100 @@ const zh: Messages = {
             "top-left": "顶部靠左",
           },
         },
-        format: { label: "格式", help: "{n} = 页码，{total} = 总页数。", default: "{n} / {total}" },
-        start: { label: "起始页码" },
-        size: { label: "文字大小" },
-        pages: { label: "需要编号的页面", placeholder: "全部", help: "例如：1-3, 5, 8-end。留空 = 全部页面。" },
+        format: {
+          label: "样式",
+          choices: {
+            nTotal: "1 / 10",
+            n: "1",
+            page: "p. 1",
+            dash: "- 1 -",
+          },
+          templates: {
+            nTotal: "{n} / {total}",
+            n: "{n}",
+            page: "p. {n}",
+            dash: "- {n} -",
+          },
+        },
+        start: {
+          label: "起始页码",
+          help: "例如：填 3 表示从 3 开始编号。",
+        },
+        size: {
+          label: "数字大小",
+        },
+        pages: {
+          label: "需要编号的页面",
+          placeholder: "全部",
+          help: "留空表示全部页面。“2-end”会跳过第一页。",
+        },
       },
     },
     filigrane: {
       name: "水印",
-      tagline: "添加文字水印（机密、副本……）。",
+      tagline: "在每一页上写上大字“COPY”或“CONFIDENTIAL”。",
       seoTitle: "给 PDF 添加水印 — 免费在线",
       seoDescription: "在 PDF 上添加文字水印（机密、副本、草稿……），可调整大小、透明度、角度和颜色。免费。",
-      intro: "为身份证件和证明材料的复印件加上清晰的说明，例如“仅供租房申请使用”，保护您的信息。",
+      intro: "放入 PDF，选一段文字（或自己输入），看一下预览，然后点击“水印”。适合保护身份证件的复印件。",
       options: {
-        text: { label: "文字", default: "机密" },
-        size: { label: "大小" },
-        opacity: { label: "不透明度（%）" },
-        rotation: { label: "角度（°）" },
-        color: { label: "颜色", choices: { gray: "灰色", red: "红色", blue: "蓝色", black: "黑色" } },
-        pages: { label: "页面", placeholder: "全部", help: "例如：1-3, 5, 8-end。留空 = 全部页面。" },
+        text: {
+          label: "要写的文字",
+          default: "CONFIDENTIAL",
+          suggestions: ["CONFIDENTIAL", "COPY", "DRAFT", "DO NOT SHARE"],
+        },
+        color: {
+          label: "颜色",
+          choices: {
+            gray: "灰色",
+            red: "红色",
+            blue: "蓝色",
+            black: "黑色",
+          },
+        },
+        opacity: {
+          label: "明显程度",
+          choices: {
+            "12": "淡",
+            "25": "适中",
+            "45": "醒目",
+          },
+        },
+        rotation: {
+          label: "文字方向",
+          choices: {
+            "0": "水平",
+            "45": "斜着",
+          },
+        },
+        size: {
+          label: "文字最大尺寸",
+          help: "文字太长放不下时会自动缩小。",
+        },
+        pages: {
+          label: "页面",
+          placeholder: "全部",
+          help: "留空表示全部页面。例如：1-3, 5, 8-end。",
+        },
       },
     },
     compresser: {
       name: "压缩",
-      tagline: "减小 PDF 文件大小。",
+      tagline: "让 PDF 变小，方便发送。",
       seoTitle: "在线压缩 PDF — 免费减小文件大小",
       seoDescription: "减小 PDF 文件大小，方便通过邮件发送或上传到官方网站。三种压缩级别，免费。",
-      intro: "网站因为文件太大而拒绝上传？在保持文字清晰的前提下压缩 PDF：根据目标大小选择无损、推荐或强力压缩。",
+      intro: "文件太大，发不了邮件或传不上网站？放入文件，保持“推荐”，然后点击“压缩”。文字依然清晰。",
       options: {
         level: {
-          label: "压缩程度",
+          label: "压缩多少？",
           choices: {
-            lossless: "无损（清理文件结构）",
-            recommended: "推荐（图片 150 DPI）",
-            strong: "高强度（图片 96 DPI）",
+            lossless: "轻度",
+            recommended: "推荐",
+            strong: "最大",
+          },
+          hints: {
+            lossless: "画质不变，减小有限。",
+            recommended: "大多数情况下的最佳选择。",
+            strong: "尽可能小；照片会稍微模糊。",
           },
         },
       },

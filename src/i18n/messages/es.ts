@@ -86,6 +86,10 @@ const es: Messages = {
     limits: "Hasta {pages} páginas y {files} archivos por operación.",
     errorConnection: "No se puede conectar con el servidor.",
     errorGeneric: "El proceso ha fallado.",
+    advanced: "Más ajustes (opcional)",
+    preview: "Vista previa",
+    saved: "{before} → {after}: {pct} más ligero",
+    savedNone: "Este archivo ya estaba bien optimizado: no se puede reducir más.",
   },
   language: {
     button: "Idioma",
@@ -331,14 +335,32 @@ const es: Messages = {
     },
     diviser: {
       name: "Dividir",
-      tagline: "Separa un PDF en varios archivos: por rangos o página a página.",
+      tagline: "Cortar un PDF en varios archivos más pequeños.",
       seoTitle: "Dividir un PDF online gratis — separar páginas",
       seoDescription: "Separa un PDF en varios archivos: por rangos de páginas, página a página o cada N páginas. Gratis, rápido y sin registro.",
-      intro: "Envía solo la parte útil de un documento grande: pdff corta tu PDF según los rangos que elijas y te devuelve las partes en un archivo ZIP.",
+      intro: "Deja tu PDF, elige cómo cortarlo y haz clic en Dividir: recibes todas las partes en un solo archivo ZIP.",
       options: {
-        mode: { label: "Modo", choices: { ranges: "Por rangos de páginas", each: "Una página = un archivo", every: "Cada N páginas" } },
-        ranges: { label: "Rangos", placeholder: "1-3, 4-10, 11-fin", help: "Cada rango se convierte en un archivo." },
-        every: { label: "Páginas por archivo" },
+        mode: {
+          label: "¿Cómo cortarlo?",
+          choices: {
+            each: "Cada página por separado",
+            ranges: "Yo elijo las páginas",
+            every: "Por bloques",
+          },
+          hints: {
+            each: "1 página = 1 archivo. Lo más sencillo.",
+            ranges: "Ej.: páginas 1 a 3 en un archivo, 4 a 10 en otro.",
+            every: "Ej.: un archivo nuevo cada 5 páginas.",
+          },
+        },
+        ranges: {
+          label: "¿Qué páginas?",
+          placeholder: "1-3, 4-10",
+          help: "Una coma separa cada archivo: «1-3, 4-10» da 2 archivos (páginas 1 a 3 y luego 4 a 10). Escribe «final» para la última página.",
+        },
+        every: {
+          label: "¿Cuántas páginas por archivo?",
+        },
       },
     },
     extraire: {
@@ -376,56 +398,116 @@ const es: Messages = {
     },
     numeroter: {
       name: "Numerar páginas",
-      tagline: "Añade números de página.",
+      tagline: "Escribir el número en cada página.",
       seoTitle: "Numerar las páginas de un PDF — gratis online",
       seoDescription: "Añade números de página a un PDF: posición, formato «1 / 10», primer número y tamaño a elegir. Gratis, sin registro.",
-      intro: "Ideal para una tesis, un expediente administrativo o un informe: elige la posición, el formato y el primer número, y pdff numera tus páginas con cuidado.",
+      intro: "Deja tu PDF, haz clic en el lugar de la página donde va el número, elige un estilo y haz clic en Numerar. La vista previa muestra el resultado antes de empezar.",
       options: {
         position: {
-          label: "Posición",
+          label: "¿Dónde poner el número?",
           choices: {
-            "bottom-center": "Abajo, centrado",
+            "bottom-center": "Abajo, en el centro",
             "bottom-right": "Abajo, a la derecha",
             "bottom-left": "Abajo, a la izquierda",
-            "top-center": "Arriba, centrado",
+            "top-center": "Arriba, en el centro",
             "top-right": "Arriba, a la derecha",
             "top-left": "Arriba, a la izquierda",
           },
         },
-        format: { label: "Formato", help: "{n} = número, {total} = número de páginas.", default: "{n} / {total}" },
-        start: { label: "Primer número" },
-        size: { label: "Tamaño del texto" },
-        pages: { label: "Páginas a numerar", placeholder: "todas", help: "Ej.: 1-3, 5, 8-fin. Vacío = todas las páginas." },
+        format: {
+          label: "Estilo",
+          choices: {
+            nTotal: "1 / 10",
+            n: "1",
+            page: "Pág. 1",
+            dash: "- 1 -",
+          },
+          templates: {
+            nTotal: "{n} / {total}",
+            n: "{n}",
+            page: "Pág. {n}",
+            dash: "- {n} -",
+          },
+        },
+        start: {
+          label: "Primer número",
+          help: "Ej.: 3 para empezar a contar en 3.",
+        },
+        size: {
+          label: "Tamaño de los números",
+        },
+        pages: {
+          label: "Páginas a numerar",
+          placeholder: "todas",
+          help: "Déjalo vacío para todas las páginas. «2-final» salta la primera página.",
+        },
       },
     },
     filigrane: {
       name: "Marca de agua",
-      tagline: "Añade un texto como marca de agua (CONFIDENCIAL, COPIA…).",
+      tagline: "Escribir «COPIA» o «CONFIDENCIAL» en grande en cada página.",
       seoTitle: "Añadir marca de agua a un PDF — gratis online",
       seoDescription: "Estampa un texto como marca de agua (CONFIDENCIAL, COPIA, BORRADOR…) en un PDF, con tamaño, opacidad, ángulo y color ajustables. Gratis.",
-      intro: "Protege las copias de tu documento de identidad y justificantes añadiendo una mención clara, por ejemplo «Copia solo para el alquiler del piso».",
+      intro: "Deja tu PDF, elige un texto (o escribe el tuyo), mira la vista previa y haz clic en Marca de agua. Útil para proteger la copia de un documento de identidad.",
       options: {
-        text: { label: "Texto", default: "CONFIDENCIAL" },
-        size: { label: "Tamaño" },
-        opacity: { label: "Opacidad (%)" },
-        rotation: { label: "Ángulo (°)" },
-        color: { label: "Color", choices: { gray: "Gris", red: "Rojo", blue: "Azul", black: "Negro" } },
-        pages: { label: "Páginas", placeholder: "todas", help: "Ej.: 1-3, 5, 8-fin. Vacío = todas las páginas." },
+        text: {
+          label: "Texto a escribir",
+          default: "CONFIDENCIAL",
+          suggestions: ["CONFIDENCIAL", "COPIA", "BORRADOR", "NO DIFUNDIR"],
+        },
+        color: {
+          label: "Color",
+          choices: {
+            gray: "Gris",
+            red: "Rojo",
+            blue: "Azul",
+            black: "Negro",
+          },
+        },
+        opacity: {
+          label: "Visibilidad",
+          choices: {
+            "12": "Discreta",
+            "25": "Normal",
+            "45": "Muy visible",
+          },
+        },
+        rotation: {
+          label: "Dirección del texto",
+          choices: {
+            "0": "En horizontal",
+            "45": "En diagonal",
+          },
+        },
+        size: {
+          label: "Tamaño máximo del texto",
+          help: "El texto se reduce solo si es demasiado largo para la página.",
+        },
+        pages: {
+          label: "Páginas",
+          placeholder: "todas",
+          help: "Déjalo vacío para todas las páginas. Ej.: 1-3, 5, 8-final.",
+        },
       },
     },
     compresser: {
       name: "Comprimir",
-      tagline: "Reduce el tamaño de un PDF.",
+      tagline: "Hacer un PDF más ligero para enviarlo fácilmente.",
       seoTitle: "Comprimir PDF online — reducir el tamaño gratis",
       seoDescription: "Reduce el peso de un PDF para enviarlo por correo o subirlo a una web oficial. Tres niveles de compresión, gratis.",
-      intro: "¿Un portal rechaza tu archivo por ser demasiado pesado? Comprime tu PDF manteniendo el texto nítido: elige sin pérdida, recomendado o fuerte según el tamaño que necesites.",
+      intro: "¿Tu archivo pesa demasiado para un correo o una web? Déjalo, mantén «Recomendado» y haz clic en Comprimir. El texto sigue nítido.",
       options: {
         level: {
-          label: "Nivel",
+          label: "¿Cuánto reducir?",
           choices: {
-            lossless: "Sin pérdida (limpieza de la estructura)",
-            recommended: "Recomendado (imágenes a 150 DPI)",
-            strong: "Fuerte (imágenes a 96 DPI)",
+            lossless: "Ligero",
+            recommended: "Recomendado",
+            strong: "Máximo",
+          },
+          hints: {
+            lossless: "Misma calidad, poca reducción.",
+            recommended: "La mejor opción en la mayoría de los casos.",
+            strong: "Lo más pequeño posible; las fotos quedan algo borrosas.",
           },
         },
       },

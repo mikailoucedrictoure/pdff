@@ -86,6 +86,10 @@ const en: Messages = {
     limits: "Up to {pages} pages and {files} files per operation.",
     errorConnection: "Can't reach the server.",
     errorGeneric: "Processing failed.",
+    advanced: "More settings (optional)",
+    preview: "Preview",
+    saved: "{before} → {after}: {pct} smaller",
+    savedNone: "This file was already well optimized: it can't be made any smaller.",
   },
   language: {
     button: "Language",
@@ -325,14 +329,32 @@ const en: Messages = {
     },
     diviser: {
       name: "Split",
-      tagline: "Split a PDF into several files: by page ranges or page by page.",
+      tagline: "Cut a PDF into several smaller files.",
       seoTitle: "Split a PDF online for free — separate pages",
       seoDescription: "Split a PDF into several files: by page ranges, page by page or every N pages. Free, fast and no sign-up.",
-      intro: "Send only the part of a big document that matters: pdff cuts your PDF along the ranges you choose and hands the pieces back in a ZIP archive.",
+      intro: "Drop your PDF, choose how to cut it, then click Split: you get all the pieces in a single ZIP file.",
       options: {
-        mode: { label: "Mode", choices: { ranges: "By page ranges", each: "One page = one file", every: "Every N pages" } },
-        ranges: { label: "Ranges", placeholder: "1-3, 4-10, 11-end", help: "Each range becomes a file." },
-        every: { label: "Pages per file" },
+        mode: {
+          label: "How to cut it?",
+          choices: {
+            each: "Every page separately",
+            ranges: "I choose the pages",
+            every: "In batches",
+          },
+          hints: {
+            each: "1 page = 1 file. The simplest.",
+            ranges: "E.g. pages 1 to 3 in one file, 4 to 10 in another.",
+            every: "E.g. a new file every 5 pages.",
+          },
+        },
+        ranges: {
+          label: "Which pages?",
+          placeholder: "1-3, 4-10",
+          help: "A comma separates each file: \"1-3, 4-10\" gives 2 files (pages 1 to 3, then 4 to 10). Type \"end\" for the last page.",
+        },
+        every: {
+          label: "How many pages per file?",
+        },
       },
     },
     extraire: {
@@ -370,56 +392,116 @@ const en: Messages = {
     },
     numeroter: {
       name: "Number pages",
-      tagline: "Add page numbers.",
+      tagline: "Write the number on every page.",
       seoTitle: "Add page numbers to a PDF — free online",
       seoDescription: "Add page numbers to a PDF: choose the position, the \"1 / 10\" format, the first number and the size. Free, no sign-up.",
-      intro: "Perfect for a thesis, an application file or a report: choose the position, format and first number, and pdff numbers your pages neatly.",
+      intro: "Drop your PDF, click where the number should go on the page, pick a style, then click Number pages. The preview shows the result before you start.",
       options: {
         position: {
-          label: "Position",
+          label: "Where should the number go?",
           choices: {
-            "bottom-center": "Bottom, center",
+            "bottom-center": "Bottom, middle",
             "bottom-right": "Bottom, right",
             "bottom-left": "Bottom, left",
-            "top-center": "Top, center",
+            "top-center": "Top, middle",
             "top-right": "Top, right",
             "top-left": "Top, left",
           },
         },
-        format: { label: "Format", help: "{n} = number, {total} = page count.", default: "{n} / {total}" },
-        start: { label: "First number" },
-        size: { label: "Text size" },
-        pages: { label: "Pages to number", placeholder: "all", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
+        format: {
+          label: "Style",
+          choices: {
+            nTotal: "1 / 10",
+            n: "1",
+            page: "Page 1",
+            dash: "- 1 -",
+          },
+          templates: {
+            nTotal: "{n} / {total}",
+            n: "{n}",
+            page: "Page {n}",
+            dash: "- {n} -",
+          },
+        },
+        start: {
+          label: "First number",
+          help: "E.g. 3 to start counting at 3.",
+        },
+        size: {
+          label: "Number size",
+        },
+        pages: {
+          label: "Pages to number",
+          placeholder: "all",
+          help: "Leave empty for all pages. \"2-end\" skips the first page.",
+        },
       },
     },
     filigrane: {
       name: "Watermark",
-      tagline: "Stamp a text watermark (CONFIDENTIAL, COPY…).",
+      tagline: "Write “COPY” or “CONFIDENTIAL” in large letters on every page.",
       seoTitle: "Add a watermark to a PDF — free online",
       seoDescription: "Stamp a text watermark (CONFIDENTIAL, COPY, DRAFT…) on a PDF with adjustable size, opacity, angle and colour. Free.",
-      intro: "Protect copies of your ID and supporting documents by adding a clear notice, such as \"Copy for rental application only\".",
+      intro: "Drop your PDF, pick a text (or type your own), check the preview, then click Watermark. Handy for protecting a copy of an ID document.",
       options: {
-        text: { label: "Text", default: "CONFIDENTIAL" },
-        size: { label: "Size" },
-        opacity: { label: "Opacity (%)" },
-        rotation: { label: "Angle (°)" },
-        color: { label: "Color", choices: { gray: "Gray", red: "Red", blue: "Blue", black: "Black" } },
-        pages: { label: "Pages", placeholder: "all", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
+        text: {
+          label: "Text to write",
+          default: "CONFIDENTIAL",
+          suggestions: ["CONFIDENTIAL", "COPY", "DRAFT", "DO NOT SHARE"],
+        },
+        color: {
+          label: "Color",
+          choices: {
+            gray: "Gray",
+            red: "Red",
+            blue: "Blue",
+            black: "Black",
+          },
+        },
+        opacity: {
+          label: "Visibility",
+          choices: {
+            "12": "Subtle",
+            "25": "Normal",
+            "45": "Very visible",
+          },
+        },
+        rotation: {
+          label: "Text direction",
+          choices: {
+            "0": "Horizontal",
+            "45": "Diagonal",
+          },
+        },
+        size: {
+          label: "Maximum text size",
+          help: "The text shrinks automatically if it is too long for the page.",
+        },
+        pages: {
+          label: "Pages",
+          placeholder: "all",
+          help: "Leave empty for all pages. E.g. 1-3, 5, 8-end.",
+        },
       },
     },
     compresser: {
       name: "Compress",
-      tagline: "Reduce the size of a PDF.",
+      tagline: "Make a PDF lighter so it's easy to send.",
       seoTitle: "Compress a PDF online — reduce file size for free",
       seoDescription: "Shrink a PDF to send it by email or upload it to an official website. Three compression levels, free.",
-      intro: "A portal rejects your file because it is too heavy? Compress your PDF while keeping text sharp: pick lossless, recommended or strong depending on the size you need.",
+      intro: "Is your file too heavy for an email or a website? Drop it, keep “Recommended” and click Compress. Text stays sharp.",
       options: {
         level: {
-          label: "Level",
+          label: "How much to reduce?",
           choices: {
-            lossless: "Lossless (structure cleanup)",
-            recommended: "Recommended (150 DPI images)",
-            strong: "Strong (96 DPI images)",
+            lossless: "Light",
+            recommended: "Recommended",
+            strong: "Maximum",
+          },
+          hints: {
+            lossless: "Same quality, modest gain.",
+            recommended: "The right choice in most cases.",
+            strong: "As small as possible; photos get a little blurry.",
           },
         },
       },

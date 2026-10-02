@@ -21,7 +21,7 @@ type Status =
   | { kind: "idle" }
   | { kind: "uploading"; progress: number }
   | { kind: "processing" }
-  | { kind: "done"; url: string; name: string; size: number; count: number; seconds: number }
+  | { kind: "done"; url: string; name: string; size: number; count: number; seconds: number; inputSize: number }
   | { kind: "error"; message: string };
 
 /** Textes d'une option d'outil (voir `tools.<id>.options` dans les traductions). */
@@ -31,6 +31,12 @@ interface OptionText {
   placeholder?: string;
   default?: string;
   choices?: Record<string, string>;
+  /** Petite explication sous chaque choix (cartes). */
+  hints?: Record<string, string>;
+  /** Valeur réellement envoyée au serveur pour chaque choix (ex. nTotal → "{n} / {total}"). */
+  templates?: Record<string, string>;
+  /** Textes proposés en un clic sous un champ libre. */
+  suggestions?: string[];
 }
 
 type WorkspaceText = Messages["workspace"];
@@ -53,6 +59,11 @@ function formatSize(bytes: number, locale: string): string {
   } catch {
     return `${(bytes / size).toFixed(1)} ${unit}`;
   }
+}
+
+/** Durée avec le séparateur décimal de la langue (0,1 en français, 0.1 en anglais). */
+function secondsText(seconds: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(seconds);
 }
 
 function filenameFrom(header: string | null, fallback: string): string {
@@ -100,6 +111,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const xhrRef = useRef<XMLHttpRequest | null>(null);
+  /** Poids des fichiers envoyés, pour afficher le gain d'une compression. */
+  const inputSizeRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
 
   const acceptedExts = useMemo(() => {
@@ -162,7 +175,14 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
       setStatus({ kind: "error", message: fmt(m.errors.tooLarge, { mb: caps.limits.maxUploadMb }) });
       return;
     }
-    const opts = { ...options, target };
+    const opts: OptionValues = { ...options, target };
+    // Les choix de style deviennent le modèle attendu par le serveur
+    for (const opt of tool.options) {
+      const templates = optText(opt.name).templates;
+      const value = String(opts[opt.name] ?? "");
+      if (templates?.[value] !== undefined) opts[opt.name] = templates[value];
+    }
+    inputSizeRef.current = total;
     // Au-delà de ~4 Mo, les fichiers passent par le stockage temporaire (limite des requêtes Vercel)
     if (caps?.blob && total > DIRECT_TRANSFER_BYTES) void runViaBlob(opts, total);
     else runDirect(opts);
@@ -172,7 +192,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
 
   /** Affiche le résultat et lance le téléchargement. */
   function deliver(url: string, name: string, size: number, count: number, started: number) {
-    setStatus({ kind: "done", url, name, size, count, seconds: (performance.now() - started) / 1000 });
+    setStatus({ kind: "done", url, name, size, count, seconds: (performance.now() - started) / 1000, inputSize: inputSizeRef.current });
     const a = document.createElement("a");
     a.href = url;
     a.download = name;
@@ -302,7 +322,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     status.kind === "uploading" || status.kind === "processing"
       ? w.processingShort
       : status.kind === "done"
-        ? `${status.count > 1 ? fmt(w.doneMany, { s: status.seconds.toFixed(1), n: status.count }) : fmt(w.done, { s: status.seconds.toFixed(1) })} ${status.name}`
+        ? `${status.count > 1 ? fmt(w.doneMany, { s: secondsText(status.seconds, locale), n: status.count }) : fmt(w.done, { s: secondsText(status.seconds, locale) })} ${status.name}`
         : "";
 
   return (
@@ -471,19 +491,50 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         </div>
 
         {tool.options.length > 0 ? (
-          <div className="mt-5 space-y-4">
-            {tool.options.filter(visible).map((opt) => (
-              <OptionField
-                key={opt.name}
-                option={opt}
-                text={optText(opt.name)}
-                value={opt.type === "target" ? target : options[opt.name]}
-                targets={targets}
-                hasFiles={items.length > 0}
-                messages={m}
-                onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
-              />
-            ))}
+          <div className="mt-5 space-y-5">
+            {(tool.id === "filigrane" || tool.id === "numeroter") && (
+              <ToolPreview toolId={tool.id} options={options} templates={optText("format").templates} label={w.preview} />
+            )}
+            {tool.options
+              .filter((opt) => visible(opt) && !opt.advanced)
+              .map((opt) => (
+                <OptionField
+                  key={opt.name}
+                  option={opt}
+                  text={optText(opt.name)}
+                  value={opt.type === "target" ? target : options[opt.name]}
+                  targets={targets}
+                  hasFiles={items.length > 0}
+                  messages={m}
+                  onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
+                />
+              ))}
+            {tool.options.some((opt) => visible(opt) && opt.advanced) && (
+              <details className="group rounded-xl border border-line">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-semibold">
+                  {w.advanced}
+                  <span aria-hidden="true" className="text-muted transition group-open:rotate-180">
+                    ▾
+                  </span>
+                </summary>
+                <div className="space-y-4 border-t border-line p-3.5">
+                  {tool.options
+                    .filter((opt) => visible(opt) && opt.advanced)
+                    .map((opt) => (
+                      <OptionField
+                        key={opt.name}
+                        option={opt}
+                        text={optText(opt.name)}
+                        value={options[opt.name]}
+                        targets={targets}
+                        hasFiles={items.length > 0}
+                        messages={m}
+                        onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
+                      />
+                    ))}
+                </div>
+              </details>
+            )}
           </div>
         ) : (
           <p className="mt-4 text-sm text-muted">{w.noSettings}</p>
@@ -493,7 +544,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
 
         <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="mt-6 hidden lg:flex" />
 
-        <StatusPanel status={status} onCancel={cancel} onReset={reset} w={w} size={size} />
+        <StatusPanel status={status} onCancel={cancel} onReset={reset} w={w} size={size} showSaving={tool.id === "compresser"} locale={locale} />
 
         {caps && (
           <p className="mt-4 text-xs text-muted">
@@ -559,12 +610,17 @@ function StatusPanel({
   onReset,
   w,
   size,
+  showSaving,
+  locale,
 }: {
   status: Status;
   onCancel: () => void;
   onReset: () => void;
   w: WorkspaceText;
   size: (bytes: number) => string;
+  /** Compression : afficher « avant → après ». */
+  showSaving: boolean;
+  locale: string;
 }) {
   if (status.kind === "idle") return null;
   if (status.kind === "uploading" || status.kind === "processing") {
@@ -597,7 +653,7 @@ function StatusPanel({
       </p>
     );
   }
-  const seconds = status.seconds.toFixed(1);
+  const seconds = secondsText(status.seconds, locale);
   return (
     <div className="pop mt-4 rounded-2xl bg-ok-soft p-4">
       <div className="flex items-center gap-3">
@@ -611,6 +667,17 @@ function StatusPanel({
           </p>
         </div>
       </div>
+      {showSaving && status.inputSize > 0 && (
+        <p className="mt-3 rounded-xl bg-surface px-3 py-2 text-sm font-semibold">
+          {status.size < status.inputSize
+            ? fmt(w.saved, {
+                before: size(status.inputSize),
+                after: size(status.size),
+                pct: new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(1 - status.size / status.inputSize),
+              })
+            : w.savedNone}
+        </p>
+      )}
       <div className="mt-3 flex gap-2">
         <a href={status.url} download={status.name} className="flex-1 rounded-full bg-ok px-4 py-2.5 text-center text-sm font-semibold text-white hover:opacity-90">
           {w.download}
@@ -653,6 +720,12 @@ function OptionField({
         </label>
       );
     case "select":
+      if (option.display === "cards")
+        return <CardChoice name={option.name} label={text.label} choices={option.choices} text={text} value={String(value)} onChange={onChange} />;
+      if (option.display === "position")
+        return <PositionPicker label={text.label} choices={option.choices} text={text} value={String(value)} onChange={onChange} />;
+      if (option.display === "swatches")
+        return <Swatches label={text.label} choices={option.choices} text={text} value={String(value)} onChange={onChange} />;
       return (
         <label className="block">
           <span className={labelCls}>{text.label}</span>
@@ -697,10 +770,225 @@ function OptionField({
             dir="auto"
           />
           {text.help && <span className="mt-1 block text-xs text-muted">{text.help}</span>}
+          {text.suggestions && (
+            <span className="mt-2 flex flex-wrap gap-1.5">
+              {text.suggestions.map((sug) => (
+                <button
+                  key={sug}
+                  type="button"
+                  onClick={() => onChange(sug)}
+                  aria-pressed={value === sug}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                    value === sug ? "border-brand bg-brand/10 text-brand-fg" : "border-line bg-bg hover:border-brand/50"
+                  }`}
+                >
+                  {sug}
+                </button>
+              ))}
+            </span>
+          )}
         </label>
       );
   }
 }
+
+const SWATCH: Record<string, string> = { gray: "#808080", red: "#cc1a1a", blue: "#1a40bf", black: "#000000" };
+
+/** Choix en grandes cartes : le libellé, et une phrase qui dit à quoi il sert. */
+function CardChoice({
+  name,
+  label,
+  choices,
+  text,
+  value,
+  onChange,
+}: {
+  name: string;
+  label: string;
+  choices: string[];
+  text: OptionText;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-2 block text-sm font-semibold">{label}</legend>
+      <div className={text.hints ? "space-y-2" : "grid grid-cols-2 gap-2"}>
+        {choices.map((c) => (
+          <label
+            key={c}
+            className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-bg px-3.5 py-3 transition hover:border-brand/50 has-[:checked]:border-brand has-[:checked]:bg-brand/10"
+          >
+            <input type="radio" name={name} value={c} checked={value === c} onChange={() => onChange(c)} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--brand)]" />
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold">{text.choices?.[c] ?? c}</span>
+              {text.hints?.[c] && <span className="mt-0.5 block text-xs text-muted">{text.hints[c]}</span>}
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/** Position du numéro : on clique directement à l'endroit voulu sur une page miniature. */
+function PositionPicker({
+  label,
+  choices,
+  text,
+  value,
+  onChange,
+}: {
+  label: string;
+  choices: string[];
+  text: OptionText;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const spot = (c: string) => (
+    <label key={c} title={text.choices?.[c]} className="group/spot grid h-10 cursor-pointer place-items-center rounded-lg transition hover:bg-brand/10">
+      <input type="radio" name="position" value={c} checked={value === c} onChange={() => onChange(c)} className="peer sr-only" />
+      <span className="sr-only">{text.choices?.[c] ?? c}</span>
+      <span
+        aria-hidden="true"
+        className="grid h-6 min-w-6 place-items-center rounded-md border-2 border-dashed border-zinc-300 px-1 text-[11px] font-bold text-transparent transition group-hover/spot:border-brand/60 peer-checked:border-solid peer-checked:border-brand peer-checked:bg-brand peer-checked:text-white peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand peer-focus-visible:outline-solid"
+      >
+        1
+      </span>
+    </label>
+  );
+  return (
+    <fieldset>
+      <legend className="mb-2 block text-sm font-semibold">{label}</legend>
+      <div className="flex items-center gap-4">
+        <div dir="ltr" className="flex aspect-[3/4] w-32 shrink-0 flex-col justify-between rounded-lg border border-line bg-white p-1.5 shadow-sm">
+          <div className="grid grid-cols-3">{choices.filter((c) => c.startsWith("top")).map(spot)}</div>
+          <div aria-hidden="true" className="space-y-1.5 px-2">
+            {[90, 75, 85, 60].map((wd, i) => (
+              <div key={i} className="h-1 rounded-full bg-zinc-200" style={{ width: `${wd}%` }} />
+            ))}
+          </div>
+          <div className="grid grid-cols-3">{choices.filter((c) => c.startsWith("bottom")).map(spot)}</div>
+        </div>
+        <p className="text-sm font-medium text-muted">{text.choices?.[value] ?? value}</p>
+      </div>
+    </fieldset>
+  );
+}
+
+/** Couleurs en pastilles, avec leur nom. */
+function Swatches({
+  label,
+  choices,
+  text,
+  value,
+  onChange,
+}: {
+  label: string;
+  choices: string[];
+  text: OptionText;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-2 block text-sm font-semibold">{label}</legend>
+      <div className="flex flex-wrap gap-4">
+        {choices.map((c) => (
+          <label key={c} className="flex cursor-pointer flex-col items-center gap-1.5 text-xs">
+            <input type="radio" name="color" value={c} checked={value === c} onChange={() => onChange(c)} className="peer sr-only" />
+            <span
+              aria-hidden="true"
+              className="h-9 w-9 rounded-full border-2 border-white shadow ring-2 ring-line transition peer-checked:ring-4 peer-checked:ring-brand peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand peer-focus-visible:outline-solid"
+              style={{ background: SWATCH[c] ?? c }}
+            />
+            <span className="peer-checked:font-semibold">{text.choices?.[c] ?? c}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/** Aperçu sur une page miniature : le filigrane ou le numéro tels qu'ils apparaîtront. */
+function ToolPreview({
+  toolId,
+  options,
+  templates,
+  label,
+}: {
+  toolId: string;
+  options: OptionValues;
+  templates?: Record<string, string>;
+  label: string;
+}) {
+  // Page A4 (595 × 842 points) réduite à 120 × 170
+  const W = 120;
+  const H = 170;
+  const k = W / 595;
+  const lines = [28, 36, 44, 52, 60, 68, 76, 84, 92, 100, 108, 116, 124, 132];
+  let overlay: React.ReactNode;
+  if (toolId === "filigrane") {
+    const text = String(options.text ?? "").trim() || " ";
+    const rotation = Number(options.rotation) || 0;
+    const rad = (rotation * Math.PI) / 180;
+    const cos = Math.abs(Math.cos(rad));
+    const sin = Math.abs(Math.sin(rad));
+    // Même calcul que le serveur : le texte pivoté doit tenir dans la page (Helvetica gras ≈ 0,62 em par caractère)
+    const maxWidth = Math.min(cos > 1e-3 ? (595 * 0.85) / cos : Infinity, sin > 1e-3 ? (842 * 0.85) / sin : Infinity);
+    const sizePt = Math.min(Number(options.size) || 60, maxWidth / (text.length * 0.62));
+    overlay = (
+      <text
+        x={W / 2}
+        y={H / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        transform={`rotate(${-rotation} ${W / 2} ${H / 2})`}
+        fill={SWATCH[String(options.color)] ?? "#808080"}
+        fillOpacity={(Number(options.opacity) || 25) / 100}
+        fontFamily="Helvetica, Arial, sans-serif"
+        fontWeight={700}
+        fontSize={sizePt * k}
+      >
+        {text}
+      </text>
+    );
+  } else {
+    const start = Number(options.start) || 1;
+    const template = templates?.[String(options.format)] ?? String(options.format ?? "{n}");
+    const labelText = template.replaceAll("{n}", String(start)).replaceAll("{total}", String(start + 9));
+    const [vertical, horizontal] = String(options.position ?? "bottom-center").split("-");
+    // Agrandi pour rester lisible sur la miniature
+    const size = Math.max(9, (Number(options.size) || 10) * k * 1.6);
+    const margin = 9;
+    overlay = (
+      <text
+        x={horizontal === "left" ? margin : horizontal === "right" ? W - margin : W / 2}
+        y={vertical === "top" ? margin + size * 0.6 : H - margin}
+        textAnchor={horizontal === "left" ? "start" : horizontal === "right" ? "end" : "middle"}
+        fill="#1a1a1a"
+        fontFamily="Helvetica, Arial, sans-serif"
+        fontWeight={600}
+        fontSize={size}
+      >
+        {labelText}
+      </text>
+    );
+  }
+  return (
+    <figure className="flex flex-col items-center gap-2 rounded-xl bg-bg p-3">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-40 drop-shadow-md" direction="ltr" role="img" aria-label={label}>
+        <rect width={W} height={H} rx="3" fill="#fff" />
+        {lines.map((y, i) => (
+          <rect key={y} x="14" y={y} width={i % 4 === 3 ? 56 : 92} height="2.5" rx="1.25" fill="#e4e4ea" />
+        ))}
+        {overlay}
+      </svg>
+      <figcaption className="text-xs font-medium text-muted">{label}</figcaption>
+    </figure>
+  );
+}
+
 
 /** Choix du format de sortie : grille de vignettes plutôt qu'une liste déroulante. */
 function TargetPicker({
