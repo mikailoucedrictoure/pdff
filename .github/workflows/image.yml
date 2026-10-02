@@ -1,0 +1,123 @@
+name: Image d'installation (Docker)
+
+# Construit l'image complète de pdff (site + LibreOffice), la teste comme un vrai serveur,
+# puis la publie sur GitHub Container Registry : ghcr.io/mikailoucedrictoure/pdff
+# - à chaque envoi sur main : étiquette « latest » ;
+# - à chaque version (étiquette git v1.2.3) : étiquettes « 1.2.3 » et « 1.2 ».
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: image-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/pdff
+
+jobs:
+  image:
+    name: Construire, tester, publier
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Construire l'image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: pdff:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Démarrer pdff comme sur un serveur (réseau coupé)
+        run: |
+          # --network none : prouve que pdff fonctionne sans aucun accès à Internet
+          docker run -d --name pdff --network none --security-opt no-new-privileges:true --tmpfs /tmp:size=1g pdff:test
+          for i in $(seq 1 60); do
+            [ "$(docker inspect -f '{{.State.Health.Status}}' pdff)" = "healthy" ] && break
+            sleep 2
+          done
+          docker inspect -f '{{.State.Health.Status}}' pdff | grep -q healthy
+
+      - name: Vérifier les pages et les conversions
+        run: |
+          set -e
+          run() { docker exec pdff "$@"; }
+          get() { run node -e "fetch('http://127.0.0.1:3000$1').then(async r=>{const t=await r.text();if(!r.ok)process.exit(1);process.stdout.write(t)})"; }
+          get /api/capabilities | tee caps.json
+          grep -q '"libreOffice":true' caps.json
+          grep -q '"blob":false' caps.json
+          for page in /fr /en /ar /fr/outils/convertir /fr/conditions /fr/securite /fr/accessibilite; do get "$page" > /dev/null && echo "ok $page"; done
+          get /robots.txt | grep -q "Disallow: /"
+          # Aucune statistique ni ressource externe dans les pages
+          if get /fr | grep -q "_vercel/insights"; then echo "Statistiques externes trouvées"; exit 1; fi
+          # Conversions réelles : texte → Word → PDF, fusion, PDF → image, protection
+          cat > smoke.mjs <<'EOF'
+          const base = "http://127.0.0.1:3000/api/tools/";
+          async function call(tool, files, options) {
+            const form = new FormData();
+            for (const [name, data, type] of files) form.append("files", new Blob([data], { type }), name);
+            form.append("options", JSON.stringify(options));
+            const res = await fetch(base + tool, { method: "POST", body: form });
+            if (!res.ok) throw new Error(`${tool} ${res.status} ${await res.text()}`);
+            const out = new Uint8Array(await res.arrayBuffer());
+            console.log(`ok ${tool} ${JSON.stringify(options)} → ${out.length} octets`);
+            return out;
+          }
+          const docx = await call("convertir", [["a.txt", "Bonjour pdff\n", "text/plain"]], { target: "docx" });
+          const pdf = await call("convertir", [["a.docx", docx, "application/octet-stream"]], { target: "pdf" });
+          if (new TextDecoder().decode(pdf.slice(0, 5)) !== "%PDF-") throw new Error("PDF invalide");
+          await call("fusionner", [["a.pdf", pdf, "application/pdf"], ["b.pdf", pdf, "application/pdf"]], {});
+          const png = await call("convertir", [["a.pdf", pdf, "application/pdf"]], { target: "png" });
+          if (png[1] !== 0x50) throw new Error("PNG invalide");
+          await call("proteger", [["a.pdf", pdf, "application/pdf"]], { password: "secret123" });
+          EOF
+          docker cp smoke.mjs pdff:/tmp/smoke.mjs
+          run node /tmp/smoke.mjs
+
+      - name: Journal du conteneur
+        if: always()
+        run: docker logs pdff
+
+      - name: Connexion à GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Étiquettes
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+          labels: |
+            org.opencontainers.image.title=pdff
+            org.opencontainers.image.description=Fusionner, convertir et modifier PDF, Word, Excel, PowerPoint et images, sur votre propre serveur
+            org.opencontainers.image.licenses=MIT
+
+      - name: Publier
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha

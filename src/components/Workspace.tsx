@@ -297,8 +297,19 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const canRun = items.length >= tool.minFiles && !busy && (!tool.options.some((o) => o.type === "target") || !!target);
   const emptyDecor = tool.accepts === "pdf" ? ["pdf", "pdf", "pdf"] : ["docx", "pdf", "xlsx", "pptx", "jpg"];
 
+  // Annonce des étapes aux lecteurs d'écran (WCAG 4.1.3) : une phrase par étape, pas à chaque pourcentage
+  const announcement =
+    status.kind === "uploading" || status.kind === "processing"
+      ? w.processingShort
+      : status.kind === "done"
+        ? `${status.count > 1 ? fmt(w.doneMany, { s: status.seconds.toFixed(1), n: status.count }) : fmt(w.done, { s: status.seconds.toFixed(1) })} ${status.name}`
+        : "";
+
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <p className="sr-only" role="status" aria-live="polite">
+        {announcement}
+      </p>
       {/* Fichiers */}
       <section className="min-w-0">
         <div
@@ -436,7 +447,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
                 <button
                   type="button"
                   onClick={() => inputRef.current?.click()}
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line py-3.5 text-sm font-semibold text-muted transition hover:border-brand hover:text-brand"
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line py-3.5 text-sm font-semibold text-muted transition hover:border-brand hover:text-brand-fg"
                 >
                   <span className="text-lg leading-none">+</span> {w.addMore}
                 </button>
@@ -446,14 +457,14 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         </div>
 
         {rejected.length > 0 && (
-          <p className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
+          <p role="alert" className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
         )}
       </section>
 
       {/* Options et action */}
       <aside className="h-fit rounded-[2rem] border border-line bg-surface p-5 sm:p-6 lg:sticky lg:top-24">
         <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand-fg">
             <ToolIcon id={tool.id} className="h-5 w-5" />
           </span>
           <h2 className="font-display text-xl font-bold">{w.settings}</h2>
@@ -560,7 +571,14 @@ function StatusPanel({
     const pct = status.kind === "uploading" ? Math.round(status.progress * 100) : 100;
     return (
       <div className="mt-4">
-        <div className="h-2.5 overflow-hidden rounded-full bg-bg">
+        <div
+          role="progressbar"
+          aria-label={w.processingShort}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={pct}
+          className="h-2.5 overflow-hidden rounded-full bg-bg"
+        >
           <div className="progress-stripes h-full rounded-full bg-brand transition-all" style={{ width: `${pct}%` }} />
         </div>
         <div className="mt-2 flex items-center justify-between text-xs text-muted">
@@ -573,7 +591,11 @@ function StatusPanel({
     );
   }
   if (status.kind === "error") {
-    return <p className="pop mt-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">{status.message}</p>;
+    return (
+      <p role="alert" className="pop mt-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">
+        {status.message}
+      </p>
+    );
   }
   const seconds = status.seconds.toFixed(1);
   return (
@@ -620,7 +642,7 @@ function OptionField({
 }) {
   const labelCls = "mb-1.5 block text-sm font-semibold";
   const inputCls =
-    "w-full rounded-xl border border-line bg-bg px-3.5 py-2.5 text-base outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/15 sm:text-sm";
+    "w-full rounded-xl border border-line bg-bg px-3.5 py-2.5 text-base transition focus:border-brand focus:ring-4 focus:ring-brand/25 sm:text-sm";
 
   switch (option.type) {
     case "checkbox":
@@ -748,7 +770,7 @@ function SmallButton({ children, onClick }: { children: React.ReactNode; onClick
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-semibold transition hover:border-brand hover:text-brand"
+      className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-semibold transition hover:border-brand hover:text-brand-fg"
     >
       {children}
     </button>

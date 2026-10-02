@@ -1,0 +1,14 @@
+# Seul ce qui sert à construire le site entre dans l'image
+.git
+.github
+.next
+node_modules
+.env*
+!.env.example
+*.lnk
+*.cmd
+*.tsbuildinfo
+.cache
+coverage
+tests
+services

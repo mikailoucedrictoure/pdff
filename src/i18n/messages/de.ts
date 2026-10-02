@@ -7,7 +7,14 @@ const de: Messages = {
     keywords: "pdf zusammenfügen, pdf umwandeln, pdf in word, word in pdf, jpg in pdf, pdf in jpg, pdf komprimieren, pdf teilen, excel in pdf, kostenlose pdf tools",
   },
   nav: { merge: "Zusammenführen", convert: "Umwandeln", allTools: "Alle Werkzeuge", back: "← Alle Werkzeuge" },
-  footer: { text: "Kostenlos, ohne Anmeldung. Ihre Dateien werden gelöscht, sobald die Verarbeitung abgeschlossen ist." },
+  footer: {
+    text: "Kostenlos, ohne Anmeldung. Ihre Dateien werden gelöscht, sobald die Verarbeitung abgeschlossen ist.",
+    skip: "Zum Inhalt springen",
+    legalNav: "Informationen zur Website",
+    developedBy: "Konzipiert und entwickelt von {name}",
+    motionPause: "Animationen anhalten",
+    motionPlay: "Animationen fortsetzen",
+  },
   home: {
     title: "Alle Ihre Dokumente, in einem einzigen Werkzeug.",
     subtitle: "PDF, Word, Excel, PowerPoint, Bilder: in Sekunden zusammenführen, umwandeln und bearbeiten.",
@@ -176,6 +183,132 @@ const de: Messages = {
         text: "Eine Frage oder Anmerkung? Schreiben Sie uns über die Projektseite:",
       },
     ],
+  },
+  legal: {
+    termsLink: "Nutzungsbedingungen",
+    securityLink: "Sicherheit und Daten",
+    accessibilityLink: "Barrierefreiheit",
+    terms: {
+      title: "Nutzungsbedingungen",
+      description: "pdff ist für alle kostenlos, auch für Unternehmen und Behörden. Ihre Dokumente bleiben Ihre: Nichts wird ausgewertet oder gespeichert.",
+      intro: "Diese Bedingungen regeln die Nutzung von pdff. Sie sind bewusst kurz und in einfacher Sprache gehalten. Mit der Nutzung der Website akzeptieren Sie sie.",
+      sections: [
+        {
+          title: "Wer pdff herausgibt",
+          text: "pdff wird von Mikaïlou Cédric Touré konzipiert, entwickelt und herausgegeben, einem Entwickler mit Sitz in New Brunswick, Kanada.",
+        },
+        {
+          title: "Eine kostenlose Nutzungslizenz für alle",
+          text: "pdff ist kostenlos, ohne Anmeldung und ohne zeitliche Begrenzung, für alle: Privatpersonen, Studierende, Lehrkräfte, Unternehmen, Vereine, Behörden und Regierungen, in Kanada wie in jedem anderen Land. Keine Nutzung ist einem kostenpflichtigen Angebot vorbehalten, denn es gibt keines. Die erzeugten Dateien gehören vollständig Ihnen: Sie tragen weder ein Wasserzeichen noch einen Hinweis auf pdff.",
+        },
+        {
+          title: "Alle Ihre Dokumente, auch vertrauliche",
+          text: "Sie können jede Art von Dokument verarbeiten, auch vertrauliche, denn pdff liest, analysiert, speichert und teilt Ihre Dateien nicht: Sie werden automatisch verarbeitet und anschließend gelöscht. Sie bleiben Eigentümer und sind dafür verantwortlich, über die nötigen Rechte zur Verarbeitung zu verfügen.",
+        },
+        {
+          title: "Quellcode und Installation auf Ihren eigenen Servern",
+          text: "Der Code von pdff ist unter der MIT-Lizenz veröffentlicht. Sie dürfen ihn einsehen, prüfen, auf Ihren eigenen Servern installieren (auch in einem geschlossenen Netz ohne Internetzugang), verändern und kostenlos weitergeben, sofern Sie den Urheberrechtsvermerk und den Lizenztext beibehalten.",
+        },
+        {
+          title: "Zulässige Nutzung",
+          text: "Es ist untersagt, pdff für rechtswidrige Zwecke zu nutzen, den Dienst zu stören (massenhafte automatisierte Uploads, Angriffsversuche) oder seine technischen Grenzen zu umgehen. Die Grenzen bei Dateigröße und Dateianzahl schützen den Dienst für alle.",
+        },
+        {
+          title: "Verfügbarkeit",
+          text: "pdff wird kostenlos bereitgestellt. Der Dienst kann sich ändern, für Wartungsarbeiten unterbrochen oder eingestellt werden. Bewahren Sie Ihre Originaldokumente immer auf: pdff behält keine Kopie.",
+        },
+        {
+          title: "Gewährleistung und Haftung",
+          text: "Der Dienst wird „wie besehen“ und ohne jegliche Gewährleistung bereitgestellt. Soweit gesetzlich zulässig, haftet der Herausgeber nicht für mittelbare Schäden, Datenverluste oder ein unvollkommenes Konvertierungsergebnis. Prüfen Sie die erzeugten Dokumente, bevor Sie sie für wichtige Vorgänge verwenden.",
+        },
+        {
+          title: "Geistiges Eigentum",
+          text: "Der Name pdff, sein Logo und die Texte der Website gehören dem Herausgeber; der Code steht, wie oben angegeben, unter der MIT-Lizenz. Die genannten Marken (PDF, Word, Excel, PowerPoint …) gehören ihren jeweiligen Inhabern.",
+        },
+        {
+          title: "Anwendbares Recht",
+          text: "Diese Bedingungen unterliegen den Gesetzen der Provinz New Brunswick und den dort geltenden Bundesgesetzen Kanadas. Zuständig sind die Gerichte von New Brunswick, unbeschadet der Rechte, die Ihnen das Recht Ihres Landes als Verbraucher garantiert.",
+        },
+        {
+          title: "Änderungen",
+          text: "Diese Bedingungen können aktualisiert werden. Das Datum oben auf der Seite zeigt die geltende Fassung; eine Änderung gilt nur für die Nutzung nach ihrer Veröffentlichung.",
+        },
+        {
+          title: "Kontakt",
+          text: "Eine Frage zu diesen Bedingungen? Schreiben Sie uns über die Projektseite:",
+        },
+      ],
+    },
+    security: {
+      title: "Sicherheit und Daten",
+      description: "Was mit Ihren Dateien bei pdff geschieht: automatische Verarbeitung, keine Auswertung, sofortige Löschung, Verschlüsselung, Hosting in Europa und Installation auf eigenen Servern möglich.",
+      intro: "Was mit Ihren Dateien geschieht, wo sie verarbeitet und wie sie geschützt werden: einfach erklärt, für Privatpersonen ebenso wie für IT-Abteilungen.",
+      sections: [
+        {
+          title: "Keine Dokumente gespeichert",
+          text: "Ihre Dateien werden automatisch verarbeitet und gelöscht, sobald das Ergebnis fertig ist oder heruntergeladen wurde. Es gibt keine Kopie, keine Sicherung und keinen Verlauf. Eine tägliche automatische Bereinigung löscht zudem jede temporäre Datei, die übrig geblieben sein könnte, spätestens am folgenden Tag.",
+        },
+        {
+          title: "Keine Auswertung",
+          text: "Niemand liest Ihre Dokumente. Sie werden weder indexiert noch analysiert, geteilt oder zum Training künstlicher Intelligenz verwendet. pdff hat keine Konten, keine Werbung und keine Nutzerprofile.",
+        },
+        {
+          title: "Verschlüsselung",
+          text: "Alle Verbindungen sind verschlüsselt (HTTPS), und die Website erzwingt die Verschlüsselung bei jedem Besuch (HSTS). Das Werkzeug Schützen verschlüsselt Ihre PDFs mit AES-256; das gewählte Passwort wird nie gespeichert.",
+        },
+        {
+          title: "Wo Ihre Dateien verarbeitet werden",
+          text: "Website, PDF- und Bildwerkzeuge: Vercel, Rechenzentrum Paris (Frankreich, Europäische Union). Word-, Excel- und PowerPoint-Konvertierungen: Render in Frankfurt (Deutschland, Europäische Union). Dateien über 4 MB: temporärer Speicher Vercel Blob unter einem zufälligen Namen, nach der Verwendung gelöscht.",
+        },
+        {
+          title: "Technische Schutzmaßnahmen",
+          text: "Sicherheits-Header (HSTS, Sperre gegen das Einbetten der Website in fremde Seiten, Schutz vor Verwechslung von Dateitypen), nicht erratbare Adressen für temporäre Dateien und ein Konvertierungsdienst, der nur mit einem geheimen Token erreichbar ist. Jede Codeänderung wird vor der Veröffentlichung automatisch geprüft (Tests, Typprüfung).",
+        },
+        {
+          title: "Datenschutz und anwendbares Recht",
+          text: "pdff wird in New Brunswick herausgegeben und hält das kanadische Gesetz zum Schutz personenbezogener Informationen und elektronischer Dokumente (PIPEDA) ein. Es erhebt keine personenbezogenen Daten seiner Nutzer: kein Konto, keine E-Mail-Adresse, kein Tracking-Cookie. Es folgt denselben Grundsätzen wie die europäische DSGVO und das Gesetz 25 von Québec: Datenminimierung, keine Weiterverwendung, Löschung nach der Verarbeitung.",
+        },
+        {
+          title: "Für Organisationen mit strengen Vorgaben",
+          text: "Wenn Ihre Vorgaben verbieten, Dokumente an einen externen Dienst zu senden, installieren Sie pdff auf Ihren eigenen Servern. Die vollständige Software ist kostenlos, quelloffen und funktioniert ohne Internetverbindung: Keine Datei verlässt Ihr Netzwerk. Die Installationsanleitung finden Sie auf der Projektseite.",
+        },
+        {
+          title: "Transparenz",
+          text: "Der vollständige Quellcode ist öffentlich: Ihre Sicherheitsteams können jede dieser Aussagen überprüfen.",
+        },
+        {
+          title: "Sicherheitslücke melden",
+          text: "Sie glauben, eine Sicherheitslücke gefunden zu haben? Melden Sie sie vertraulich über den Reiter „Security“ der Projektseite:",
+        },
+      ],
+    },
+    accessibility: {
+      title: "Barrierefreiheit",
+      description: "Erklärung zur Barrierefreiheit von pdff: Ziel WCAG 2.2 Stufe AA, umgesetzte Maßnahmen, bekannte Einschränkungen und wie Sie eine Barriere melden.",
+      intro: "Alle sollen pdff nutzen können, auch blinde oder sehbehinderte, gehörlose oder schwerhörige Menschen sowie Menschen mit motorischen oder kognitiven Beeinträchtigungen.",
+      sections: [
+        {
+          title: "Angestrebter Standard",
+          text: "pdff strebt die Konformität mit den Richtlinien für barrierefreie Webinhalte (WCAG) 2.2, Stufe AA, an, dem internationalen Standard des W3C. Diese Stufe deckt die Anforderungen des Standards für Web-Barrierefreiheit der kanadischen Regierung, der europäischen Norm EN 301 549 und von Section 508 in den USA ab, die auf WCAG 2.0 oder 2.1 Stufe AA verweisen.",
+        },
+        {
+          title: "Stand der Konformität",
+          text: "pdff ist teilweise konform mit WCAG 2.2 Stufe AA: Die bekannten Einschränkungen sind unten aufgeführt. Diese Erklärung beruht auf einer internen Bewertung vom 2. Oktober 2026 mit automatischen Werkzeugen (axe, Lighthouse) und manuellen Prüfungen (Tastatur, Kontraste, Zoom, Ansagen). Ein unabhängiges Audit wurde noch nicht durchgeführt.",
+        },
+        {
+          title: "Umgesetzte Maßnahmen",
+          text: "Die gesamte Website ist per Tastatur bedienbar, mit einem Link „Zum Inhalt springen“ und einer sichtbaren Umrandung des aktiven Elements. Der Textkontrast beträgt mindestens 4,5:1. Die Schritte einer Aufgabe (Upload, Ergebnis, Fehler) werden Screenreadern angesagt. Die Reihenfolge der Dateien lässt sich ohne Ziehen und Ablegen über Schaltflächen ändern. Die Website beachtet die Einstellung „Bewegung reduzieren“ Ihres Geräts, und eine Schaltfläche unten auf jeder Seite hält alle Animationen an. Die Seiten bleiben bei 400 % Zoom und auf dem Smartphone lesbar. Die Sprache jeder Seite ist ausgezeichnet, und Arabisch wird von rechts nach links angezeigt.",
+        },
+        {
+          title: "Bekannte Einschränkungen",
+          text: "Der animierte Ring auf der Startseite wird mit der Maus oder dem Finger bedient; er ist dekorativ, und die Liste der gezeigten Formate steht auf der Seite auch als Text zur Verfügung. Maschinell übersetzte Sprachen können Ungenauigkeiten enthalten. Zudem hängt die Barrierefreiheit eines erzeugten Dokuments vom Original ab: pdff fügt einem PDF ohne Tags keine Barrierefreiheits-Tags hinzu.",
+        },
+        {
+          title: "Barriere melden",
+          text: "Bereitet Ihnen ein Teil der Website Probleme? Beschreiben Sie ihn über die Projektseite; wir bemühen uns, innerhalb von 10 Werktagen zu antworten und eine Alternative anzubieten, wenn die Korrektur länger dauert:",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {

@@ -29,7 +29,7 @@ export default async function PrivacyPage() {
               {i === last && (
                 <>
                   {" "}
-                  <a href={SOURCE_URL} className="font-medium text-brand underline underline-offset-4" rel="noopener">
+                  <a href={SOURCE_URL} className="font-medium text-brand-fg underline underline-offset-4" rel="noopener">
                     github.com/mikailoucedrictoure/pdff
                   </a>
                 </>

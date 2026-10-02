@@ -23,6 +23,7 @@ export function FileGlyphSprite() {
 
 /**
  * Icône de document : feuille au coin plié + bandeau à la couleur du format.
+ * Décorative pour les lecteurs d'écran : le nom du format est toujours écrit à côté.
  * Dessinée en SVG pour rester nette à toutes les tailles.
  */
 export function FileGlyph({
@@ -40,8 +41,7 @@ export function FileGlyph({
     <svg
       viewBox="0 0 64 80"
       className={className}
-      role="img"
-      aria-label={`Fichier ${label}`}
+      aria-hidden="true"
       style={{ color, ...(glow ? { filter: `drop-shadow(0 6px 18px ${color}88)` } : {}) }}
     >
       <use href={`#${SHEET_ID}`} />

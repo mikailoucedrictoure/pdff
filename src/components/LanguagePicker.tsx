@@ -70,7 +70,6 @@ export function LanguagePicker() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label={t.title}
         className="flex items-center gap-1.5 rounded-full px-3 py-2 text-white/85 hover:bg-white/10 hover:text-white"
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
@@ -78,6 +77,7 @@ export function LanguagePicker() {
           <path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" />
         </svg>
         <span className="text-sm font-semibold uppercase">{translating ?? locale}</span>
+        <span className="sr-only"> — {t.title}</span>
       </button>
 
       <dialog
@@ -105,7 +105,8 @@ export function LanguagePicker() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t.search}
-              className="w-full rounded-xl border border-line bg-bg px-4 py-3 text-base outline-none focus:border-brand focus:ring-4 focus:ring-brand/15"
+              aria-label={t.search}
+              className="w-full rounded-xl border border-line bg-bg px-4 py-3 text-base focus:border-brand focus:ring-4 focus:ring-brand/25"
             />
           </div>
 
@@ -116,7 +117,7 @@ export function LanguagePicker() {
                 onClick={() => choose(null)}
                 className="mx-2 mb-1 flex w-[calc(100%-1rem)] items-center gap-3 rounded-xl px-3 py-2.5 text-start hover:bg-bg"
               >
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand/10 text-brand">✦</span>
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand/10 text-brand-fg">✦</span>
                 <span className="font-medium">{t.auto}</span>
               </button>
             )}
@@ -155,17 +156,16 @@ function Group({
             <li key={e.code}>
               <button
                 type="button"
-                lang={e.code}
                 onClick={() => onPick(e.code)}
                 onPointerEnter={() => onIntent(e.code)}
                 onFocus={() => onIntent(e.code)}
                 aria-current={selected ? "true" : undefined}
                 className={`mx-2 flex w-[calc(100%-1rem)] items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-start transition ${
-                  selected ? "bg-brand/10 text-brand" : "hover:bg-bg"
+                  selected ? "bg-brand/10 text-brand-fg" : "hover:bg-bg"
                 }`}
               >
                 <span className="min-w-0">
-                  <span className="block truncate font-medium">{e.native}</span>
+                  <span lang={e.code} className="block truncate font-medium">{e.native}</span>
                   {e.local !== e.native && <span className="block truncate text-xs text-muted">{e.local}</span>}
                 </span>
                 <span className="shrink-0 text-xs font-semibold text-muted uppercase">{selected ? "✓" : e.code}</span>

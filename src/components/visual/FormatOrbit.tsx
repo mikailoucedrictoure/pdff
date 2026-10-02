@@ -64,7 +64,10 @@ export function FormatOrbit() {
 
   useEffect(() => {
     const root = rootRef.current!;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Calme : réglage « réduire les animations » de l'appareil, ou bouton « Arrêter les animations » du site
+    const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const calm = () => reducedQuery.matches || document.documentElement.dataset.motion === "paused";
+    let stillFrames = 0;
 
     const bodies: Body[] = ITEMS.map(() => ({
       dx: 0, dy: 0, vx: 0, vy: 0, rot: 0, vrot: 0, rotHome: 0, scale: 1, hover: false, sx: 0, psx: 0,
@@ -75,7 +78,7 @@ export function FormatOrbit() {
     let radius = 200;
     let card = 64;
     let angle = 0;
-    let spin = reduced ? 0 : BASE_SPIN;
+    let spin = calm() ? 0 : BASE_SPIN;
     let pitch = PITCH;
     let pitchTarget = PITCH;
     let yaw = 0;
@@ -113,7 +116,7 @@ export function FormatOrbit() {
       const a = it.ring === 0 ? it.slot + angle + yaw : it.slot - angle * 1.4 + yaw;
       const x = Math.sin(a) * r;
       const z = Math.cos(a) * r;
-      const y = reduced ? 0 : Math.sin(t * 1.5 + it.phase) * 7 - (it.ring === 1 ? card * 0.15 : 0);
+      const y = calm() ? 0 : Math.sin(t * 1.5 + it.phase) * 7 - (it.ring === 1 ? card * 0.15 : 0);
       // Inclinaison de la caméra (rotation autour de X)
       const y2 = y * Math.cos(pitch) - z * Math.sin(pitch);
       const z2 = y * Math.sin(pitch) + z * Math.cos(pitch);
@@ -255,7 +258,12 @@ export function FormatOrbit() {
     let started = false;
     let last = performance.now();
     let lastDraw = 0;
+    // Dernières valeurs écrites : on ne touche au style que si elles changent
+    // (un z-index modifié force le navigateur à réordonner tout l'anneau).
     const zIndexes: string[] = [];
+    const opacities: string[] = [];
+    const depths = new Float64Array(ITEMS.length);
+    const order = ITEMS.map((_, i) => i);
     const IDLE_FRAME_MS = 1000 / 30 - 2;
 
     const io = new IntersectionObserver(([entry]) => {
@@ -270,7 +278,15 @@ export function FormatOrbit() {
 
     function frame(now: number) {
       if (!visible) return;
-      const active = !!drag || coreKick > 0.01 || Math.abs(spin - (reduced ? 0 : BASE_SPIN)) > 0.02;
+      const cruise = calm() ? 0 : BASE_SPIN;
+      const active = !!drag || coreKick > 0.01 || Math.abs(spin - cruise) > 0.02;
+      // Au calme et immobile : quelques images pour finir les rebonds, puis plus aucun calcul
+      stillFrames = calm() && !active ? stillFrames + 1 : 0;
+      if (stillFrames > 90) {
+        last = now;
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       if (!active && now - lastDraw < IDLE_FRAME_MS) {
         raf = requestAnimationFrame(frame);
         return;
@@ -283,7 +299,7 @@ export function FormatOrbit() {
 
       // Rotation de l'anneau : l'inertie retombe vers la vitesse de croisière
       if (!drag || drag.kind !== "ring") {
-        spin += ((reduced ? 0 : BASE_SPIN) - spin) * ease(0.9);
+        spin += (cruise - spin) * ease(0.9);
         angle += spin * dt;
       }
       pitch += (pitchTarget - pitch) * ease(5);
@@ -329,14 +345,24 @@ export function FormatOrbit() {
         const depth = (h.z + radius) / (2 * radius); // 0 = fond, 1 = devant
         const s = h.s * b.scale;
         el.style.transform = `translate3d(${(h.x + b.dx).toFixed(1)}px, ${(h.y + b.dy).toFixed(1)}px, 0) rotate(${b.rot.toFixed(2)}deg) scale(${s.toFixed(3)})`;
-        const z = String(dragged ? 3000 : Math.round(1000 + h.z));
+        depths[i] = dragged ? Infinity : h.z;
+        const o = dragged ? "1" : (0.5 + 0.5 * depth).toFixed(2);
+        if (opacities[i] !== o) el.style.opacity = opacities[i] = o;
+      });
+
+      // Empilement : seul le rang compte (fond → devant), il ne change que lorsque deux icônes se croisent.
+      // La feuille centrale reste à 1000 : rangs 0..n sous elle pour le fond, au-dessus pour l'avant.
+      order.sort((a, b) => depths[a] - depths[b]);
+      order.forEach((i, rank) => {
+        const el = itemRefs.current[i];
+        if (!el) return;
+        const z = String(depths[i] === Infinity ? 3000 : depths[i] < 0 ? 900 + rank : 1100 + rank);
         if (zIndexes[i] !== z) el.style.zIndex = zIndexes[i] = z;
-        el.style.opacity = String(dragged ? 1 : (0.5 + 0.5 * depth).toFixed(3));
       });
 
       const core = coreRef.current;
       if (core) {
-        const bob = reduced ? 0 : Math.sin(t * 1.2) * 8;
+        const bob = calm() ? 0 : Math.sin(t * 1.2) * 8;
         const kick = coreKick * Math.sin(t * 40) * 8;
         core.style.transform = `translate3d(${(shiftX * 0.6).toFixed(1)}px, ${(bob - coreKick * 14).toFixed(1)}px, 0) perspective(600px) rotateY(${(yaw * 40 + kick).toFixed(2)}deg) rotateX(${((pitch - PITCH) * -40).toFixed(2)}deg) scale(${(1 + coreKick * 0.12).toFixed(3)})`;
       }
@@ -389,6 +415,7 @@ export function FormatOrbit() {
               itemRefs.current[i] = el;
             }}
             className="orbit-piece absolute top-1/2 left-1/2 touch-none"
+            aria-hidden="true"
             style={{ "--w": it.ring === 0 ? "var(--card)" : "calc(var(--card) * 0.74)" } as React.CSSProperties}
           >
             <FileGlyph ext={it.ext} className="pointer-events-none w-full" glow={it.ring === 0} />

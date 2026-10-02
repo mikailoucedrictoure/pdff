@@ -7,6 +7,8 @@
   --brand: #6d5cff;
   --brand-2: #8f82ff;
   --brand-ink: #ffffff;
+  /* Violet pour du texte : contraste ≥ 4,5:1 sur tous les fonds (WCAG 1.4.3) */
+  --brand-fg: #5a48f0;
 
   --bg: #f3f2ff;
   --surface: #ffffff;
@@ -26,6 +28,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --brand-fg: #a59bff;
     --bg: #0e0c29;
     --surface: #1a1745;
     --ink: #eeecff;
@@ -47,6 +50,7 @@
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
   --color-brand-ink: var(--brand-ink);
+  --color-brand-fg: var(--brand-fg);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
@@ -64,6 +68,9 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  /* L'élément qui reçoit le focus n'est jamais caché sous l'en-tête ou la barre d'action mobile (WCAG 2.4.11) */
+  scroll-padding-top: 5rem;
+  scroll-padding-bottom: 6rem;
 }
 
 /* Les éléments 3D ne doivent jamais créer de défilement horizontal */
@@ -81,6 +88,52 @@ body {
   outline: 3px solid var(--brand);
   outline-offset: 2px;
 }
+/* Sur le fond nocturne, un contour clair reste bien visible */
+.scene :focus-visible,
+header :focus-visible {
+  outline-color: #fff;
+}
+
+/* Lien « Aller au contenu » : caché jusqu'à ce qu'on navigue au clavier (WCAG 2.4.1) */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+}
+.skip-link:focus {
+  transform: none;
+}
+/* Sur le fond nocturne, un contour clair reste bien visible */
+.scene :focus-visible,
+header :focus-visible {
+  outline-color: #fff;
+}
+
+/* Lien « Aller au contenu » : invisible jusqu'à ce qu'on navigue au clavier (WCAG 2.4.1) */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+}
+.skip-link:focus {
+  transform: none;
+}
 
 .font-display {
   font-family: var(--font-display), var(--font-body), sans-serif;
@@ -96,27 +149,31 @@ body {
   color: #fff;
 }
 
-/* Halos de couleur qui dérivent */
+/* Halos de couleur qui dérivent.
+   Le flou est dessiné une fois pour toutes par un dégradé radial (aucun filtre) :
+   chaque halo n'est ensuite que déplacé par la carte graphique. */
 .aurora {
   position: absolute;
   inset: -20%;
   z-index: -2;
   pointer-events: none;
-  filter: blur(70px);
   opacity: 0.75;
 }
 .aurora span {
+  --c: #6d5cff;
   position: absolute;
-  width: 42vmax;
-  height: 42vmax;
+  width: 52vmax;
+  height: 52vmax;
+  margin: -5vmax 0 0 -5vmax;
   border-radius: 50%;
-  mix-blend-mode: screen;
+  background: radial-gradient(closest-side, var(--c) 0%, color-mix(in srgb, var(--c) 60%, transparent) 55%, transparent 100%);
+  will-change: transform;
   animation: drift 22s ease-in-out infinite alternate;
 }
-.aurora span:nth-child(1) { background: #6d5cff; left: 5%; top: 10%; }
-.aurora span:nth-child(2) { background: #e5322d; left: 55%; top: 0%; opacity: 0.45; animation-duration: 28s; animation-delay: -6s; }
-.aurora span:nth-child(3) { background: #2b6cf0; left: 35%; top: 45%; opacity: 0.6; animation-duration: 25s; animation-delay: -12s; }
-.aurora span:nth-child(4) { background: #1d9e5a; left: 75%; top: 50%; opacity: 0.35; animation-duration: 31s; animation-delay: -3s; }
+.aurora span:nth-child(1) { left: 5%; top: 10%; }
+.aurora span:nth-child(2) { --c: #e5322d; left: 55%; top: 0%; opacity: 0.45; animation-duration: 28s; animation-delay: -6s; }
+.aurora span:nth-child(3) { --c: #2b6cf0; left: 35%; top: 45%; opacity: 0.6; animation-duration: 25s; animation-delay: -12s; }
+.aurora span:nth-child(4) { --c: #1d9e5a; left: 75%; top: 50%; opacity: 0.35; animation-duration: 31s; animation-delay: -3s; }
 
 @keyframes drift {
   0% { transform: translate(0, 0) scale(1); }
@@ -146,10 +203,19 @@ body {
     linear-gradient(to right, rgb(143 130 255 / 0.35) 1px, transparent 1px),
     linear-gradient(to bottom, rgb(143 130 255 / 0.35) 1px, transparent 1px);
   background-size: 56px 56px;
+  /* Le quadrillage glisse d'une case (déplacement, pas de redessin) puis boucle */
+  will-change: transform;
   animation: floor-move 3.5s linear infinite;
 }
 @keyframes floor-move {
-  to { background-position: 0 56px; }
+  from { transform: rotateX(62deg) translateY(-56px); }
+  to { transform: rotateX(62deg) translateY(0); }
+}
+
+/* Sections sous la ligne de flottaison : rendues seulement quand on s'en approche */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 /* Grain léger pour éviter l'effet « dégradé numérique » */
@@ -287,6 +353,28 @@ body {
 }
 @keyframes stripes {
   to { background-position: 18px 0; }
+}
+
+/* ------------------------------------------------------------ Animations en pause
+   Bouton du pied de page (WCAG 2.2.2) : tout ce qui bouge tout seul s'arrête. */
+:root[data-motion="paused"] *,
+:root[data-motion="paused"] *::before,
+:root[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ------------------------------------------------------------ Animations en pause
+   Bouton du pied de page (WCAG 2.2.2) : tout ce qui bouge tout seul s'arrête. */
+:root[data-motion="paused"] *,
+:root[data-motion="paused"] *::before,
+:root[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
 }
 
 /* ------------------------------------------------------------ Mouvement réduit */

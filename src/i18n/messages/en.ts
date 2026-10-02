@@ -7,7 +7,14 @@ const en: Messages = {
     keywords: "merge pdf, convert pdf, pdf to word, word to pdf, jpg to pdf, pdf to jpg, compress pdf, split pdf, excel to pdf, free pdf tools",
   },
   nav: { merge: "Merge", convert: "Convert", allTools: "All tools", back: "← All tools" },
-  footer: { text: "Free, no sign-up. Your files are deleted as soon as processing is done." },
+  footer: {
+    text: "Free, no sign-up. Your files are deleted as soon as processing is done.",
+    skip: "Skip to content",
+    legalNav: "About this site",
+    developedBy: "Designed and built by {name}",
+    motionPause: "Stop animations",
+    motionPlay: "Play animations",
+  },
   home: {
     title: "All your documents, in one tool.",
     subtitle: "PDF, Word, Excel, PowerPoint, images: merge, convert and edit in seconds.",
@@ -170,6 +177,132 @@ const en: Messages = {
       },
       { title: "Contact", text: "A question or a comment? Reach us from the project page:" },
     ],
+  },
+  legal: {
+    termsLink: "Terms of use",
+    securityLink: "Security and data",
+    accessibilityLink: "Accessibility",
+    terms: {
+      title: "Terms of use",
+      description: "pdff is free for everyone, including businesses and governments. Your documents stay yours: nothing is analyzed or kept.",
+      intro: "These terms govern your use of pdff. They are deliberately short and written in plain language. By using the site, you accept them.",
+      sections: [
+        {
+          title: "Who publishes pdff",
+          text: "pdff is designed, built and published by Mikaïlou Cédric Touré, a developer based in New Brunswick, Canada.",
+        },
+        {
+          title: "A free license to use, for everyone",
+          text: "pdff is free, with no sign-up and no time limit, for everyone: individuals, students, teachers, businesses, non-profits, public administrations and governments, in Canada and in any other country. No use is reserved for a paid plan, because there is none. The files you produce belong entirely to you: they carry no watermark and no mention of pdff.",
+        },
+        {
+          title: "All your documents, even confidential ones",
+          text: "You can process any kind of document, including confidential ones, because pdff does not read, analyze, keep or share your files: they are processed automatically and then deleted. You remain their owner, and you are responsible for having the rights needed to process them.",
+        },
+        {
+          title: "Source code and installation on your own servers",
+          text: "The pdff source code is published under the MIT license. You may read it, audit it, install it on your own servers (including on a closed network with no Internet access), modify it and redistribute it free of charge, provided you keep the copyright notice and the license text.",
+        },
+        {
+          title: "Acceptable use",
+          text: "You may not use pdff for illegal activity, try to disrupt the service (mass automated uploads, intrusion attempts) or bypass its technical limits. The size and file-count limits protect the service for everyone.",
+        },
+        {
+          title: "Availability",
+          text: "pdff is provided free of charge. It may change, be interrupted for maintenance or be discontinued. Always keep your original documents: pdff keeps no copy of them.",
+        },
+        {
+          title: "Warranty and liability",
+          text: "The service is provided “as is”, without warranty of any kind. To the fullest extent permitted by law, the publisher is not liable for indirect damages, data loss or an imperfect conversion result. Check the documents you produce before using them for anything important.",
+        },
+        {
+          title: "Intellectual property",
+          text: "The pdff name, its logo and the site's texts belong to the publisher; the code is under the MIT license as stated above. The trademarks mentioned (PDF, Word, Excel, PowerPoint…) belong to their respective owners.",
+        },
+        {
+          title: "Governing law",
+          text: "These terms are governed by the laws of the Province of New Brunswick and the federal laws of Canada applicable therein. The courts of New Brunswick have jurisdiction, without prejudice to the rights your own country's law grants you as a consumer.",
+        },
+        {
+          title: "Changes",
+          text: "These terms may be updated. The date at the top of the page shows the version in force; a change only applies to use after it is published.",
+        },
+        {
+          title: "Contact",
+          text: "A question about these terms? Write to us from the project page:",
+        },
+      ],
+    },
+    security: {
+      title: "Security and data",
+      description: "What happens to your files on pdff: automatic processing, no analysis, immediate deletion, encryption, hosting in Europe, and the option to install it on your own servers.",
+      intro: "What happens to your files, where they are processed and how they are protected: explained simply, for individuals and IT departments alike.",
+      sections: [
+        {
+          title: "No documents kept",
+          text: "Your files are processed automatically, then deleted as soon as the result is ready or downloaded. There is no copy, no backup and no history. A daily automatic cleanup also erases any temporary file that might remain, by the next day at the latest.",
+        },
+        {
+          title: "No analysis",
+          text: "Nobody reads your documents. They are not indexed, analyzed, shared or used to train artificial intelligence. pdff has no accounts, no ads and no user profiles.",
+        },
+        {
+          title: "Encryption",
+          text: "Every connection is encrypted (HTTPS) and the site enforces encryption on every visit (HSTS). The Protect tool encrypts your PDFs with AES-256; the password you choose is never stored.",
+        },
+        {
+          title: "Where your files are processed",
+          text: "Site, PDF and image tools: Vercel, Paris data center (France, European Union). Word, Excel and PowerPoint conversions: Render, in Frankfurt (Germany, European Union). Files over 4 MB: temporary Vercel Blob storage, under a random name, deleted after use.",
+        },
+        {
+          title: "Technical safeguards",
+          text: "Security headers (HSTS, blocking the site from being embedded in other pages, protection against file-type confusion), temporary file addresses that cannot be guessed, and a conversion service that only accepts requests carrying a secret token. Every code change is checked automatically (tests, type checks) before going live.",
+        },
+        {
+          title: "Privacy and applicable law",
+          text: "pdff is published in New Brunswick and complies with Canada's Personal Information Protection and Electronic Documents Act (PIPEDA). It collects no personal information about its users: no account, no email address, no tracking cookie. It is built on the same principles as the European GDPR and Quebec's Law 25: data minimization, no reuse, deletion after processing.",
+        },
+        {
+          title: "For organizations with strict rules",
+          text: "If your rules forbid sending documents to an outside service, install pdff on your own servers. The complete software is free, open source and works without an Internet connection: no file ever leaves your network. The installation guide is on the project page.",
+        },
+        {
+          title: "Transparency",
+          text: "The complete source code is public: your security teams can verify every one of these statements.",
+        },
+        {
+          title: "Report a vulnerability",
+          text: "Think you have found a security flaw? Report it confidentially from the “Security” tab of the project page:",
+        },
+      ],
+    },
+    accessibility: {
+      title: "Accessibility",
+      description: "pdff accessibility statement: WCAG 2.2 level AA target, measures in place, known limitations and how to report a barrier.",
+      intro: "Everyone must be able to use pdff, including people who are blind or have low vision, who are Deaf or hard of hearing, or who have a motor or cognitive disability.",
+      sections: [
+        {
+          title: "Target standard",
+          text: "pdff aims to conform to the Web Content Accessibility Guidelines (WCAG) 2.2, level AA, the international W3C standard. This level covers the requirements of the Government of Canada's Standard on Web Accessibility, the European standard EN 301 549 and Section 508 in the United States, which refer to WCAG 2.0 or 2.1 level AA.",
+        },
+        {
+          title: "Conformance status",
+          text: "pdff is partially conformant with WCAG 2.2 level AA: known limitations are listed below. This statement is based on an internal evaluation carried out on October 2, 2026, using automated tools (axe, Lighthouse) and manual checks (keyboard, contrast, zoom, announcements). No independent audit has been carried out yet.",
+        },
+        {
+          title: "What is in place",
+          text: "The whole site works with a keyboard, with a “Skip to content” link and a visible outline on the active element. Text contrast is at least 4.5:1. The steps of a task (upload, result, error) are announced to screen readers. File order can be changed without drag and drop, using buttons. The site follows your device's “reduce motion” setting, and a button at the bottom of every page stops all animations. Pages remain readable at 400% zoom and on mobile. The language of each page is declared, and Arabic is displayed right to left.",
+        },
+        {
+          title: "Known limitations",
+          text: "The animated ring on the home page is operated with a mouse or a finger; it is decorative, and the list of formats it shows is also available as text on the page. Machine-translated languages may contain inaccuracies. Finally, the accessibility of a produced document depends on the original: pdff does not add accessibility tags to a PDF that has none.",
+        },
+        {
+          title: "Report a barrier",
+          text: "Is part of the site a problem for you? Describe it from the project page; we aim to reply within 10 business days and to offer an alternative if the fix takes longer:",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {

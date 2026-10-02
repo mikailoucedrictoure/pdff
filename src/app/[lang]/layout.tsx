@@ -1,15 +1,17 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+import { Fragment } from "react";
 import { Bricolage_Grotesque, Onest } from "next/font/google";
 import { LanguagePicker } from "@/components/LanguagePicker";
+import { MOTION_INIT_SCRIPT, MotionToggle } from "@/components/MotionToggle";
 import { FileGlyphSprite } from "@/components/visual/FileGlyph";
 import { I18nProvider, TranslationBanner } from "@/i18n/client";
 import { toClientMessages } from "@/i18n/client-messages";
 import { direction, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
 import { SUPPORTED_LOCALES } from "@/i18n/supported";
-import { SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
+import { AUTHOR_NAME, AUTHOR_URL, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
 import "../globals.css";
 
 /** Chaque page est fabriquée à l'avance dans chaque langue, puis servie depuis le CDN. */
@@ -46,8 +48,20 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const shownLocale = status === "pending" || status === "unavailable" ? "en" : locale;
   const t = messages;
   return (
-    <html lang={shownLocale} dir={direction(shownLocale)} className={`${display.variable} ${body.variable} h-full antialiased`}>
+    <html
+      lang={shownLocale}
+      dir={direction(shownLocale)}
+      className={`${display.variable} ${body.variable} h-full antialiased`}
+      // data-motion peut être posé par MOTION_INIT_SCRIPT avant React
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: MOTION_INIT_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col font-sans">
+        <a href="#contenu" className="skip-link">
+          {t.footer.skip}
+        </a>
         <FileGlyphSprite />
         <I18nProvider locale={locale} messages={toClientMessages(messages)} status={status} machineEnabled={machineEnabled} prefix={prefix}>
           <header className="sticky top-0 z-50 border-b border-white/10 bg-night/75 text-white backdrop-blur-xl">
@@ -71,21 +85,51 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
             </div>
           </header>
           <TranslationBanner />
-          <main className="flex-1">{children}</main>
-          <footer className="border-t border-line px-4 py-8 text-center text-sm text-muted">
+          <main id="contenu" tabIndex={-1} className="flex-1 focus:outline-none">
+            {children}
+          </main>
+          <footer className="border-t border-line px-4 py-10 text-center text-sm text-muted">
             <p className="font-display text-base font-semibold text-ink">pdff</p>
             <p className="mt-1">{t.footer.text}</p>
-            <p className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-1">
-              <Link href={href("/confidentialite")} className="underline-offset-4 hover:text-ink hover:underline">
-                {t.seo.privacyLink}
-              </Link>
-              <a href={SOURCE_URL} className="underline-offset-4 hover:text-ink hover:underline" rel="noopener">
-                {t.seo.sourceLink}
-              </a>
+            <nav aria-label={t.footer.legalNav} className="mt-5">
+              <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+                {[
+                  ["/conditions", t.legal.termsLink],
+                  ["/confidentialite", t.seo.privacyLink],
+                  ["/securite", t.legal.securityLink],
+                  ["/accessibilite", t.legal.accessibilityLink],
+                ].map(([path, label]) => (
+                  <li key={path}>
+                    <Link href={href(path)} className="underline-offset-4 hover:text-ink hover:underline">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <a href={SOURCE_URL} className="underline-offset-4 hover:text-ink hover:underline" rel="noopener">
+                    {t.seo.sourceLink}
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <p className="mt-5">
+              {(t.footer.developedBy.includes("{name}") ? t.footer.developedBy : `${t.footer.developedBy} {name}`).split("{name}").map((part, i) => (
+                <Fragment key={i}>
+                  {i > 0 && (
+                    <a href={AUTHOR_URL} className="font-medium text-ink underline underline-offset-4 hover:text-brand-fg" rel="noopener author">
+                      {AUTHOR_NAME}
+                    </a>
+                  )}
+                  {part}
+                </Fragment>
+              ))}
             </p>
+            <div className="mt-5">
+              <MotionToggle pauseLabel={t.footer.motionPause} playLabel={t.footer.motionPlay} />
+            </div>
           </footer>
         </I18nProvider>
-        <Analytics />
+        {process.env.VERCEL && <Analytics />}
       </body>
     </html>
   );

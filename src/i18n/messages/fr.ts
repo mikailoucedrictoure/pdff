@@ -17,6 +17,11 @@ const fr = {
   },
   footer: {
     text: "Gratuit et sans inscription. Vos fichiers sont supprimés dès que le traitement est terminé.",
+    skip: "Aller au contenu",
+    legalNav: "Informations sur le site",
+    developedBy: "Conçu et développé par {name}",
+    motionPause: "Arrêter les animations",
+    motionPlay: "Relancer les animations",
   },
   home: {
     title: "Tous vos documents, dans un seul outil.",
@@ -195,6 +200,132 @@ const fr = {
         text: "Une question ou une remarque ? Écrivez-nous depuis la page du projet :",
       },
     ],
+  },
+  legal: {
+    termsLink: "Conditions d'utilisation",
+    securityLink: "Sécurité et données",
+    accessibilityLink: "Accessibilité",
+    terms: {
+      title: "Conditions d'utilisation",
+      description: "pdff est gratuit pour tous, y compris les entreprises et les administrations. Vos documents restent à vous : rien n'est analysé ni conservé.",
+      intro: "Ces conditions encadrent l'utilisation de pdff. Elles sont volontairement courtes et écrites simplement. En utilisant le site, vous les acceptez.",
+      sections: [
+        {
+          title: "Qui édite pdff",
+          text: "pdff est conçu, développé et édité par Mikaïlou Cédric Touré, développeur établi au Nouveau-Brunswick, au Canada.",
+        },
+        {
+          title: "Une licence d'utilisation gratuite, pour tous",
+          text: "pdff est gratuit, sans inscription et sans limite de durée, pour tout le monde : particuliers, étudiants, enseignants, entreprises, associations, administrations et gouvernements, au Canada comme dans tout autre pays. Aucun usage n'est réservé à une offre payante, car il n'en existe pas. Les fichiers produits vous appartiennent entièrement : ils ne portent ni filigrane ni mention de pdff.",
+        },
+        {
+          title: "Tous vos documents, même confidentiels",
+          text: "Vous pouvez traiter tout type de document, y compris confidentiel, car pdff ne lit, n'analyse, ne conserve ni ne partage vos fichiers : ils sont traités automatiquement puis supprimés. Vous en restez propriétaire, et vous êtes responsable de disposer des droits nécessaires pour les traiter.",
+        },
+        {
+          title: "Code source et installation sur vos propres serveurs",
+          text: "Le code de pdff est publié sous licence MIT. Vous pouvez le consulter, le vérifier, l'installer sur vos propres serveurs (y compris dans un réseau fermé, sans accès à Internet), le modifier et le redistribuer gratuitement, à condition de conserver la mention de droit d'auteur et le texte de la licence.",
+        },
+        {
+          title: "Utilisation acceptable",
+          text: "Il est interdit d'utiliser pdff pour une activité illégale, de chercher à perturber le service (envois automatisés massifs, tentatives d'intrusion) ou de contourner ses limites techniques. Ces limites de taille et de nombre de fichiers protègent le service pour tous.",
+        },
+        {
+          title: "Disponibilité",
+          text: "pdff est fourni gratuitement. Il peut évoluer, être interrompu pour maintenance ou s'arrêter. Gardez toujours vos documents d'origine : pdff n'en conserve aucune copie.",
+        },
+        {
+          title: "Garantie et responsabilité",
+          text: "Le service est fourni « tel quel », sans garantie d'aucune sorte. Dans toute la mesure permise par la loi, l'éditeur n'est pas responsable des dommages indirects, des pertes de données ou d'un résultat de conversion imparfait. Vérifiez les documents produits avant de les utiliser pour une démarche importante.",
+        },
+        {
+          title: "Propriété intellectuelle",
+          text: "Le nom pdff, son logo et les textes du site appartiennent à l'éditeur ; le code est sous licence MIT comme indiqué plus haut. Les marques citées (PDF, Word, Excel, PowerPoint…) appartiennent à leurs propriétaires respectifs.",
+        },
+        {
+          title: "Droit applicable",
+          text: "Ces conditions sont régies par les lois de la province du Nouveau-Brunswick et les lois fédérales du Canada qui s'y appliquent. Les tribunaux du Nouveau-Brunswick sont compétents, sans préjudice des droits que la loi de votre pays vous garantit en tant que consommateur.",
+        },
+        {
+          title: "Modifications",
+          text: "Ces conditions peuvent être mises à jour. La date en haut de la page indique la version en vigueur ; un changement ne s'applique qu'aux utilisations qui suivent sa publication.",
+        },
+        {
+          title: "Contact",
+          text: "Une question sur ces conditions ? Écrivez depuis la page du projet :",
+        },
+      ],
+    },
+    security: {
+      title: "Sécurité et données",
+      description: "Ce que deviennent vos fichiers sur pdff : traitement automatique, aucune analyse, suppression immédiate, chiffrement, hébergement en Europe, installation possible sur vos serveurs.",
+      intro: "Ce que deviennent vos fichiers, où ils sont traités et comment ils sont protégés : expliqué simplement, pour les particuliers comme pour les services informatiques.",
+      sections: [
+        {
+          title: "Aucun document conservé",
+          text: "Vos fichiers sont traités automatiquement, puis supprimés dès que le résultat est prêt ou téléchargé. Il n'y a ni copie, ni sauvegarde, ni historique. Un nettoyage automatique quotidien efface aussi tout fichier temporaire qui aurait pu rester, au plus tard le lendemain.",
+        },
+        {
+          title: "Aucune analyse",
+          text: "Personne ne lit vos documents. Ils ne sont ni indexés, ni analysés, ni partagés, ni utilisés pour entraîner une intelligence artificielle. pdff n'a ni compte, ni publicité, ni profil d'utilisateur.",
+        },
+        {
+          title: "Chiffrement",
+          text: "Toutes les connexions sont chiffrées (HTTPS) et le site impose le chiffrement à chaque visite (HSTS). L'outil Protéger chiffre vos PDF en AES-256 ; le mot de passe choisi n'est jamais enregistré.",
+        },
+        {
+          title: "Où vos fichiers sont traités",
+          text: "Site, outils PDF et images : Vercel, centre de données de Paris (France, Union européenne). Conversions Word, Excel et PowerPoint : Render, à Francfort (Allemagne, Union européenne). Fichiers de plus de 4 Mo : stockage temporaire Vercel Blob, sous un nom aléatoire, supprimé après usage.",
+        },
+        {
+          title: "Protections techniques",
+          text: "En-têtes de sécurité (HSTS, blocage de l'intégration du site dans d'autres pages, protection contre la confusion des types de fichiers), adresses de fichiers temporaires impossibles à deviner, service de conversion accessible uniquement avec un jeton secret. Chaque modification du code est vérifiée automatiquement (tests, contrôle des types) avant sa mise en ligne.",
+        },
+        {
+          title: "Vie privée et lois applicables",
+          text: "pdff est édité au Nouveau-Brunswick et respecte la Loi sur la protection des renseignements personnels et les documents électroniques (LPRPDE) du Canada. Il ne recueille aucun renseignement personnel sur ses utilisateurs : ni compte, ni adresse courriel, ni cookie de suivi. Il est conçu selon les mêmes principes que le RGPD européen et la Loi 25 du Québec : minimisation des données, aucune réutilisation, suppression après traitement.",
+        },
+        {
+          title: "Pour les organisations aux règles strictes",
+          text: "Si vos règles interdisent d'envoyer des documents à un service externe, installez pdff sur vos propres serveurs. Le logiciel complet est gratuit, open source, et fonctionne sans connexion à Internet : aucun fichier ne sort de votre réseau. Le guide d'installation est sur la page du projet.",
+        },
+        {
+          title: "Transparence",
+          text: "Le code source complet est public : vos équipes de sécurité peuvent vérifier chacune de ces affirmations.",
+        },
+        {
+          title: "Signaler une faille",
+          text: "Vous pensez avoir trouvé une faille de sécurité ? Signalez-la de façon confidentielle depuis l'onglet « Security » de la page du projet :",
+        },
+      ],
+    },
+    accessibility: {
+      title: "Accessibilité",
+      description: "Déclaration d'accessibilité de pdff : objectif WCAG 2.2 niveau AA, mesures en place, limites connues et comment signaler un obstacle.",
+      intro: "pdff doit pouvoir être utilisé par tout le monde, y compris les personnes aveugles ou malvoyantes, sourdes ou malentendantes, ou ayant un handicap moteur ou cognitif.",
+      sections: [
+        {
+          title: "Norme visée",
+          text: "pdff vise la conformité aux Règles pour l'accessibilité des contenus Web (WCAG) 2.2, niveau AA, la norme internationale du W3C. Ce niveau couvre les exigences de la Norme sur l'accessibilité des sites Web du gouvernement du Canada, de la norme européenne EN 301 549 et de la section 508 aux États-Unis, qui renvoient aux WCAG 2.0 ou 2.1 de niveau AA.",
+        },
+        {
+          title: "État de conformité",
+          text: "pdff est partiellement conforme aux WCAG 2.2 niveau AA : les limites connues sont listées plus bas. Cette déclaration repose sur une évaluation interne réalisée le 2 octobre 2026, avec des outils automatiques (axe, Lighthouse) et des vérifications manuelles (clavier, contrastes, zoom, annonces). Aucun audit indépendant n'a encore été réalisé.",
+        },
+        {
+          title: "Ce qui est en place",
+          text: "Tout le site s'utilise au clavier, avec un lien « Aller au contenu » et un contour visible sur l'élément actif. Les contrastes de texte atteignent au moins 4,5:1. Les étapes d'un traitement (envoi, résultat, erreur) sont annoncées aux lecteurs d'écran. L'ordre des fichiers se change sans glisser-déposer, avec des boutons. Le site respecte le réglage « réduire les animations » de votre appareil, et un bouton en bas de chaque page arrête toutes les animations. Les pages restent lisibles avec un zoom à 400 % et sur mobile. La langue de chaque page est déclarée, et l'arabe s'affiche de droite à gauche.",
+        },
+        {
+          title: "Limites connues",
+          text: "L'anneau animé de la page d'accueil se manipule à la souris ou au doigt ; il est décoratif, et la liste des formats qu'il présente est aussi disponible sous forme de texte sur la page. Les langues traduites automatiquement peuvent contenir des imprécisions. Enfin, l'accessibilité d'un document produit dépend du document d'origine : pdff n'ajoute pas de balisage d'accessibilité à un PDF qui n'en contient pas.",
+        },
+        {
+          title: "Signaler un obstacle",
+          text: "Un passage du site vous pose problème ? Décrivez-le depuis la page du projet ; nous nous efforçons de répondre sous 10 jours ouvrables et de proposer une solution de remplacement si la correction prend plus de temps :",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {

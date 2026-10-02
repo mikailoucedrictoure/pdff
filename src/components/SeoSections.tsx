@@ -83,7 +83,7 @@ export function SeoSections({ t, prefix, toolId, locale }: { t: Messages; prefix
               <li key={x.id}>
                 <Link
                   href={localePath(prefix, `/outils/${x.id}`)}
-                  className="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium transition hover:border-brand hover:text-brand"
+                  className="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium transition hover:border-brand hover:text-brand-fg"
                 >
                   <ToolIcon id={x.id} className="h-4 w-4" />
                   {t.tools[x.id].name}

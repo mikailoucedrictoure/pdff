@@ -8,9 +8,17 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
+// Installation sur ses propres serveurs (Dockerfile) : serveur autonome, sans node_modules complet
+const standalone = process.env.PDFF_STANDALONE === "1";
+
 const nextConfig: NextConfig = {
   // Modules natifs / WebAssembly chargés tels quels par Node.js
   serverExternalPackages: ["mupdf", "sharp"],
+  ...(standalone && {
+    output: "standalone",
+    // Le moteur PDF charge son fichier WebAssembly à l'exécution : on l'embarque en entier
+    outputFileTracingIncludes: { "/**": ["./node_modules/mupdf/dist/**/*"] },
+  }),
   poweredByHeader: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

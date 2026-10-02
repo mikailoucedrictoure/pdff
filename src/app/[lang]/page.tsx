@@ -5,6 +5,7 @@ import { SeoSections } from "@/components/SeoSections";
 import { FormatMarquee } from "@/components/visual/FormatMarquee";
 import { FormatOrbit } from "@/components/visual/FormatOrbit";
 import { Scene } from "@/components/visual/Scene";
+import { TiltEffect } from "@/components/visual/TiltEffect";
 import { ToolCard } from "@/components/visual/ToolCard";
 import { fmt, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
@@ -91,20 +92,22 @@ export default async function Home() {
           <CapabilityNotice caps={caps} />
         </div>
 
+        <TiltEffect />
         <div id="outils" className="scroll-mt-20 space-y-12 py-12">
           {TOOL_CATEGORIES.map((cat) => (
             <section key={cat}>
               <h2 className="font-display mb-4 text-2xl font-bold tracking-tight">{t.categories[cat]}</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Rendue seulement près de l'écran ; la marge laisse de la place à l'ombre des cartes */}
+              <div className="cv-auto -m-10 grid gap-4 p-10 sm:grid-cols-2 lg:grid-cols-3">
                 {TOOLS.filter((tool) => tool.category === cat).map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} />
+                  <ToolCard key={tool.id} tool={tool} name={t.tools[tool.id].name} tagline={t.tools[tool.id].tagline} href={href(`/outils/${tool.id}`)} />
                 ))}
               </div>
             </section>
           ))}
         </div>
 
-        <section className="mb-12 rounded-[2rem] border border-line bg-surface p-6 sm:p-10">
+        <section className="cv-auto mb-12 rounded-[2rem] border border-line bg-surface p-6 sm:p-10">
           <h2 className="font-display text-2xl font-bold tracking-tight">{t.home.stepsTitle}</h2>
           <ol className="mt-6 grid gap-6 sm:grid-cols-3">
             {t.home.steps.map((s, i) => (
@@ -121,7 +124,7 @@ export default async function Home() {
           </ol>
         </section>
 
-        <div className="mb-16">
+        <div className="cv-auto mb-16">
           <SeoSections t={t} prefix={prefix} locale={locale} />
         </div>
       </div>

@@ -109,7 +109,7 @@ export default async function ToolPage({ params }: PageProps<"/[lang]/outils/[to
             </div>
           )}
           <Workspace toolId={tool.id} caps={caps} />
-          <div className="mt-16">
+          <div className="cv-auto mt-16">
             <SeoSections t={t} prefix={prefix} toolId={tool.id} locale={locale} />
           </div>
         </div>

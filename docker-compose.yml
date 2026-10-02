@@ -1,0 +1,24 @@
+# pdff sur votre propre serveur : docker compose up -d
+# puis ouvrir http://ADRESSE-DU-SERVEUR:8080 (voir INSTALLATION.md)
+services:
+  pdff:
+    image: ghcr.io/mikailoucedrictoure/pdff:latest
+    # Pour construire l'image vous-même à partir du code (au lieu de la télécharger) :
+    # build:
+    #   context: .
+    #   args:
+    #     PDFF_SITE_URL: https://pdff.mon-organisation.ca
+    container_name: pdff
+    restart: unless-stopped
+    ports:
+      - "8080:3000"
+    environment:
+      # Limites (facultatif) : pages max d'un document produit, fichiers par opération, taille d'un envoi en Mo
+      PDFF_MAX_PAGES: "10000"
+      PDFF_MAX_FILES: "500"
+      PDFF_MAX_UPLOAD_MB: "2048"
+    # Durcissement : aucun privilège supplémentaire, fichiers temporaires en mémoire
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=4g

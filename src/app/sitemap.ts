@@ -11,6 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", priority: 1 },
     ...TOOL_IDS.map((id) => ({ path: `/outils/${id}`, priority: id === "fusionner" || id === "convertir" ? 0.9 : 0.8 })),
     { path: "/confidentialite", priority: 0.3 },
+    { path: "/conditions", priority: 0.3 },
+    { path: "/securite", priority: 0.4 },
+    { path: "/accessibilite", priority: 0.3 },
   ];
   return pages.flatMap(({ path, priority }) => {
     const languages = absolute(languageAlternates(path));

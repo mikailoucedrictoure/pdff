@@ -3,6 +3,12 @@
 Fusionner, convertir et modifier tous vos documents (PDF, Word, Excel, PowerPoint, images, EPUB…) depuis une seule interface.
 Next.js 16 + TypeScript.
 
+Conçu et développé par [Mikaïlou Cédric Touré](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure) (Nouveau-Brunswick, Canada). Licence [MIT](LICENSE) : gratuit pour tous, y compris entreprises et administrations.
+
+- **Installer pdff sur vos propres serveurs** (administrations, entreprises, écoles) : [INSTALLATION.md](INSTALLATION.md) — une commande Docker, fonctionne sans Internet.
+- **Signaler une faille** : [SECURITY.md](SECURITY.md).
+- Sur le site : Conditions d’utilisation (`/conditions`), Confidentialité, Sécurité et données (`/securite`), Accessibilité (`/accessibilite`, WCAG 2.2 AA).
+
 ## Démarrer en local
 
 ```bash
