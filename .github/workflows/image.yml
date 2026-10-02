@@ -83,8 +83,7 @@ jobs:
           if (png[1] !== 0x50) throw new Error("PNG invalide");
           await call("proteger", [["a.pdf", pdf, "application/pdf"]], { password: "secret123" });
           EOF
-          docker cp smoke.mjs pdff:/tmp/smoke.mjs
-          run node /tmp/smoke.mjs
+          docker exec -i pdff node --input-type=module < smoke.mjs
 
       - name: Journal du conteneur
         if: always()
