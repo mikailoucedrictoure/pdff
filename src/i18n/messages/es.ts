@@ -12,8 +12,6 @@ const es: Messages = {
     skip: "Ir al contenido",
     legalNav: "Información sobre el sitio",
     developedBy: "Diseñado y desarrollado por {name}",
-    motionPause: "Detener las animaciones",
-    motionPlay: "Reanudar las animaciones",
   },
   home: {
     title: "Todos tus documentos, en una sola herramienta.",
@@ -297,11 +295,11 @@ const es: Messages = {
         },
         {
           title: "Medidas aplicadas",
-          text: "Todo el sitio se usa con el teclado, con un enlace «Ir al contenido» y un contorno visible en el elemento activo. El contraste del texto es de al menos 4,5:1. Las etapas de una tarea (envío, resultado, error) se anuncian a los lectores de pantalla. El orden de los archivos se cambia sin arrastrar y soltar, con botones. El sitio respeta el ajuste «reducir movimiento» de tu dispositivo, y un botón al pie de cada página detiene todas las animaciones. Las páginas siguen siendo legibles con un zoom del 400 % y en el móvil. El idioma de cada página está declarado y el árabe se muestra de derecha a izquierda.",
+          text: "Todo el sitio se usa con el teclado, con un enlace «Ir al contenido» y un contorno visible en el elemento activo. El contraste del texto es de al menos 4,5:1. Las etapas de una tarea (envío, resultado, error) se anuncian a los lectores de pantalla. El orden de los archivos se cambia sin arrastrar y soltar, con botones. El sitio respeta el ajuste «reducir movimiento» de tu dispositivo: las animaciones se detienen entonces por completo. Las páginas siguen siendo legibles con un zoom del 400 % y en el móvil. El idioma de cada página está declarado y el árabe se muestra de derecha a izquierda.",
         },
         {
           title: "Limitaciones conocidas",
-          text: "El anillo animado de la página de inicio se maneja con el ratón o con el dedo; es decorativo y la lista de formatos que muestra también está disponible como texto en la página. Los idiomas traducidos automáticamente pueden contener imprecisiones. Por último, la accesibilidad de un documento producido depende del original: pdff no añade etiquetas de accesibilidad a un PDF que no las tiene.",
+          text: "Sin ese ajuste, las animaciones decorativas (fondo, anillo, desfile de formatos) funcionan sin parar; el desfile se detiene al pasar el ratón y con el teclado. El anillo animado de la página de inicio se maneja con el ratón o con el dedo; es decorativo y la lista de formatos que muestra también está disponible como texto en la página. Los idiomas traducidos automáticamente pueden contener imprecisiones. Por último, la accesibilidad de un documento producido depende del original: pdff no añade etiquetas de accesibilidad a un PDF que no las tiene.",
         },
         {
           title: "Informar de un obstáculo",

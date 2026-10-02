@@ -20,8 +20,6 @@ const fr = {
     skip: "Aller au contenu",
     legalNav: "Informations sur le site",
     developedBy: "Conçu et développé par {name}",
-    motionPause: "Arrêter les animations",
-    motionPlay: "Relancer les animations",
   },
   home: {
     title: "Tous vos documents, dans un seul outil.",
@@ -314,11 +312,11 @@ const fr = {
         },
         {
           title: "Ce qui est en place",
-          text: "Tout le site s'utilise au clavier, avec un lien « Aller au contenu » et un contour visible sur l'élément actif. Les contrastes de texte atteignent au moins 4,5:1. Les étapes d'un traitement (envoi, résultat, erreur) sont annoncées aux lecteurs d'écran. L'ordre des fichiers se change sans glisser-déposer, avec des boutons. Le site respecte le réglage « réduire les animations » de votre appareil, et un bouton en bas de chaque page arrête toutes les animations. Les pages restent lisibles avec un zoom à 400 % et sur mobile. La langue de chaque page est déclarée, et l'arabe s'affiche de droite à gauche.",
+          text: "Tout le site s'utilise au clavier, avec un lien « Aller au contenu » et un contour visible sur l'élément actif. Les contrastes de texte atteignent au moins 4,5:1. Les étapes d'un traitement (envoi, résultat, erreur) sont annoncées aux lecteurs d'écran. L'ordre des fichiers se change sans glisser-déposer, avec des boutons. Le site respecte le réglage « réduire les animations » de votre appareil : les animations s'arrêtent alors complètement. Les pages restent lisibles avec un zoom à 400 % et sur mobile. La langue de chaque page est déclarée, et l'arabe s'affiche de droite à gauche.",
         },
         {
           title: "Limites connues",
-          text: "L'anneau animé de la page d'accueil se manipule à la souris ou au doigt ; il est décoratif, et la liste des formats qu'il présente est aussi disponible sous forme de texte sur la page. Les langues traduites automatiquement peuvent contenir des imprécisions. Enfin, l'accessibilité d'un document produit dépend du document d'origine : pdff n'ajoute pas de balisage d'accessibilité à un PDF qui n'en contient pas.",
+          text: "Sans ce réglage, les animations décoratives (fond, anneau, défilé des formats) tournent en continu ; le défilé s'arrête au survol et au clavier. L'anneau animé de la page d'accueil se manipule à la souris ou au doigt ; il est décoratif, et la liste des formats qu'il présente est aussi disponible sous forme de texte sur la page. Les langues traduites automatiquement peuvent contenir des imprécisions. Enfin, l'accessibilité d'un document produit dépend du document d'origine : pdff n'ajoute pas de balisage d'accessibilité à un PDF qui n'en contient pas.",
         },
         {
           title: "Signaler un obstacle",

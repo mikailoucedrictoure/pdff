@@ -64,9 +64,9 @@ export function FormatOrbit() {
 
   useEffect(() => {
     const root = rootRef.current!;
-    // Calme : réglage « réduire les animations » de l'appareil, ou bouton « Arrêter les animations » du site
+    // Calme : réglage « réduire les animations » de l'appareil
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const calm = () => reducedQuery.matches || document.documentElement.dataset.motion === "paused";
+    const calm = () => reducedQuery.matches;
     let stillFrames = 0;
 
     const bodies: Body[] = ITEMS.map(() => ({

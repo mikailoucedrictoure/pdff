@@ -12,8 +12,6 @@ const pt: Messages = {
     skip: "Ir para o conteúdo",
     legalNav: "Informações sobre o site",
     developedBy: "Criado e desenvolvido por {name}",
-    motionPause: "Parar as animações",
-    motionPlay: "Retomar as animações",
   },
   home: {
     title: "Todos os seus documentos, em uma só ferramenta.",
@@ -300,11 +298,11 @@ const pt: Messages = {
         },
         {
           title: "O que já está em vigor",
-          text: "Todo o site funciona pelo teclado, com um link “Ir para o conteúdo” e um contorno visível no elemento ativo. O contraste do texto é de pelo menos 4,5:1. As etapas de uma tarefa (envio, resultado, erro) são anunciadas aos leitores de tela. A ordem dos arquivos pode ser alterada sem arrastar e soltar, com botões. O site respeita a configuração “reduzir movimento” do seu aparelho, e um botão no rodapé de cada página para todas as animações. As páginas continuam legíveis com zoom de 400% e no celular. O idioma de cada página é declarado, e o árabe é exibido da direita para a esquerda.",
+          text: "Todo o site funciona pelo teclado, com um link “Ir para o conteúdo” e um contorno visível no elemento ativo. O contraste do texto é de pelo menos 4,5:1. As etapas de uma tarefa (envio, resultado, erro) são anunciadas aos leitores de tela. A ordem dos arquivos pode ser alterada sem arrastar e soltar, com botões. O site respeita a configuração “reduzir movimento” do seu aparelho: as animações então param completamente. As páginas continuam legíveis com zoom de 400% e no celular. O idioma de cada página é declarado, e o árabe é exibido da direita para a esquerda.",
         },
         {
           title: "Limitações conhecidas",
-          text: "O anel animado da página inicial é manipulado com o mouse ou com o dedo; ele é decorativo, e a lista de formatos que apresenta também está disponível em texto na página. Os idiomas traduzidos automaticamente podem conter imprecisões. Por fim, a acessibilidade de um documento gerado depende do original: o pdff não adiciona marcação de acessibilidade a um PDF que não a possui.",
+          text: "Sem essa configuração, as animações decorativas (fundo, anel, faixa de formatos) rodam continuamente; a faixa para ao passar o mouse e com o teclado. O anel animado da página inicial é manipulado com o mouse ou com o dedo; ele é decorativo, e a lista de formatos que apresenta também está disponível em texto na página. Os idiomas traduzidos automaticamente podem conter imprecisões. Por fim, a acessibilidade de um documento gerado depende do original: o pdff não adiciona marcação de acessibilidade a um PDF que não a possui.",
         },
         {
           title: "Relatar uma barreira",

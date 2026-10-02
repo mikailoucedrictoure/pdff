@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { Bricolage_Grotesque, Onest } from "next/font/google";
 import { LanguagePicker } from "@/components/LanguagePicker";
-import { MOTION_INIT_SCRIPT, MotionToggle } from "@/components/MotionToggle";
 import { FileGlyphSprite } from "@/components/visual/FileGlyph";
 import { I18nProvider, TranslationBanner } from "@/i18n/client";
 import { toClientMessages } from "@/i18n/client-messages";
@@ -52,12 +51,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       lang={shownLocale}
       dir={direction(shownLocale)}
       className={`${display.variable} ${body.variable} h-full antialiased`}
-      // data-motion peut être posé par MOTION_INIT_SCRIPT avant React
-      suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: MOTION_INIT_SCRIPT }} />
-      </head>
       <body className="flex min-h-full flex-col font-sans">
         <a href="#contenu" className="skip-link">
           {t.footer.skip}
@@ -124,9 +118,6 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
                 </Fragment>
               ))}
             </p>
-            <div className="mt-5">
-              <MotionToggle pauseLabel={t.footer.motionPause} playLabel={t.footer.motionPlay} />
-            </div>
           </footer>
         </I18nProvider>
         {process.env.VERCEL && <Analytics />}

@@ -111,29 +111,6 @@ header :focus-visible {
 .skip-link:focus {
   transform: none;
 }
-/* Sur le fond nocturne, un contour clair reste bien visible */
-.scene :focus-visible,
-header :focus-visible {
-  outline-color: #fff;
-}
-
-/* Lien « Aller au contenu » : invisible jusqu'à ce qu'on navigue au clavier (WCAG 2.4.1) */
-.skip-link {
-  position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
-  z-index: 100;
-  transform: translateY(-200%);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--ink);
-  padding: 0.75rem 1.25rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-}
-.skip-link:focus {
-  transform: none;
-}
 
 .font-display {
   font-family: var(--font-display), var(--font-body), sans-serif;
@@ -355,24 +332,7 @@ header :focus-visible {
   to { background-position: 18px 0; }
 }
 
-/* ------------------------------------------------------------ Animations en pause
-   Bouton du pied de page (WCAG 2.2.2) : tout ce qui bouge tout seul s'arrête. */
-:root[data-motion="paused"] *,
-:root[data-motion="paused"] *::before,
-:root[data-motion="paused"] *::after {
-  animation-play-state: paused !important;
-}
-.marquee:focus-within .marquee-track {
-  animation-play-state: paused;
-}
-
-/* ------------------------------------------------------------ Animations en pause
-   Bouton du pied de page (WCAG 2.2.2) : tout ce qui bouge tout seul s'arrête. */
-:root[data-motion="paused"] *,
-:root[data-motion="paused"] *::before,
-:root[data-motion="paused"] *::after {
-  animation-play-state: paused !important;
-}
+/* Le défilé des formats s'arrête aussi quand on y navigue au clavier */
 .marquee:focus-within .marquee-track {
   animation-play-state: paused;
 }

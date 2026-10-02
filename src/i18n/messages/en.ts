@@ -12,8 +12,6 @@ const en: Messages = {
     skip: "Skip to content",
     legalNav: "About this site",
     developedBy: "Designed and built by {name}",
-    motionPause: "Stop animations",
-    motionPlay: "Play animations",
   },
   home: {
     title: "All your documents, in one tool.",
@@ -291,11 +289,11 @@ const en: Messages = {
         },
         {
           title: "What is in place",
-          text: "The whole site works with a keyboard, with a “Skip to content” link and a visible outline on the active element. Text contrast is at least 4.5:1. The steps of a task (upload, result, error) are announced to screen readers. File order can be changed without drag and drop, using buttons. The site follows your device's “reduce motion” setting, and a button at the bottom of every page stops all animations. Pages remain readable at 400% zoom and on mobile. The language of each page is declared, and Arabic is displayed right to left.",
+          text: "The whole site works with a keyboard, with a “Skip to content” link and a visible outline on the active element. Text contrast is at least 4.5:1. The steps of a task (upload, result, error) are announced to screen readers. File order can be changed without drag and drop, using buttons. The site follows your device's “reduce motion” setting: animations then stop completely. Pages remain readable at 400% zoom and on mobile. The language of each page is declared, and Arabic is displayed right to left.",
         },
         {
           title: "Known limitations",
-          text: "The animated ring on the home page is operated with a mouse or a finger; it is decorative, and the list of formats it shows is also available as text on the page. Machine-translated languages may contain inaccuracies. Finally, the accessibility of a produced document depends on the original: pdff does not add accessibility tags to a PDF that has none.",
+          text: "Without that setting, decorative animations (background, ring, format ticker) run continuously; the ticker pauses on hover and keyboard focus. The animated ring on the home page is operated with a mouse or a finger; it is decorative, and the list of formats it shows is also available as text on the page. Machine-translated languages may contain inaccuracies. Finally, the accessibility of a produced document depends on the original: pdff does not add accessibility tags to a PDF that has none.",
         },
         {
           title: "Report a barrier",

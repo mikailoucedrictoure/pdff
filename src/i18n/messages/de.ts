@@ -12,8 +12,6 @@ const de: Messages = {
     skip: "Zum Inhalt springen",
     legalNav: "Informationen zur Website",
     developedBy: "Konzipiert und entwickelt von {name}",
-    motionPause: "Animationen anhalten",
-    motionPlay: "Animationen fortsetzen",
   },
   home: {
     title: "Alle Ihre Dokumente, in einem einzigen Werkzeug.",
@@ -297,11 +295,11 @@ const de: Messages = {
         },
         {
           title: "Umgesetzte Maßnahmen",
-          text: "Die gesamte Website ist per Tastatur bedienbar, mit einem Link „Zum Inhalt springen“ und einer sichtbaren Umrandung des aktiven Elements. Der Textkontrast beträgt mindestens 4,5:1. Die Schritte einer Aufgabe (Upload, Ergebnis, Fehler) werden Screenreadern angesagt. Die Reihenfolge der Dateien lässt sich ohne Ziehen und Ablegen über Schaltflächen ändern. Die Website beachtet die Einstellung „Bewegung reduzieren“ Ihres Geräts, und eine Schaltfläche unten auf jeder Seite hält alle Animationen an. Die Seiten bleiben bei 400 % Zoom und auf dem Smartphone lesbar. Die Sprache jeder Seite ist ausgezeichnet, und Arabisch wird von rechts nach links angezeigt.",
+          text: "Die gesamte Website ist per Tastatur bedienbar, mit einem Link „Zum Inhalt springen“ und einer sichtbaren Umrandung des aktiven Elements. Der Textkontrast beträgt mindestens 4,5:1. Die Schritte einer Aufgabe (Upload, Ergebnis, Fehler) werden Screenreadern angesagt. Die Reihenfolge der Dateien lässt sich ohne Ziehen und Ablegen über Schaltflächen ändern. Die Website beachtet die Einstellung „Bewegung reduzieren“ Ihres Geräts: Die Animationen stoppen dann vollständig. Die Seiten bleiben bei 400 % Zoom und auf dem Smartphone lesbar. Die Sprache jeder Seite ist ausgezeichnet, und Arabisch wird von rechts nach links angezeigt.",
         },
         {
           title: "Bekannte Einschränkungen",
-          text: "Der animierte Ring auf der Startseite wird mit der Maus oder dem Finger bedient; er ist dekorativ, und die Liste der gezeigten Formate steht auf der Seite auch als Text zur Verfügung. Maschinell übersetzte Sprachen können Ungenauigkeiten enthalten. Zudem hängt die Barrierefreiheit eines erzeugten Dokuments vom Original ab: pdff fügt einem PDF ohne Tags keine Barrierefreiheits-Tags hinzu.",
+          text: "Ohne diese Einstellung laufen dekorative Animationen (Hintergrund, Ring, Formatlaufband) dauerhaft; das Laufband hält bei Mauszeiger und Tastaturfokus an. Der animierte Ring auf der Startseite wird mit der Maus oder dem Finger bedient; er ist dekorativ, und die Liste der gezeigten Formate steht auf der Seite auch als Text zur Verfügung. Maschinell übersetzte Sprachen können Ungenauigkeiten enthalten. Zudem hängt die Barrierefreiheit eines erzeugten Dokuments vom Original ab: pdff fügt einem PDF ohne Tags keine Barrierefreiheits-Tags hinzu.",
         },
         {
           title: "Barriere melden",
