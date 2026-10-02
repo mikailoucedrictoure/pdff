@@ -1,9 +1,10 @@
 /**
- * Les 12 outils de bout en bout (hors formats Office, testés à part).
+ * Les 13 outils de bout en bout (hors formats Office, testés à part).
  */
 import JSZip from "jszip";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
+import { renamedFiles } from "@/lib/core/rename";
 import { runTool } from "@/lib/server/runners";
 import { UserError } from "@/lib/server/types";
 import { isPdf, makePdf, makePng, pageCount } from "./helpers";
@@ -92,5 +93,32 @@ describe("archive ZIP", () => {
     for (const f of out) zip.file(f.name, f.data);
     const back = await JSZip.loadAsync(await zip.generateAsync({ type: "uint8array" }));
     expect(Object.keys(back.files)).toHaveLength(2);
+  });
+});
+
+describe("format du résultat et renommage", () => {
+  it("diviser puis convertir chaque morceau en PNG", async () => {
+    const out = await runTool("diviser", [await makePdf("doc.pdf", ["1", "2"])], { mode: "each", output: "png" });
+    expect(out.map((f) => f.name.split(".").pop())).toEqual(["png", "png"]);
+    expect(out[0].data[1]).toBe(0x50); // signature PNG
+  });
+
+  it("PDF par défaut quand aucun format n'est choisi", async () => {
+    const [out] = await runTool("pivoter", [await makePdf("doc.pdf", ["1"])], { angle: 90, pages: "", output: "pdf" });
+    expect(isPdf(out)).toBe(true);
+  });
+
+  it("renommer : un nom, une numérotation, une extension", () => {
+    expect(renamedFiles(["a.pdf"], "Facture mars", "")).toEqual(["Facture mars.pdf"]);
+    expect(renamedFiles(["a.pdf", "b.jpg"], "Scan", "")).toEqual(["Scan-1.pdf", "Scan-2.jpg"]);
+    expect(renamedFiles(["a.txt"], "", ".md")).toEqual(["a.md"]);
+    expect(renamedFiles(["a.pdf"], 'x/y:z?', "")).toEqual(["x-y-z-.pdf"]);
+  });
+
+  it("renommer via l'API : le contenu reste identique", async () => {
+    const file = await makePdf("doc.pdf", ["1"]);
+    const [out] = await runTool("renommer", [file], { name: "Contrat signé", ext: "" });
+    expect(out.name).toBe("Contrat signé.pdf");
+    expect(out.data).toBe(file.data);
   });
 });

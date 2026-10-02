@@ -90,6 +90,19 @@ const de: Messages = {
     preview: "Vorschau",
     saved: "{before} → {after}: {pct} kleiner",
     savedNone: "Diese Datei war bereits gut optimiert: Sie lässt sich nicht weiter verkleinern.",
+    outputLabel: "Format des Ergebnisses",
+    resultName: "Name der erzeugten Datei",
+    resultNamePlaceholder: "automatisch",
+    resultNameHelp: "Die Dateiendung wird automatisch ergänzt.",
+    previewTitle: "Vorschau",
+    previewResult: "Vorschau des Ergebnisses",
+    previewLoading: "Vorschau wird vorbereitet…",
+    previewLocked: "Geschütztes Dokument: Geben Sie das Passwort ein, um die Vorschau zu sehen.",
+    previewNone: "Keine Vorschau für dieses Format.",
+    previewMore: "+ {n} Seiten",
+    previewFile: "Datei {n}",
+    previewInvalid: "Prüfen Sie die Seitenzahlen: Die Vorschau aktualisiert sich, sobald sie gültig sind.",
+    localOnly: "Wird in Ihrem Browser verarbeitet: Ihre Dateien werden nicht hochgeladen.",
   },
   language: {
     button: "Sprache",
@@ -311,6 +324,38 @@ const de: Messages = {
         },
       ],
     },
+    installLink: "Auf eigenen Servern installieren",
+    install: {
+      title: "pdff für Organisationen",
+      description: "Installieren Sie pdff auf den Servern Ihrer Behörde oder Ihres Unternehmens: kostenlos, quelloffen, und Ihre Dokumente verlassen nie Ihr Netzwerk.",
+      intro: "Behörden, Unternehmen, Krankenhäuser, Schulen: Installieren Sie pdff in wenigen Minuten bei sich und behalten Sie die volle Kontrolle über Ihre Dokumente.",
+      sections: [
+        {
+          title: "Ihre Dokumente bleiben in Ihrem Netzwerk",
+          text: "Die gesamte Verarbeitung findet auf Ihren eigenen Servern statt, auch ohne Internetverbindung. Keine Statistiken, keine externen Dienste, keine Konten.",
+        },
+        {
+          title: "Alles inklusive",
+          text: "Alle Werkzeuge von pdff, mehr als 40 Formate, LibreOffice für Word, Excel und PowerPoint sowie alle 160 Sprachen der Oberfläche in einem einzigen Container.",
+        },
+        {
+          title: "Kostenlos und quelloffen",
+          text: "pdff steht unter der MIT-Lizenz: kostenlose Installation, Nutzung und Anpassung ohne Nutzerbegrenzung. Ihre Sicherheitsteams können den gesamten Code prüfen.",
+        },
+        {
+          title: "Installation mit 3 Befehlen",
+          text: "Auf einem Server mit Docker (mindestens 2 Prozessoren und 2 GB Arbeitsspeicher):",
+        },
+        {
+          title: "Aktualisierungen",
+          text: "Ein Befehl genügt: docker compose pull, dann docker compose up -d. Jede Version wird vor der Veröffentlichung automatisch ohne Netzwerk gebaut und getestet. Die vollständige Anleitung (HTTPS, isolierte Netze, Einstellungen) finden Sie hier:",
+        },
+        {
+          title: "Unterstützung",
+          text: "Brauchen Sie Hilfe bei der Installation, eine Version in Ihren Farben, einen Supportvertrag oder eine maßgeschneiderte Funktion? Kontaktieren Sie den Entwickler:",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {
@@ -383,6 +428,25 @@ const de: Messages = {
       options: {
         order: { label: "Neue Reihenfolge", placeholder: "3, 1, 2, 4-ende", help: "Nicht genannte Seiten werden entfernt." },
         reverse: { label: "Gesamtes Dokument umkehren (ignoriert die Reihenfolge oben)" },
+      },
+    },
+    renommer: {
+      name: "Umbenennen",
+      tagline: "Den Namen einer oder mehrerer Dateien ändern, ohne etwas hochzuladen.",
+      seoTitle: "Dateien online umbenennen — kostenlos, ohne Upload",
+      seoDescription: "Benennen Sie eine oder viele Dateien (PDF, Word, Bilder…) auf einmal um, mit automatischer Nummerierung. Alles geschieht in Ihrem Browser: Nichts wird hochgeladen.",
+      intro: "Legen Sie Ihre Dateien ab, geben Sie den neuen Namen ein und klicken Sie auf Umbenennen. Bei mehreren Dateien fügt pdff eine Nummer hinzu: Rechnung-1, Rechnung-2… Ihre Dateien verlassen Ihr Gerät nie.",
+      options: {
+        name: {
+          label: "Neuer Name",
+          placeholder: "z. B. Rechnung-Maerz",
+          help: "Mehrere Dateien? Eine Nummer wird in der Reihenfolge der Liste angehängt.",
+        },
+        ext: {
+          label: "Neue Dateiendung",
+          placeholder: "Endung beibehalten",
+          help: "Eine andere Endung ändert nicht das Dateiformat. Zum Umwandeln nutzen Sie Umwandeln.",
+        },
       },
     },
     pivoter: {

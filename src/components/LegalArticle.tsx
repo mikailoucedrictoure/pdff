@@ -17,7 +17,8 @@ export function ExternalLink({ href, children }: { href: string; children: React
 
 /**
  * Page de texte (Conditions d'utilisation, Sécurité, Accessibilité) : titre, date de mise à jour,
- * introduction puis sections. `extras` ajoute un lien à la fin de certaines sections (par numéro).
+ * introduction puis sections. `extras` ajoute un lien à la fin de certaines sections (par numéro),
+ * `blocks` un bloc (code, liste…) sous le paragraphe.
  */
 export function LegalArticle({
   text,
@@ -25,6 +26,7 @@ export function LegalArticle({
   updated,
   locale,
   extras = {},
+  blocks = {},
 }: {
   text: LegalText;
   updatedLabel: string;
@@ -32,6 +34,7 @@ export function LegalArticle({
   updated: string;
   locale: string;
   extras?: Record<number, React.ReactNode>;
+  blocks?: Record<number, React.ReactNode>;
 }) {
   const date = new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(`${updated}T12:00:00Z`));
   return (
@@ -47,6 +50,7 @@ export function LegalArticle({
               {section.text}
               {extras[i] && <> {extras[i]}</>}
             </p>
+            {blocks[i]}
           </section>
         ))}
       </div>

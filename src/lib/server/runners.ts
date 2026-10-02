@@ -5,7 +5,8 @@
 import { randomBytes } from "node:crypto";
 import { baseName, canonicalExt, extOf } from "@/lib/core/formats";
 import { PageSelectionError, parsePageList, parsePageSet, parseRanges } from "@/lib/core/pages";
-import type { OptionValues } from "@/lib/core/tools";
+import { renamedFiles } from "@/lib/core/rename";
+import { getTool, type OptionValues } from "@/lib/core/tools";
 import { availableEngines, convertFile, ensurePdf } from "./convert";
 import * as pdf from "./engines/pdf";
 import { decrypt, encrypt } from "./engines/mupdf";
@@ -183,6 +184,12 @@ const runners: Record<string, Runner> = {
     return out;
   },
 
+  // Le navigateur renomme lui-même (rien n'est envoyé) ; ce chemin sert aux appels directs de l'API
+  async renommer(files, o) {
+    const names = renamedFiles(files.map((f) => f.name), o.str("name"), o.str("ext"));
+    return files.map((f, i) => ({ name: names[i], data: f.data }));
+  },
+
   metadonnees: (files, o) =>
     eachPdf(files, async (file, doc) => ({
       name: file.name,
@@ -200,7 +207,19 @@ export async function runTool(toolId: string, files: FileData[], values: OptionV
   const runner = runners[toolId];
   if (!runner) throw new UserError("unknownTool");
   try {
-    return await runner(files, new Options(values));
+    const options = new Options(values);
+    const out = await runner(files, options);
+    // Format du résultat choisi par l'utilisateur (PDF par défaut)
+    const output = canonicalExt(options.str("output").toLowerCase());
+    const hasOutput = getTool(toolId)?.options.some((opt) => opt.type === "output");
+    if (!hasOutput || !output || output === "pdf") return out;
+    const engines = await availableEngines();
+    const converted: FileData[] = [];
+    for (const file of out) {
+      if (canonicalExt(extOf(file.name)) !== "pdf") converted.push(file);
+      else converted.push(...(await convertFile(file, output, { dpi: 150, quality: 90 }, engines)));
+    }
+    return converted;
   } catch (err) {
     if (err instanceof PageSelectionError) throw new UserError(err.key, err.params);
     throw err;

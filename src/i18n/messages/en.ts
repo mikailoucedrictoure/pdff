@@ -90,6 +90,19 @@ const en: Messages = {
     preview: "Preview",
     saved: "{before} → {after}: {pct} smaller",
     savedNone: "This file was already well optimized: it can't be made any smaller.",
+    outputLabel: "Result format",
+    resultName: "Output file name",
+    resultNamePlaceholder: "automatic",
+    resultNameHelp: "The extension is added automatically.",
+    previewTitle: "Preview",
+    previewResult: "Result preview",
+    previewLoading: "Preparing the preview…",
+    previewLocked: "Protected document: enter the password to see the preview.",
+    previewNone: "No preview for this format.",
+    previewMore: "+ {n} pages",
+    previewFile: "File {n}",
+    previewInvalid: "Check the page numbers: the preview updates as soon as they are valid.",
+    localOnly: "Processed in your browser: your files are not uploaded.",
   },
   language: {
     button: "Language",
@@ -305,6 +318,38 @@ const en: Messages = {
         },
       ],
     },
+    installLink: "Install on your servers",
+    install: {
+      title: "pdff for organizations",
+      description: "Install pdff on your government's or company's servers: free, open source, and your documents never leave your network.",
+      intro: "Governments, businesses, hospitals, schools: install pdff in-house in minutes and keep full control of your documents.",
+      sections: [
+        {
+          title: "Your documents stay on your network",
+          text: "All processing happens on your own servers, even without Internet access. No analytics, no external service, no accounts.",
+        },
+        {
+          title: "Everything included",
+          text: "Every pdff tool, more than 40 formats, LibreOffice for Word, Excel and PowerPoint, and all 160 interface languages, in a single container.",
+        },
+        {
+          title: "Free and open source",
+          text: "pdff is released under the MIT license: free to install, use and modify, with no user limit. Your security teams can audit all of the code.",
+        },
+        {
+          title: "Install in 3 commands",
+          text: "On a server with Docker (at least 2 CPUs and 2 GB of RAM):",
+        },
+        {
+          title: "Updates",
+          text: "One command is enough: docker compose pull, then docker compose up -d. Every version is built and tested automatically, with networking disabled, before release. The full guide (HTTPS, air-gapped networks, settings) is here:",
+        },
+        {
+          title: "Support",
+          text: "Need help with installation, a version in your colors, a support contract or a custom feature? Contact the developer:",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {
@@ -377,6 +422,25 @@ const en: Messages = {
       options: {
         order: { label: "New order", placeholder: "3, 1, 2, 4-end", help: "Pages not listed are removed." },
         reverse: { label: "Reverse the whole document (ignores the order above)" },
+      },
+    },
+    renommer: {
+      name: "Rename",
+      tagline: "Change the name of one or more files, without uploading anything.",
+      seoTitle: "Rename files online — free, nothing uploaded",
+      seoDescription: "Rename one or many files (PDF, Word, images…) at once, with automatic numbering. Everything happens in your browser: nothing is uploaded.",
+      intro: "Drop your files, type the new name, then click Rename. For several files, pdff adds a number: Invoice-1, Invoice-2… Your files never leave your device.",
+      options: {
+        name: {
+          label: "New name",
+          placeholder: "e.g. Invoice-March",
+          help: "Several files? A number is added, in list order.",
+        },
+        ext: {
+          label: "New extension",
+          placeholder: "keep the extension",
+          help: "Changing the extension does not change the file format. To transform a file, use Convert.",
+        },
       },
     },
     pivoter: {

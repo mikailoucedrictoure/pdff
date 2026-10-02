@@ -28,6 +28,8 @@ export type ToolOption = OptionUi &
     | { type: "checkbox"; name: string; default: boolean }
     /** Choix du format cible : alimenté dynamiquement par le graphe de conversion. */
     | { type: "target"; name: string }
+    /** Format du résultat d'un outil PDF : PDF par défaut, ou tout format atteignable depuis un PDF. */
+    | { type: "output"; name: string }
   );
 
 export type ToolCategory = "organiser" | "convertir" | "modifier" | "securite";
@@ -38,6 +40,7 @@ export const TOOL_IDS = [
   "diviser",
   "extraire",
   "organiser",
+  "renommer",
   "pivoter",
   "numeroter",
   "filigrane",
@@ -52,8 +55,10 @@ export type ToolId = (typeof TOOL_IDS)[number];
 export interface ToolMeta {
   id: ToolId;
   category: ToolCategory;
-  /** "pdf" : uniquement des PDF. "any" : tout format convertible. */
-  accepts: "pdf" | "any";
+  /** "pdf" : uniquement des PDF. "any" : tout format convertible. "all" : n'importe quel fichier. */
+  accepts: "pdf" | "any" | "all";
+  /** Traité entièrement dans le navigateur : le fichier n'est jamais envoyé. */
+  local?: boolean;
   minFiles: number;
   maxFiles?: number;
   /** L'utilisateur peut réordonner les fichiers (l'ordre compte). */
@@ -70,7 +75,9 @@ export const TOOLS: ToolMeta[] = [
     accepts: "any",
     minFiles: 1,
     ordered: true,
-    options: [{ type: "checkbox", name: "bookmarks", default: true }],
+    options: [{ type: "checkbox", name: "bookmarks", default: true },
+      { type: "output", name: "output" },
+    ],
   },
   {
     id: "convertir",
@@ -92,6 +99,7 @@ export const TOOLS: ToolMeta[] = [
       { type: "select", name: "mode", default: "each", choices: ["each", "ranges", "every"], display: "cards" },
       { type: "text", name: "ranges", default: "", showIf: { name: "mode", in: ["ranges"] } },
       { type: "number", name: "every", default: 10, min: 1, showIf: { name: "mode", in: ["every"] } },
+      { type: "output", name: "output" },
     ],
   },
   {
@@ -100,8 +108,9 @@ export const TOOLS: ToolMeta[] = [
     accepts: "pdf",
     minFiles: 1,
     options: [
-      { type: "select", name: "mode", default: "keep", choices: ["keep", "remove"] },
+      { type: "select", name: "mode", default: "keep", choices: ["keep", "remove"], display: "cards" },
       { type: "text", name: "pages", default: "" },
+      { type: "output", name: "output" },
     ],
   },
   {
@@ -113,6 +122,19 @@ export const TOOLS: ToolMeta[] = [
     options: [
       { type: "text", name: "order", default: "" },
       { type: "checkbox", name: "reverse", default: false },
+      { type: "output", name: "output" },
+    ],
+  },
+  {
+    id: "renommer",
+    category: "organiser",
+    accepts: "all",
+    local: true,
+    minFiles: 1,
+    ordered: true,
+    options: [
+      { type: "text", name: "name", default: "" },
+      { type: "text", name: "ext", default: "", advanced: true },
     ],
   },
   {
@@ -121,8 +143,9 @@ export const TOOLS: ToolMeta[] = [
     accepts: "pdf",
     minFiles: 1,
     options: [
-      { type: "select", name: "angle", default: "90", choices: ["90", "180", "270"] },
+      { type: "select", name: "angle", default: "90", choices: ["90", "180", "270"], display: "cards" },
       { type: "text", name: "pages", default: "" },
+      { type: "output", name: "output" },
     ],
   },
   {
@@ -143,6 +166,7 @@ export const TOOLS: ToolMeta[] = [
       { type: "number", name: "start", default: 1, min: 0, advanced: true },
       { type: "number", name: "size", default: 10, min: 4, max: 72, advanced: true },
       { type: "text", name: "pages", default: "", advanced: true },
+      { type: "output", name: "output" },
     ],
   },
   {
@@ -158,6 +182,7 @@ export const TOOLS: ToolMeta[] = [
       { type: "select", name: "rotation", default: "45", choices: ["45", "0"], display: "cards" },
       { type: "number", name: "size", default: 60, min: 8, max: 300, advanced: true },
       { type: "text", name: "pages", default: "", advanced: true },
+      { type: "output", name: "output" },
     ],
   },
   {
@@ -184,7 +209,9 @@ export const TOOLS: ToolMeta[] = [
     category: "securite",
     accepts: "pdf",
     minFiles: 1,
-    options: [{ type: "password", name: "password", default: "" }],
+    options: [{ type: "password", name: "password", default: "" },
+      { type: "output", name: "output" },
+    ],
   },
   {
     id: "metadonnees",
@@ -217,6 +244,7 @@ export function defaultOptions(tool: ToolMeta, textDefaults: Record<string, stri
   const values: OptionValues = {};
   for (const opt of tool.options) {
     if (opt.type === "target") values[opt.name] = "";
+    else if (opt.type === "output") values[opt.name] = "pdf";
     else values[opt.name] = textDefaults[opt.name] ?? opt.default;
   }
   return values;

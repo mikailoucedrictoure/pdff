@@ -99,6 +99,24 @@ const GLYPHS: Record<string, Glyph> = {
     ),
   },
 
+  // Le nom de la page s'édite dans une étiquette, curseur de texte en place.
+  renommer: {
+    base: (
+      <>
+        <path d={PAGE} />
+        <path d={FOLD} />
+        <path d="M7 10.5h6" />
+      </>
+    ),
+    cut: <rect x="8.5" y="13.5" width="14" height="7" rx="2" />,
+    top: (
+      <>
+        <rect x="8.5" y="13.5" width="14" height="7" rx="2" {...T} />
+        <path d="M11 17h3.5M18.5 15v4M17.5 15h2M17.5 19h2" />
+      </>
+    ),
+  },
+
   // La page bascule, son ancienne position reste en pointillés.
   pivoter: {
     base: (

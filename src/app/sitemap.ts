@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/conditions", priority: 0.3 },
     { path: "/securite", priority: 0.4 },
     { path: "/accessibilite", priority: 0.3 },
+    { path: "/installation", priority: 0.6 },
   ];
   return pages.flatMap(({ path, priority }) => {
     const languages = absolute(languageAlternates(path));

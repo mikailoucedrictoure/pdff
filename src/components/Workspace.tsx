@@ -7,8 +7,10 @@ import type { ClientMessages as Messages } from "@/i18n/client-messages";
 import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
 import type { Capabilities } from "@/lib/core/capabilities";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
+import { cleanFileName, renamedFiles } from "@/lib/core/rename";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
+import { InputPreview, ResultPreview } from "./Preview";
 import { FileGlyph } from "./visual/FileGlyph";
 import { ToolIcon } from "./visual/ToolIcon";
 
@@ -106,6 +108,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     defaultOptions(tool, Object.fromEntries(Object.entries(optionTexts).map(([k, v]) => [k, v.default]))),
   );
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  /** Nom souhaité pour le fichier produit (vide = nom automatique). */
+  const [resultName, setResultName] = useState("");
   const [rejected, setRejected] = useState<string[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -115,7 +119,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const inputSizeRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
 
-  const acceptedExts = useMemo(() => {
+  const acceptedExts = useMemo((): string[] | null => {
+    if (tool.accepts === "all") return null;
     if (tool.accepts === "pdf") return ["pdf"];
     if (!caps) return ALL_EXTENSIONS;
     const inputs = new Set(supportedInputs(engines).concat("pdf"));
@@ -137,7 +142,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     const accepted: Item[] = [];
     const refused: string[] = [];
     for (const file of Array.from(list)) {
-      if (acceptedExts.includes(extOf(file.name))) accepted.push({ id: newId(), file });
+      if (!acceptedExts || acceptedExts.includes(extOf(file.name))) accepted.push({ id: newId(), file });
       else refused.push(file.name);
     }
     setRejected(refused);
@@ -161,15 +166,50 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   // Format choisi, ignoré s'il n'est plus possible avec les fichiers actuels
   const target = targets.includes(String(options.target ?? "")) ? String(options.target) : "";
 
-  const approximate = !!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate));
+  const outputTargets = useMemo(() => {
+    const possible = caps ? commonTargets(["pdf"], engines) : [];
+    // Les formats les plus demandés d'abord, puis les autres
+    const order = ["pdf", "docx", "jpg", "png", "txt", "pptx", "odt", "html", "rtf", "webp", "avif", "tiff", "gif", "doc", "ppt", "odp"];
+    const rank = (t: string) => (order.includes(t) ? order.indexOf(t) : order.length);
+    return ["pdf", ...possible.filter((t) => t !== "pdf").sort((a, b) => rank(a) - rank(b))];
+  }, [caps, engines]);
+  const output = String(options.output ?? "pdf");
+  const approximate =
+    (!!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate))) ||
+    (output !== "pdf" && !!findPath("pdf", output, engines)?.some((s) => s.approximate));
 
   function visible(opt: ToolOption) {
     if (!opt.showIf) return true;
     return opt.showIf.in.includes(String(options[opt.showIf.name] ?? ""));
   }
 
+  /** Renommer : tout se fait dans le navigateur (une archive ZIP s'il y a plusieurs fichiers). */
+  async function runLocal() {
+    const started = window.performance.now();
+    inputSizeRef.current = items.reduce((n, i) => n + i.file.size, 0);
+    const names = renamedFiles(
+      items.map((i) => i.file.name),
+      String(options.name ?? ""),
+      String(options.ext ?? ""),
+    );
+    if (items.length === 1) {
+      deliver(URL.createObjectURL(items[0].file), names[0], items[0].file.size, 1, started);
+      return;
+    }
+    setStatus({ kind: "processing" });
+    const { default: JSZip } = await import("jszip");
+    const zip = new JSZip();
+    items.forEach((it, i) => zip.file(names[i], it.file));
+    const blob = await zip.generateAsync({ type: "blob" });
+    deliver(URL.createObjectURL(blob), `${cleanFileName(String(options.name ?? "")) || "pdff"}.zip`, blob.size, items.length, started);
+  }
+
   function run() {
     if (!items.length || busy) return;
+    if (tool.local) {
+      void runLocal();
+      return;
+    }
     const total = items.reduce((n, i) => n + i.file.size, 0);
     if (caps && total > caps.limits.maxUploadMb * 1024 * 1024) {
       setStatus({ kind: "error", message: fmt(m.errors.tooLarge, { mb: caps.limits.maxUploadMb }) });
@@ -191,7 +231,10 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const endpoint = `/api/tools/${tool.id}?lang=${encodeURIComponent(locale)}`;
 
   /** Affiche le résultat et lance le téléchargement. */
-  function deliver(url: string, name: string, size: number, count: number, started: number) {
+  function deliver(url: string, producedName: string, size: number, count: number, started: number) {
+    const custom = tool.local ? "" : cleanFileName(resultName);
+    const ext = extOf(producedName);
+    const name = custom ? (ext ? `${custom.replace(new RegExp(`\\.${ext}$`, "i"), "")}.${ext}` : custom) : producedName;
     setStatus({ kind: "done", url, name, size, count, seconds: (performance.now() - started) / 1000, inputSize: inputSizeRef.current });
     const a = document.createElement("a");
     a.href = url;
@@ -353,7 +396,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
             ref={inputRef}
             type="file"
             multiple={maxFiles > 1}
-            accept={acceptedExts.map((e) => `.${e}`).join(",")}
+            accept={acceptedExts?.map((e) => `.${e}`).join(",")}
             className="hidden"
             onChange={(e) => {
               if (e.target.files) addFiles(e.target.files);
@@ -479,6 +522,13 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         {rejected.length > 0 && (
           <p role="alert" className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
         )}
+
+        {items.length > 0 &&
+          (status.kind === "done" ? (
+            <ResultPreview key={status.url} url={status.url} name={status.name} w={w} />
+          ) : (
+            <InputPreview toolId={tool.id} items={items} options={options} templates={optText("format").templates} w={w} />
+          ))}
       </section>
 
       {/* Options et action */}
@@ -492,24 +542,36 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
 
         {tool.options.length > 0 ? (
           <div className="mt-5 space-y-5">
-            {(tool.id === "filigrane" || tool.id === "numeroter") && (
+            {/* Avant le dépôt d'un fichier : aperçu sur une page d'exemple */}
+            {(tool.id === "filigrane" || tool.id === "numeroter") && !items.length && (
               <ToolPreview toolId={tool.id} options={options} templates={optText("format").templates} label={w.preview} />
             )}
             {tool.options
               .filter((opt) => visible(opt) && !opt.advanced)
-              .map((opt) => (
-                <OptionField
-                  key={opt.name}
-                  option={opt}
-                  text={optText(opt.name)}
-                  value={opt.type === "target" ? target : options[opt.name]}
-                  targets={targets}
-                  hasFiles={items.length > 0}
-                  messages={m}
-                  onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
-                />
-              ))}
-            {tool.options.some((opt) => visible(opt) && opt.advanced) && (
+              .map((opt) =>
+                opt.type === "output" ? (
+                  <OutputPicker
+                    key={opt.name}
+                    label={w.outputLabel}
+                    value={output}
+                    targets={outputTargets}
+                    names={m.formatNames as Partial<Record<string, string>>}
+                    onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
+                  />
+                ) : (
+                  <OptionField
+                    key={opt.name}
+                    option={opt}
+                    text={optText(opt.name)}
+                    value={opt.type === "target" ? target : options[opt.name]}
+                    targets={targets}
+                    hasFiles={items.length > 0}
+                    messages={m}
+                    onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
+                  />
+                ),
+              )}
+            {(!tool.local || tool.options.some((opt) => visible(opt) && opt.advanced)) && (
               <details className="group rounded-xl border border-line">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-semibold">
                   {w.advanced}
@@ -532,6 +594,20 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
                         onChange={(v) => setOptions((o) => ({ ...o, [opt.name]: v }))}
                       />
                     ))}
+                  {!tool.local && (
+                    <label className="block">
+                      <span className="mb-1.5 block text-sm font-semibold">{w.resultName}</span>
+                      <input
+                        type="text"
+                        value={resultName}
+                        placeholder={w.resultNamePlaceholder}
+                        onChange={(e) => setResultName(e.target.value)}
+                        className="w-full rounded-xl border border-line bg-bg px-3.5 py-2.5 text-base transition focus:border-brand focus:ring-4 focus:ring-brand/25 sm:text-sm"
+                        dir="auto"
+                      />
+                      <span className="mt-1 block text-xs text-muted">{w.resultNameHelp}</span>
+                    </label>
+                  )}
                 </div>
               </details>
             )}
@@ -754,6 +830,8 @@ function OptionField({
           />
         </label>
       );
+    case "output":
+      return null;
     case "target":
       return <TargetPicker label={text.label} value={String(value ?? "")} targets={targets} hasFiles={hasFiles} messages={messages} onChange={onChange} />;
     default:
@@ -793,6 +871,40 @@ function OptionField({
 }
 
 const SWATCH: Record<string, string> = { gray: "#808080", red: "#cc1a1a", blue: "#1a40bf", black: "#000000" };
+
+/** Format du résultat d'un outil PDF : PDF par défaut, ou Word, images, texte… */
+function OutputPicker({
+  label,
+  value,
+  targets,
+  names,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  targets: string[];
+  names: Partial<Record<string, string>>;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-2 block text-sm font-semibold">{label}</legend>
+      <div className="flex flex-wrap gap-1.5">
+        {targets.map((t) => (
+          <label
+            key={t}
+            title={names[t] ?? FORMATS[t]?.label ?? t}
+            className="cursor-pointer rounded-lg border border-line bg-bg px-2.5 py-1.5 text-xs font-semibold uppercase transition hover:border-brand/50 has-[:checked]:border-brand has-[:checked]:bg-brand has-[:checked]:text-white has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand has-[:focus-visible]:outline-solid"
+          >
+            <input type="radio" name="output" value={t} checked={value === t} onChange={() => onChange(t)} className="sr-only" />
+            <span className="sr-only">{names[t] ?? FORMATS[t]?.label ?? t} </span>
+            <span aria-hidden="true">{t}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
 
 /** Choix en grandes cartes : le libellé, et une phrase qui dit à quoi il sert. */
 function CardChoice({

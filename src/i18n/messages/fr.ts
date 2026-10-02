@@ -104,6 +104,19 @@ const fr = {
     preview: "Aperçu",
     saved: "{before} → {after} : {pct} plus léger",
     savedNone: "Ce fichier était déjà bien optimisé : impossible de le réduire davantage.",
+    outputLabel: "Format du résultat",
+    resultName: "Nom du fichier produit",
+    resultNamePlaceholder: "automatique",
+    resultNameHelp: "L'extension est ajoutée toute seule.",
+    previewTitle: "Aperçu",
+    previewResult: "Aperçu du résultat",
+    previewLoading: "Préparation de l'aperçu…",
+    previewLocked: "Document protégé : saisissez le mot de passe pour voir l'aperçu.",
+    previewNone: "Pas d'aperçu pour ce format.",
+    previewMore: "+ {n} pages",
+    previewFile: "Fichier {n}",
+    previewInvalid: "Vérifiez les numéros de pages : l'aperçu se met à jour dès qu'ils sont corrects.",
+    localOnly: "Traité dans votre navigateur : vos fichiers ne sont pas envoyés.",
   },
   language: {
     button: "Langue",
@@ -328,6 +341,38 @@ const fr = {
         },
       ],
     },
+    installLink: "Installer sur vos serveurs",
+    install: {
+      title: "pdff pour les organisations",
+      description: "Installez pdff sur les serveurs de votre administration ou de votre entreprise : gratuit, open source, vos documents ne quittent jamais votre réseau.",
+      intro: "Administrations, entreprises, hôpitaux, écoles : installez pdff chez vous, en quelques minutes, et gardez la maîtrise complète de vos documents.",
+      sections: [
+        {
+          title: "Vos documents ne quittent pas votre réseau",
+          text: "Tous les traitements se font sur vos propres serveurs, même sans connexion à Internet. Aucune statistique, aucun service externe, aucun compte.",
+        },
+        {
+          title: "Tout est inclus",
+          text: "Tous les outils de pdff, plus de 40 formats, LibreOffice pour Word, Excel et PowerPoint, et les 160 langues de l'interface, dans un seul conteneur.",
+        },
+        {
+          title: "Gratuit et open source",
+          text: "pdff est publié sous licence MIT : installation, utilisation et modification gratuites, sans limite d'utilisateurs. Vos équipes de sécurité peuvent auditer tout le code.",
+        },
+        {
+          title: "Installation en 3 commandes",
+          text: "Sur un serveur avec Docker (2 processeurs et 2 Go de mémoire au minimum) :",
+        },
+        {
+          title: "Mises à jour",
+          text: "Une commande suffit : docker compose pull, puis docker compose up -d. Chaque version est construite et testée automatiquement, réseau coupé, avant d'être publiée. Le guide complet (HTTPS, réseau isolé, réglages) est ici :",
+        },
+        {
+          title: "Accompagnement",
+          text: "Besoin d'aide pour l'installation, d'une version à vos couleurs, d'un contrat de support ou d'une fonctionnalité sur mesure ? Contactez le développeur :",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {
@@ -402,6 +447,25 @@ const fr = {
       options: {
         order: { label: "Nouvel ordre", placeholder: "3, 1, 2, 4-fin", help: "Les pages non citées sont retirées." },
         reverse: { label: "Inverser tout le document (ignore l'ordre ci-dessus)" },
+      },
+    },
+    renommer: {
+      name: "Renommer",
+      tagline: "Changer le nom d'un ou plusieurs fichiers, sans rien envoyer.",
+      seoTitle: "Renommer des fichiers en ligne — gratuit et sans envoi",
+      seoDescription: "Renommez un ou plusieurs fichiers (PDF, Word, images…) en une fois, avec une numérotation automatique. Tout se passe dans votre navigateur : rien n'est envoyé.",
+      intro: "Déposez vos fichiers, écrivez le nouveau nom, puis cliquez sur Renommer. Pour plusieurs fichiers, pdff ajoute un numéro : Facture-1, Facture-2… Vos fichiers ne quittent jamais votre appareil.",
+      options: {
+        name: {
+          label: "Nouveau nom",
+          placeholder: "ex. : Facture-mars",
+          help: "Plusieurs fichiers ? Un numéro est ajouté, dans l'ordre de la liste.",
+        },
+        ext: {
+          label: "Nouvelle extension",
+          placeholder: "garder l'extension",
+          help: "Changer l'extension ne change pas le format du fichier. Pour le transformer, utilisez Convertir.",
+        },
       },
     },
     pivoter: {

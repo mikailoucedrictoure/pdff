@@ -90,6 +90,19 @@ const zh: Messages = {
     preview: "预览",
     saved: "{before} → {after}：减小了 {pct}",
     savedNone: "该文件已经优化得很好，无法再缩小。",
+    outputLabel: "结果格式",
+    resultName: "生成文件的名称",
+    resultNamePlaceholder: "自动",
+    resultNameHelp: "扩展名会自动加上。",
+    previewTitle: "预览",
+    previewResult: "结果预览",
+    previewLoading: "正在准备预览…",
+    previewLocked: "文档受保护：输入密码即可查看预览。",
+    previewNone: "此格式无法预览。",
+    previewMore: "+ {n} 页",
+    previewFile: "文件 {n}",
+    previewInvalid: "请检查页码：页码正确后预览会立即更新。",
+    localOnly: "在您的浏览器中处理：文件不会上传。",
   },
   language: {
     button: "语言",
@@ -281,6 +294,38 @@ const zh: Messages = {
         },
       ],
     },
+    installLink: "安装到您的服务器",
+    install: {
+      title: "面向机构的 pdff",
+      description: "将 pdff 安装在贵机构或公司的服务器上：免费、开源，文档永远不会离开您的网络。",
+      intro: "政府机构、企业、医院、学校：几分钟即可在内部安装 pdff，完全掌控您的文档。",
+      sections: [
+        {
+          title: "文档不离开您的网络",
+          text: "所有处理都在您自己的服务器上完成，即使没有互联网连接也可以。没有统计、没有外部服务、没有账户。",
+        },
+        {
+          title: "全部包含",
+          text: "pdff 的全部工具、40 多种格式、用于 Word、Excel 和 PowerPoint 的 LibreOffice，以及 160 种界面语言，都在一个容器里。",
+        },
+        {
+          title: "免费开源",
+          text: "pdff 以 MIT 许可证发布：免费安装、使用和修改，不限用户数量。您的安全团队可以审计全部代码。",
+        },
+        {
+          title: "3 条命令完成安装",
+          text: "在装有 Docker 的服务器上（至少 2 个处理器和 2 GB 内存）：",
+        },
+        {
+          title: "更新",
+          text: "一条命令即可：先 docker compose pull，再 docker compose up -d。每个版本在发布前都会在断网环境下自动构建和测试。完整指南（HTTPS、隔离网络、设置）见：",
+        },
+        {
+          title: "技术支持",
+          text: "需要安装协助、定制品牌版本、支持合同或定制功能？请联系开发者：",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {
@@ -353,6 +398,25 @@ const zh: Messages = {
       options: {
         order: { label: "新顺序", placeholder: "3, 1, 2, 4-end", help: "未列出的页面将被删除。" },
         reverse: { label: "整个文档倒序（忽略上面的顺序）" },
+      },
+    },
+    renommer: {
+      name: "重命名",
+      tagline: "修改一个或多个文件的名称，无需上传。",
+      seoTitle: "在线重命名文件 — 免费且无需上传",
+      seoDescription: "一次重命名一个或多个文件（PDF、Word、图片等），自动编号。全部在浏览器中完成：不会上传任何内容。",
+      intro: "放入文件，输入新名称，然后点击“重命名”。如果有多个文件，pdff 会加上编号：Invoice-1、Invoice-2…… 您的文件始终不会离开您的设备。",
+      options: {
+        name: {
+          label: "新名称",
+          placeholder: "例如：Invoice-March",
+          help: "多个文件？会按列表顺序加上编号。",
+        },
+        ext: {
+          label: "新扩展名",
+          placeholder: "保留原扩展名",
+          help: "修改扩展名不会改变文件格式。如需转换格式，请使用“转换”。",
+        },
       },
     },
     pivoter: {

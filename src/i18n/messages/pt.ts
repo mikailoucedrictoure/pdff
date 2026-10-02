@@ -90,6 +90,19 @@ const pt: Messages = {
     preview: "Pré-visualização",
     saved: "{before} → {after}: {pct} mais leve",
     savedNone: "Este arquivo já estava bem otimizado: não dá para reduzir mais.",
+    outputLabel: "Formato do resultado",
+    resultName: "Nome do arquivo final",
+    resultNamePlaceholder: "automático",
+    resultNameHelp: "A extensão é adicionada automaticamente.",
+    previewTitle: "Pré-visualização",
+    previewResult: "Pré-visualização do resultado",
+    previewLoading: "Preparando a pré-visualização…",
+    previewLocked: "Documento protegido: digite a senha para ver a pré-visualização.",
+    previewNone: "Sem pré-visualização para este formato.",
+    previewMore: "+ {n} páginas",
+    previewFile: "Arquivo {n}",
+    previewInvalid: "Confira os números das páginas: a pré-visualização se atualiza assim que estiverem corretos.",
+    localOnly: "Processado no seu navegador: seus arquivos não são enviados.",
   },
   language: {
     button: "Idioma",
@@ -314,6 +327,38 @@ const pt: Messages = {
         },
       ],
     },
+    installLink: "Instalar nos seus servidores",
+    install: {
+      title: "pdff para organizações",
+      description: "Instale o pdff nos servidores do seu órgão público ou empresa: grátis, de código aberto, e seus documentos nunca saem da sua rede.",
+      intro: "Órgãos públicos, empresas, hospitais, escolas: instale o pdff internamente em minutos e mantenha o controle total dos seus documentos.",
+      sections: [
+        {
+          title: "Seus documentos não saem da sua rede",
+          text: "Todo o processamento acontece nos seus próprios servidores, mesmo sem conexão com a Internet. Sem estatísticas, sem serviço externo, sem contas.",
+        },
+        {
+          title: "Tudo incluído",
+          text: "Todas as ferramentas do pdff, mais de 40 formatos, LibreOffice para Word, Excel e PowerPoint, e os 160 idiomas da interface, em um único contêiner.",
+        },
+        {
+          title: "Grátis e de código aberto",
+          text: "O pdff é publicado sob a licença MIT: instalação, uso e modificação gratuitos, sem limite de usuários. Suas equipes de segurança podem auditar todo o código.",
+        },
+        {
+          title: "Instalação em 3 comandos",
+          text: "Em um servidor com Docker (pelo menos 2 processadores e 2 GB de memória):",
+        },
+        {
+          title: "Atualizações",
+          text: "Basta um comando: docker compose pull e depois docker compose up -d. Cada versão é construída e testada automaticamente, sem rede, antes de ser publicada. O guia completo (HTTPS, rede isolada, ajustes) está aqui:",
+        },
+        {
+          title: "Suporte",
+          text: "Precisa de ajuda com a instalação, de uma versão com as suas cores, de um contrato de suporte ou de um recurso sob medida? Fale com o desenvolvedor:",
+        },
+      ],
+    },
   },
   tools: {
     fusionner: {
@@ -386,6 +431,25 @@ const pt: Messages = {
       options: {
         order: { label: "Nova ordem", placeholder: "3, 1, 2, 4-fim", help: "As páginas não citadas são removidas." },
         reverse: { label: "Inverter o documento inteiro (ignora a ordem acima)" },
+      },
+    },
+    renommer: {
+      name: "Renomear",
+      tagline: "Mudar o nome de um ou vários arquivos, sem enviar nada.",
+      seoTitle: "Renomear arquivos online — grátis e sem envio",
+      seoDescription: "Renomeie um ou vários arquivos (PDF, Word, imagens…) de uma vez, com numeração automática. Tudo acontece no seu navegador: nada é enviado.",
+      intro: "Envie seus arquivos, digite o novo nome e clique em Renomear. Para vários arquivos, o pdff adiciona um número: Fatura-1, Fatura-2… Seus arquivos nunca saem do seu aparelho.",
+      options: {
+        name: {
+          label: "Novo nome",
+          placeholder: "ex.: Fatura-marco",
+          help: "Vários arquivos? Um número é adicionado, na ordem da lista.",
+        },
+        ext: {
+          label: "Nova extensão",
+          placeholder: "manter a extensão",
+          help: "Mudar a extensão não muda o formato do arquivo. Para transformá-lo, use Converter.",
+        },
       },
     },
     pivoter: {

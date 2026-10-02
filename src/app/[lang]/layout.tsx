@@ -92,6 +92,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
                   ["/confidentialite", t.seo.privacyLink],
                   ["/securite", t.legal.securityLink],
                   ["/accessibilite", t.legal.accessibilityLink],
+                  ["/installation", t.legal.installLink],
                 ].map(([path, label]) => (
                   <li key={path}>
                     <Link href={href(path)} className="underline-offset-4 hover:text-ink hover:underline">
