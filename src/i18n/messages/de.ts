@@ -195,7 +195,7 @@ const de: Messages = {
       sections: [
         {
           title: "Wer pdff herausgibt",
-          text: "pdff wird von Mikaïlou Cédric Touré konzipiert, entwickelt und herausgegeben, einem Entwickler mit Sitz in New Brunswick, Kanada.",
+          text: "pdff wird von Mikailou Cedric Toure konzipiert, entwickelt und herausgegeben, einem Entwickler mit Sitz in New Brunswick, Kanada.",
         },
         {
           title: "Eine kostenlose Nutzungslizenz für alle",

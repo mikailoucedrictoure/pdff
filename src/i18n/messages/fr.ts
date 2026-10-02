@@ -212,7 +212,7 @@ const fr = {
       sections: [
         {
           title: "Qui édite pdff",
-          text: "pdff est conçu, développé et édité par Mikaïlou Cédric Touré, développeur établi au Nouveau-Brunswick, au Canada.",
+          text: "pdff est conçu, développé et édité par Mikailou Cedric Toure, développeur établi au Nouveau-Brunswick, au Canada.",
         },
         {
           title: "Une licence d'utilisation gratuite, pour tous",

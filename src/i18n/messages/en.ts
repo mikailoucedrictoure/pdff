@@ -189,7 +189,7 @@ const en: Messages = {
       sections: [
         {
           title: "Who publishes pdff",
-          text: "pdff is designed, built and published by Mikaïlou Cédric Touré, a developer based in New Brunswick, Canada.",
+          text: "pdff is designed, built and published by Mikailou Cedric Toure, a developer based in New Brunswick, Canada.",
         },
         {
           title: "A free license to use, for everyone",

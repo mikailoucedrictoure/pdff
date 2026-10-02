@@ -165,7 +165,7 @@ const zh: Messages = {
       sections: [
         {
           title: "pdff 的发布者",
-          text: "pdff 由 Mikaïlou Cédric Touré 设计、开发和发布，他是一名常驻加拿大新不伦瑞克省的开发者。",
+          text: "pdff 由 Mikailou Cedric Toure 设计、开发和发布，他是一名常驻加拿大新不伦瑞克省的开发者。",
         },
         {
           title: "人人可用的免费使用许可",

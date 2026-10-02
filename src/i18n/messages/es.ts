@@ -195,7 +195,7 @@ const es: Messages = {
       sections: [
         {
           title: "Quién edita pdff",
-          text: "pdff ha sido diseñado, desarrollado y editado por Mikaïlou Cédric Touré, desarrollador establecido en Nuevo Brunswick (Canadá).",
+          text: "pdff ha sido diseñado, desarrollado y editado por Mikailou Cedric Toure, desarrollador establecido en Nuevo Brunswick (Canadá).",
         },
         {
           title: "Una licencia de uso gratuita, para todos",

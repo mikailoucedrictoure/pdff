@@ -8,7 +8,7 @@ import { OG_SIZE, ogImagePath } from "./og";
 export const SITE_NAME = "pdff";
 export const SOURCE_URL = "https://github.com/mikailoucedrictoure/pdff";
 /** Éditeur et développeur du site (pied de page, Conditions d'utilisation). */
-export const AUTHOR_NAME = "Mikaïlou Cédric Touré";
+export const AUTHOR_NAME = "Mikailou Cedric Toure";
 export const AUTHOR_URL = "https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure";
 /** Signalement confidentiel des failles (onglet Security de GitHub). */
 export const SECURITY_URL = `${SOURCE_URL}/security`;

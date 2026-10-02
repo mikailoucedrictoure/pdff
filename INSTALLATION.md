@@ -117,7 +117,7 @@ et `docker load < pdff.tar.gz`.
 
 Code sous licence MIT : utilisation, modification et redistribution libres et gratuites,
 en conservant la mention de droit d'auteur. Conçu et développé par
-[Mikaïlou Cédric Touré](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure).
+[Mikailou Cedric Toure](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure).
 
 ---
 
@@ -175,4 +175,4 @@ The container runs as an unprivileged user and keeps no files. Every image is bu
 tested automatically by GitHub with networking disabled and real conversions.
 Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
-Designed and built by [Mikaïlou Cédric Touré](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure). MIT license.
+Designed and built by [Mikailou Cedric Toure](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure). MIT license.

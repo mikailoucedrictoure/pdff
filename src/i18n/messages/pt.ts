@@ -198,7 +198,7 @@ const pt: Messages = {
       sections: [
         {
           title: "Quem publica o pdff",
-          text: "O pdff foi criado, desenvolvido e é publicado por Mikaïlou Cédric Touré, desenvolvedor estabelecido em New Brunswick, no Canadá.",
+          text: "O pdff foi criado, desenvolvido e é publicado por Mikailou Cedric Toure, desenvolvedor estabelecido em New Brunswick, no Canadá.",
         },
         {
           title: "Uma licença de uso gratuita, para todos",
