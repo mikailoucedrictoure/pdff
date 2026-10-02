@@ -10,7 +10,8 @@ import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/c
 import { cleanFileName, renamedFiles } from "@/lib/core/rename";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
-import { InputPreview, ResultPreview } from "./Preview";
+import { InputPreview, parseAreaList, ResultPreview } from "./Preview";
+import { SignaturePad } from "./SignaturePad";
 import { FileGlyph } from "./visual/FileGlyph";
 import { ToolIcon } from "./visual/ToolIcon";
 
@@ -23,6 +24,8 @@ type Status =
   | { kind: "idle" }
   | { kind: "uploading"; progress: number }
   | { kind: "processing" }
+  /** Traitement dans le navigateur (OCR) : pages lues sur le total (0 = préparation). */
+  | { kind: "working"; done: number; total: number }
   | { kind: "done"; url: string; name: string; size: number; count: number; seconds: number; inputSize: number }
   | { kind: "error"; message: string };
 
@@ -104,9 +107,13 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const engines = useMemo(() => new Set<EngineId>(caps?.engines ?? []), [caps]);
 
   const [items, setItems] = useState<Item[]>([]);
-  const [options, setOptions] = useState<OptionValues>(() =>
-    defaultOptions(tool, Object.fromEntries(Object.entries(optionTexts).map(([k, v]) => [k, v.default]))),
-  );
+  const [options, setOptions] = useState<OptionValues>(() => {
+    const initial = defaultOptions(tool, Object.fromEntries(Object.entries(optionTexts).map(([k, v]) => [k, v.default])));
+    // OCR : la langue de l'interface est la plus probable pour le document
+    const ocrLang = Object.entries(OCR_LANGS).find(([, bcp]) => bcp.split("-")[0] === locale.split("-")[0])?.[0];
+    if (tool.id === "ocr" && ocrLang) initial.lang = ocrLang;
+    return initial;
+  });
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   /** Nom souhaité pour le fichier produit (vide = nom automatique). */
   const [resultName, setResultName] = useState("");
@@ -122,12 +129,13 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const acceptedExts = useMemo((): string[] | null => {
     if (tool.accepts === "all") return null;
     if (tool.accepts === "pdf") return ["pdf"];
+    if (tool.accepts === "scan") return ["pdf", "jpg", "jpeg", "png", "webp", "bmp", "gif", "tif", "tiff"];
     if (!caps) return ALL_EXTENSIONS;
     const inputs = new Set(supportedInputs(engines).concat("pdf"));
     return ALL_EXTENSIONS.filter((e) => inputs.has(canonicalExt(e)));
   }, [tool.accepts, caps, engines]);
 
-  const busy = status.kind === "uploading" || status.kind === "processing";
+  const busy = status.kind === "uploading" || status.kind === "processing" || status.kind === "working";
   const maxFiles = Math.min(tool.maxFiles ?? Infinity, caps?.limits.maxFiles ?? Infinity);
   const size = (bytes: number) => formatSize(bytes, locale);
 
@@ -186,6 +194,31 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   /** Renommer : tout se fait dans le navigateur (une archive ZIP s'il y a plusieurs fichiers). */
   async function runLocal() {
     const started = window.performance.now();
+    if (tool.id === "ocr") {
+      try {
+        const { ocrFiles } = await import("@/lib/client/ocr");
+        const results = await ocrFiles(
+          items.map((i) => i.file),
+          String(options.lang ?? "eng"),
+          options.format === "txt" ? "txt" : "pdf",
+          ({ done, total }) => setStatus({ kind: "working", done, total }),
+        );
+        inputSizeRef.current = items.reduce((n, i) => n + i.file.size, 0);
+        if (results.length === 1) {
+          const blob = new Blob([results[0].data as BlobPart]);
+          deliver(URL.createObjectURL(blob), results[0].name, blob.size, 1, started);
+          return;
+        }
+        const { default: JSZip } = await import("jszip");
+        const zip = new JSZip();
+        for (const r of results) zip.file(r.name, r.data);
+        const blob = await zip.generateAsync({ type: "blob" });
+        deliver(URL.createObjectURL(blob), "pdff-ocr.zip", blob.size, results.length, started);
+      } catch {
+        setStatus({ kind: "error", message: w.errorConnection });
+      }
+      return;
+    }
     inputSizeRef.current = items.reduce((n, i) => n + i.file.size, 0);
     const names = renamedFiles(
       items.map((i) => i.file.name),
@@ -216,6 +249,9 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
       return;
     }
     const opts: OptionValues = { ...options, target };
+    if (tool.id === "signer" && options.date) {
+      opts.dateText = new Intl.DateTimeFormat(locale, { dateStyle: "short", numberingSystem: "latn" }).format(new Date());
+    }
     // Les choix de style deviennent le modèle attendu par le serveur
     for (const opt of tool.options) {
       const templates = optText(opt.name).templates;
@@ -362,7 +398,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
 
   // Annonce des étapes aux lecteurs d'écran (WCAG 4.1.3) : une phrase par étape, pas à chaque pourcentage
   const announcement =
-    status.kind === "uploading" || status.kind === "processing"
+    status.kind === "uploading" || status.kind === "processing" || status.kind === "working"
       ? w.processingShort
       : status.kind === "done"
         ? `${status.count > 1 ? fmt(w.doneMany, { s: secondsText(status.seconds, locale), n: status.count }) : fmt(w.done, { s: secondsText(status.seconds, locale) })} ${status.name}`
@@ -527,7 +563,14 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
           (status.kind === "done" ? (
             <ResultPreview key={status.url} url={status.url} name={status.name} w={w} />
           ) : (
-            <InputPreview toolId={tool.id} items={items} options={options} templates={optText("format").templates} w={w} />
+            <InputPreview
+              toolId={tool.id}
+              items={items}
+              options={options}
+              templates={optText("format").templates}
+              w={w}
+              onOption={(name, value) => setOptions((o) => ({ ...o, [name]: value }))}
+            />
           ))}
       </section>
 
@@ -699,6 +742,18 @@ function StatusPanel({
   locale: string;
 }) {
   if (status.kind === "idle") return null;
+  if (status.kind === "working") {
+    const pct = status.total ? Math.round((status.done / status.total) * 100) : 0;
+    const text = status.total ? fmt(w.ocrProgress, { n: Math.min(status.done + 1, status.total), total: status.total }) : w.ocrLoading;
+    return (
+      <div className="mt-4">
+        <div role="progressbar" aria-label={w.processingShort} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} className="h-2.5 overflow-hidden rounded-full bg-bg">
+          <div className="progress-stripes h-full rounded-full bg-brand transition-all" style={{ width: `${Math.max(pct, 4)}%` }} />
+        </div>
+        <p className="mt-2 text-xs text-muted">{text}</p>
+      </div>
+    );
+  }
   if (status.kind === "uploading" || status.kind === "processing") {
     const pct = status.kind === "uploading" ? Math.round(status.progress * 100) : 100;
     return (
@@ -796,6 +851,7 @@ function OptionField({
         </label>
       );
     case "select":
+      if (option.display === "language") return <LanguageSelect label={text.label} choices={option.choices} value={String(value)} onChange={onChange} />;
       if (option.display === "cards")
         return <CardChoice name={option.name} label={text.label} choices={option.choices} text={text} value={String(value)} onChange={onChange} />;
       if (option.display === "position")
@@ -832,6 +888,43 @@ function OptionField({
       );
     case "output":
       return null;
+    case "signature":
+      return <SignaturePad label={text.label} value={String(value ?? "")} onChange={onChange} w={messages.workspace} />;
+    case "areas": {
+      const n = parseAreaList(value).length;
+      return (
+        <div className="rounded-xl border border-dashed border-line px-3.5 py-3 text-sm">
+          <p className="font-semibold">{text.label}</p>
+          <p className="mt-0.5 text-xs text-muted">{n ? fmt(messages.workspace.areaCount, { n }) : messages.workspace.areaHint}</p>
+        </div>
+      );
+    }
+    case "multi": {
+      const selected = new Set(String(value ?? "").split(",").filter(Boolean));
+      return (
+        <fieldset>
+          <legend className="mb-2 block text-sm font-semibold">{text.label}</legend>
+          <div className="space-y-1.5">
+            {option.choices.map((c) => (
+              <label key={c} className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-bg px-3.5 py-2.5 text-sm has-[:checked]:border-brand has-[:checked]:bg-brand/10">
+                <input
+                  type="checkbox"
+                  checked={selected.has(c)}
+                  onChange={(e) => {
+                    const next = new Set(selected);
+                    if (e.target.checked) next.add(c);
+                    else next.delete(c);
+                    onChange([...next].join(","));
+                  }}
+                  className="h-5 w-5 accent-[var(--brand)]"
+                />
+                {text.choices?.[c] ?? c}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      );
+    }
     case "target":
       return <TargetPicker label={text.label} value={String(value ?? "")} targets={targets} hasFiles={hasFiles} messages={messages} onChange={onChange} />;
     default:
@@ -871,6 +964,40 @@ function OptionField({
 }
 
 const SWATCH: Record<string, string> = { gray: "#808080", red: "#cc1a1a", blue: "#1a40bf", black: "#000000" };
+
+/** Code de langue OCR (Tesseract) → code BCP 47, pour afficher le nom de la langue. */
+const OCR_LANGS: Record<string, string> = {
+  fra: "fr", eng: "en", spa: "es", por: "pt", deu: "de", ita: "it", nld: "nl", ara: "ar",
+  chi_sim: "zh-Hans", rus: "ru", pol: "pl", tur: "tr", vie: "vi", hin: "hi", jpn: "ja", kor: "ko",
+};
+
+/** Langue du document, nommée dans la langue de l'interface. */
+function LanguageSelect({ label, choices, value, onChange }: { label: string; choices: string[]; value: string; onChange: (v: string) => void }) {
+  const { locale } = useI18n();
+  const names = (code: string) => {
+    try {
+      return new Intl.DisplayNames([locale], { type: "language" }).of(OCR_LANGS[code] ?? code) ?? code;
+    } catch {
+      return code;
+    }
+  };
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-sm font-semibold">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-xl border border-line bg-bg px-3.5 py-2.5 text-base transition focus:border-brand focus:ring-4 focus:ring-brand/25 sm:text-sm"
+      >
+        {choices.map((c) => (
+          <option key={c} value={c}>
+            {names(c)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
 
 /** Format du résultat d'un outil PDF : PDF par défaut, ou Word, images, texte… */
 function OutputPicker({

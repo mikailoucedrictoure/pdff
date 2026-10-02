@@ -103,6 +103,18 @@ const zh: Messages = {
     previewFile: "文件 {n}",
     previewInvalid: "请检查页码：页码正确后预览会立即更新。",
     localOnly: "在您的浏览器中处理：文件不会上传。",
+    sigDraw: "手写",
+    sigType: "输入",
+    sigUpload: "上传",
+    sigClear: "清除",
+    sigTypePlaceholder: "您的姓名",
+    sigDrawHint: "用鼠标或手指在框内签名。",
+    sigUploadHint: "签名图片（PNG 或 JPG），最好是白色背景。",
+    areaHint: "在页面上拖出一个矩形即可遮盖该区域（照片、签名、印章等）。",
+    areaRemove: "移除此区域",
+    areaCount: "需遮盖的区域：{n}",
+    ocrLoading: "正在准备识别（下载语言模型）…",
+    ocrProgress: "正在识别文字：第 {n} 页，共 {total} 页…",
   },
   language: {
     button: "语言",
@@ -581,6 +593,104 @@ const zh: Messages = {
         clear: { label: "清除所有现有元数据" },
       },
     },
+    signer: {
+      name: "签名",
+      tagline: "在 PDF 上加上您的签名。",
+      seoTitle: "免费在线签署 PDF，无需注册",
+      seoDescription: "手写、输入或上传签名并放到 PDF 上，可附上日期。免费、无需注册，文件立即删除。",
+      intro: "用鼠标或手指手写签名（或输入姓名），选择页面和位置，然后点击“签名”。这是可视签名，相当于扫描的手写签名。",
+      options: {
+        signature: {
+          label: "您的签名",
+        },
+        where: {
+          label: "签在哪一页？",
+          choices: {
+            last: "最后一页",
+            first: "第一页",
+            all: "所有页面",
+            custom: "自己选择",
+          },
+        },
+        pages: {
+          label: "页面",
+          placeholder: "例如：2, 5",
+          help: "例如：1-3, 5, 8-end。",
+        },
+        position: {
+          label: "签在哪里？",
+          choices: {
+            "bottom-center": "底部居中",
+            "bottom-right": "底部靠右",
+            "bottom-left": "底部靠左",
+            "top-center": "顶部居中",
+            "top-right": "顶部靠右",
+            "top-left": "顶部靠左",
+          },
+        },
+        size: {
+          label: "大小",
+          choices: {
+            small: "小",
+            medium: "中",
+            large: "大",
+          },
+        },
+        date: {
+          label: "在签名下方加上今天的日期",
+        },
+      },
+    },
+    caviarder: {
+      name: "涂黑",
+      tagline: "从 PDF 中彻底删除敏感信息。",
+      seoTitle: "PDF 涂黑：永久遮盖敏感信息",
+      seoDescription: "真正删除 PDF 中的姓名、地址、号码和区域：被遮盖的内容会从文件中删除，而不只是被盖住。免费、无需注册。",
+      intro: "输入要删除的文字，勾选要自动识别的信息（邮箱、电话等），或在页面上画出矩形。pdff 会真正删除被遮盖的内容：无论复制文字还是移除黑框都无法恢复。",
+      options: {
+        terms: {
+          label: "要删除的文字",
+          placeholder: "例如：张三, 花园路 12 号",
+          help: "用逗号分隔。所有出现的地方都会被删除，不区分大小写。",
+        },
+        patterns: {
+          label: "自动识别",
+          choices: {
+            email: "电子邮箱",
+            phone: "电话号码",
+            iban: "IBAN 和账号",
+            date: "日期",
+            number: "数字（6 位及以上）",
+          },
+        },
+        areas: {
+          label: "需遮盖的区域",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR 文字识别",
+      tagline: "让扫描文档可以搜索和复制。",
+      seoTitle: "免费在线 OCR：扫描 PDF 转可搜索 PDF",
+      seoDescription: "把扫描的 PDF 或文档照片转换为可搜索、可复制文字的 PDF，或转换为文本文件。支持 16 种语言，文档不会上传。",
+      intro: "放入扫描件（PDF 或照片），选择语言，然后点击“OCR”。识别在您的设备上进行：文档不会上传。只需下载一次所选语言的模型（几 MB）。",
+      options: {
+        lang: {
+          label: "文档语言",
+        },
+        format: {
+          label: "结果",
+          choices: {
+            pdf: "可搜索的 PDF",
+            txt: "文本（.txt）",
+          },
+          hints: {
+            pdf: "同一份文档，文字可以搜索和复制。",
+            txt: "只有文字，方便在别处使用。",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "未知工具。",
@@ -620,6 +730,9 @@ const zh: Messages = {
     pageMissing: "第 {n} 页不存在（该文档共 {total} 页）。",
     rangeInvalid: "无效的范围：“{part}”。",
     rangeRequired: "请至少输入一个页码范围。",
+    signatureMissing: "请先创建签名：手写、输入姓名或上传图片。",
+    redactNothing: "请输入文字、勾选信息类型或画出需要遮盖的区域。",
+    redactNone: "没有可涂黑的内容：文档中没有找到所指定的文字或信息。",
   },
 };
 

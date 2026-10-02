@@ -72,3 +72,15 @@ describe("choix de la langue des pages fabriquées à l'avance", () => {
     expect(isSupported("outils")).toBe(false);
   });
 });
+
+describe("chemins de conversion depuis un PDF", () => {
+  it("PDF → texte : extraction directe (le détour par LibreOffice donne un fichier vide)", async () => {
+    const { findPath, ALL_ENGINES } = await import("@/lib/core/graph");
+    const all = new Set(ALL_ENGINES);
+    expect(findPath("pdf", "txt", all)?.map((s) => s.engine)).toEqual(["mupdf-text"]);
+    expect(findPath("pdf", "html", all)?.map((s) => s.engine)).toEqual(["mupdf-text"]);
+    // Word : jamais en passant par du texte brut
+    expect(findPath("pdf", "docx", all)?.map((s) => s.engine)).toEqual(["office-pdf-import"]);
+    expect(findPath("pdf", "doc", all)?.map((s) => s.engine)).toEqual(["office-pdf-import", "office"]);
+  });
+});

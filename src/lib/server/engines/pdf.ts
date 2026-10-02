@@ -400,3 +400,56 @@ export function pdfName(file: FileData, suffix: string): string {
   return `${baseName(file.name)}${suffix}.pdf`;
 }
 
+
+export interface SignatureOptions {
+  /** Image de la signature (PNG ou JPEG). */
+  image: Uint8Array;
+  position: Position;
+  /** Largeur de la signature, en fraction de la largeur de la page. */
+  width: number;
+  /** Texte écrit sous la signature (date…), vide = rien. */
+  caption: string;
+  pages: Set<number>;
+}
+
+/** Appose une signature (image) sur les pages choisies, à l'endroit choisi, même si la page est pivotée. */
+export async function placeSignature(doc: PDFDocument, o: SignatureOptions): Promise<Uint8Array> {
+  const isPng = o.image[0] === 0x89 && o.image[1] === 0x50;
+  const image = isPng ? await doc.embedPng(o.image) : await doc.embedJpg(o.image);
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const caption = o.caption ? winAnsiSafe(o.caption, font) : "";
+  doc.getPages().forEach((page, i) => {
+    if (!o.pages.has(i)) return;
+    const { w, h } = visualSize(page);
+    const width = w * o.width;
+    const height = (width * image.height) / image.width;
+    const captionSize = Math.max(7, Math.min(11, width / 14));
+    const captionSpace = caption ? captionSize * 1.6 : 0;
+    const margin = Math.min(w, h) * 0.06;
+    const [vertical, horizontal] = o.position.split("-");
+    const vx = horizontal === "left" ? margin : horizontal === "right" ? w - margin - width : (w - width) / 2;
+    const vy = vertical === "top" ? h - margin - height : margin + captionSpace;
+    const { box, rotation } = visibleBox(page);
+    const [x, y] = toPageSpace(box, rotation, vx, vy);
+    page.drawImage(image, { x, y, width, height, rotate: degrees(rotation) });
+    if (caption) {
+      const tw = font.widthOfTextAtSize(caption, captionSize);
+      drawVisual(page, caption, vx + (width - tw) / 2, vy - captionSpace + captionSize * 0.3, { size: captionSize, font, color: rgb(0.2, 0.2, 0.2) });
+    }
+  });
+  return save(doc);
+}
+
+/** Coordonnées « visuelles » (ce que voit l'utilisateur) → coordonnées réelles de la page pivotée. */
+function toPageSpace(box: { x: number; y: number; width: number; height: number }, rotation: number, vx: number, vy: number): [number, number] {
+  switch (rotation) {
+    case 90:
+      return [box.x + box.width - vy, box.y + vx];
+    case 180:
+      return [box.x + box.width - vx, box.y + box.height - vy];
+    case 270:
+      return [box.x + vy, box.y + box.height - vx];
+    default:
+      return [box.x + vx, box.y + vy];
+  }
+}

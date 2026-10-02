@@ -154,3 +154,93 @@ export function encrypt(file: FileData, o: EncryptOptions): Promise<Uint8Array> 
     `encrypt=aes-256,user-password=${o.userPassword},owner-password=${o.ownerPassword},permissions=${permissions},garbage=1`,
   );
 }
+
+/** Informations repérées automatiquement pour le caviardage. */
+export const REDACT_PATTERNS = {
+  email: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g,
+  phone: /(?:\+|00)?\d(?:[\s.\-()]*\d){7,14}/g,
+  iban: /\b[A-Z]{2}\d{2}(?:\s?[A-Z0-9]){10,30}\b/g,
+  date: /\b\d{1,4}[/.-]\d{1,2}[/.-]\d{1,4}\b/g,
+  number: /\b\d(?:[\s-]?\d){5,}\b/g,
+} as const;
+export type RedactPattern = keyof typeof REDACT_PATTERNS;
+
+export interface RedactOptions {
+  /** Mots ou expressions à faire disparaître (sans tenir compte des majuscules). */
+  terms: string[];
+  patterns: RedactPattern[];
+  /** Zones tracées par l'utilisateur, en fractions de la page affichée (0 à 1). */
+  areas: { file?: number; page: number; x: number; y: number; w: number; h: number }[];
+}
+
+/**
+ * Caviardage réel : le texte, les morceaux d'image et les tracés situés sous chaque zone sont
+ * supprimés du fichier (pas seulement recouverts), puis un rectangle noir est dessiné à leur place.
+ */
+export async function redact(file: FileData, o: RedactOptions): Promise<{ data: Uint8Array; count: number }> {
+  const { m, doc } = await open(file);
+  const pdf = doc.asPDF();
+  if (!pdf) throw new UserError("notPdf", { name: file.name });
+  const total = pdf.countPages();
+  assertPageLimit(total);
+  let count = 0;
+  for (let i = 0; i < total; i++) {
+    const page = pdf.loadPage(i) as MuPDF.PDFPage;
+    const zones: MuPDF.Quad[][] = [];
+    // Mots demandés (sans tenir compte des majuscules ni des espaces multiples) et informations repérées
+    const regexes = [
+      ...o.terms.map((t) => new RegExp(escapeRegExp(t).replace(/\s+/g, "\\s+"), "giu")),
+      ...o.patterns.map((p) => new RegExp(REDACT_PATTERNS[p])),
+    ];
+    if (regexes.length) zones.push(...matchQuads(page, regexes));
+    const [x0, y0, x1, y1] = page.getBounds();
+    for (const a of o.areas.filter((a) => a.page === i)) {
+      const rx0 = x0 + a.x * (x1 - x0);
+      const ry0 = y0 + a.y * (y1 - y0);
+      const rx1 = rx0 + a.w * (x1 - x0);
+      const ry1 = ry0 + a.h * (y1 - y0);
+      zones.push([[rx0, ry0, rx1, ry0, rx0, ry1, rx1, ry1]]);
+    }
+    for (const quads of zones) {
+      const annot = page.createAnnotation("Redact");
+      annot.setQuadPoints(quads);
+      count++;
+    }
+    if (zones.length) page.applyRedactions(true, m.PDFPage.REDACT_IMAGE_PIXELS, m.PDFPage.REDACT_LINE_ART_REMOVE_IF_COVERED, m.PDFPage.REDACT_TEXT_REMOVE);
+    page.destroy();
+  }
+  const data = new Uint8Array(pdf.saveToBuffer("garbage=4,compress").asUint8Array());
+  doc.destroy();
+  return { data, count };
+}
+
+/** Un texte cherché tel quel (les caractères spéciaux des expressions régulières sont neutralisés). */
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Repère des mots, adresses, numéros… dans le texte d'une page et renvoie leurs contours. */
+function matchQuads(page: MuPDF.PDFPage, regexes: RegExp[]): MuPDF.Quad[][] {
+  const stext = page.toStructuredText("preserve-whitespace");
+  let text = "";
+  const quads: (MuPDF.Quad | null)[] = [];
+  stext.walk({
+    onChar(c, _origin, _font, _size, quad) {
+      text += c;
+      for (let k = 0; k < c.length; k++) quads.push(quad);
+    },
+    endLine() {
+      text += "\n";
+      quads.push(null);
+    },
+  });
+  stext.destroy();
+  const out: MuPDF.Quad[][] = [];
+  for (const re of regexes) {
+    for (const match of text.matchAll(re)) {
+      const hit = quads.slice(match.index, match.index + match[0].length).filter((q): q is MuPDF.Quad => !!q);
+      if (hit.length) out.push(hit);
+    }
+  }
+  return out;
+}

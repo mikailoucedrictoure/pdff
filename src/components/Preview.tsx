@@ -15,8 +15,29 @@ type WorkspaceText = ClientMessages["workspace"];
 /** Pages affichées au plus par fichier (les suivantes sont résumées par « + N pages »). */
 const MAX_PAGES = 24;
 
+/** Zone de caviardage : fichier, page (à partir de 0) et rectangle en fractions de la page. */
+export interface Area {
+  file: number;
+  page: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export function parseAreaList(raw: unknown): Area[] {
+  try {
+    const list = JSON.parse(String(raw || "[]"));
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
 interface Tile {
   key: string;
+  /** Fichier d'origine (rang dans la liste). */
+  file?: number;
   src?: string;
   /** Numéro de la page d'origine (1 = première). */
   page: number;
@@ -24,6 +45,7 @@ interface Tile {
   rotate?: number;
   number?: string;
   watermark?: boolean;
+  signature?: boolean;
 }
 
 interface Group {
@@ -63,15 +85,15 @@ function useThumbnails(files: { id: string; file: File }[], password: string) {
   return thumbs;
 }
 
-function pagesOf(thumbs: Thumbs, list: number[], extra: (index: number, position: number) => Partial<Tile> = () => ({})): Tile[] {
-  return list.map((index, position) => ({ key: `${index}-${position}`, src: thumbs.images[index], page: index + 1, ...extra(index, position) }));
+function pagesOf(thumbs: Thumbs, list: number[], extra: (index: number, position: number) => Partial<Tile> = () => ({}), file = 0): Tile[] {
+  return list.map((index, position) => ({ key: `${file}-${index}-${position}`, file, src: thumbs.images[index], page: index + 1, ...extra(index, position) }));
 }
 
 /** Ce que l'outil va produire, page par page, à partir des réglages en cours. */
 function buildGroups(toolId: string, options: OptionValues, files: { name: string; thumbs: Thumbs }[], w: WorkspaceText, templates?: Record<string, string>): Group[] {
   const groups: Group[] = [];
   const multi = files.length > 1;
-  for (const { name, thumbs } of files) {
+  for (const [fileIndex, { name, thumbs }] of files.entries()) {
     const total = thumbs.pages;
     const all = Array.from({ length: total }, (_, i) => i);
     const cap = (tiles: Tile[], title?: string): Group => ({ title, tiles: tiles.slice(0, MAX_PAGES), more: Math.max(0, tiles.length - MAX_PAGES) });
@@ -120,6 +142,15 @@ function buildGroups(toolId: string, options: OptionValues, files: { name: strin
         );
         continue;
       }
+      case "signer": {
+        const where = String(options.where ?? "last");
+        const selected = where === "all" ? new Set(all) : where === "first" ? new Set([0]) : where === "custom" ? parsePageSet(pages, total) : new Set([total - 1]);
+        groups.push(cap(pagesOf(thumbs, all, (i) => ({ signature: selected.has(i) && !!options.signature })), multi ? name : undefined));
+        continue;
+      }
+      case "caviarder":
+        groups.push(cap(pagesOf(thumbs, all, () => ({}), fileIndex), multi ? name : undefined));
+        continue;
       case "filigrane": {
         const selected = parsePageSet(pages, total);
         groups.push(cap(pagesOf(thumbs, all, (i) => ({ watermark: selected.has(i) })), multi ? name : undefined));
@@ -133,7 +164,40 @@ function buildGroups(toolId: string, options: OptionValues, files: { name: strin
 }
 
 /** Une page miniature, avec l'effet de l'outil dessiné par-dessus. */
-function PageTile({ tile, options }: { tile: Tile; options: OptionValues }) {
+const SIGNATURE_WIDTH: Record<string, number> = { small: 0.18, medium: 0.26, large: 0.36 };
+
+function PageTile({ tile, options, areas, onAreas, w }: { tile: Tile; options: OptionValues; areas?: Area[]; onAreas?: (next: Area[]) => void; w?: WorkspaceText }) {
+  const [draft, setDraft] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
+  const editable = !!onAreas && !!areas;
+  const here = editable ? areas.filter((a) => a.file === (tile.file ?? 0) && a.page === tile.page - 1) : [];
+  const frac = (e: React.PointerEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) };
+  };
+  const pointer = editable
+    ? {
+        onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
+          if ((e.target as HTMLElement).closest("button")) return;
+          e.currentTarget.setPointerCapture(e.pointerId);
+          const p = frac(e);
+          setDraft({ x0: p.x, y0: p.y, x1: p.x, y1: p.y });
+        },
+        onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
+          if (!draft) return;
+          const p = frac(e);
+          setDraft({ ...draft, x1: p.x, y1: p.y });
+        },
+        onPointerUp: () => {
+          if (!draft) return;
+          const x = Math.min(draft.x0, draft.x1), y = Math.min(draft.y0, draft.y1);
+          const width = Math.abs(draft.x1 - draft.x0), height = Math.abs(draft.y1 - draft.y0);
+          setDraft(null);
+          if (width > 0.01 && height > 0.005) onAreas!([...areas!, { file: tile.file ?? 0, page: tile.page - 1, x, y, w: width, h: height }]);
+        },
+      }
+    : {};
+  const sigWidth = (SIGNATURE_WIDTH[String(options.size)] ?? 0.26) * 100;
+  const [sv, sh] = String(options.position ?? "bottom-right").split("-");
   const size = Number(options.size) || 10;
   const [vertical, horizontal] = String(options.position ?? "bottom-center").split("-");
   const marginX = (Math.max(18, size * 2) / 595) * 100;
@@ -147,8 +211,9 @@ function PageTile({ tile, options }: { tile: Tile; options: OptionValues }) {
     <figure className="flex flex-col items-center gap-1">
       <div className="grid aspect-[3/4] w-full place-items-center">
         <div
-          className={`relative w-full overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-black/10 transition-transform duration-300 ${tile.faded ? "opacity-25 grayscale" : ""}`}
+          className={`relative w-full overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-black/10 transition-transform duration-300 ${tile.faded ? "opacity-25 grayscale" : ""} ${editable ? "cursor-crosshair touch-none select-none" : ""}`}
           style={{ containerType: "inline-size", transform: tile.rotate ? `rotate(${tile.rotate}deg) scale(${tile.rotate % 180 ? 0.75 : 1})` : undefined }}
+          {...pointer}
         >
           {tile.src ? (
             // eslint-disable-next-line @next/next/no-img-element -- vignette générée dans le navigateur
@@ -182,6 +247,38 @@ function PageTile({ tile, options }: { tile: Tile; options: OptionValues }) {
               {text}
             </span>
           )}
+          {tile.signature && (
+            // eslint-disable-next-line @next/next/no-img-element -- signature créée dans le navigateur
+            <img
+              src={String(options.signature)}
+              alt=""
+              className="absolute"
+              style={{
+                width: `${sigWidth}%`,
+                [sv === "top" ? "top" : "bottom"]: "5%",
+                ...(sh === "left" ? { left: "6%" } : sh === "right" ? { right: "6%" } : { left: `${(100 - sigWidth) / 2}%` }),
+              }}
+            />
+          )}
+          {here.map((a, i) => (
+            <span key={i} className="absolute bg-black" style={{ left: `${a.x * 100}%`, top: `${a.y * 100}%`, width: `${a.w * 100}%`, height: `${a.h * 100}%` }}>
+              <button
+                type="button"
+                aria-label={w?.areaRemove}
+                title={w?.areaRemove}
+                onClick={() => onAreas!(areas!.filter((x) => x !== a))}
+                className="absolute -top-2 -right-2 grid h-5 w-5 place-items-center rounded-full bg-danger text-[10px] font-bold text-white shadow"
+              >
+                ✕
+              </button>
+            </span>
+          ))}
+          {draft && (
+            <span
+              className="absolute border-2 border-danger bg-black/60"
+              style={{ left: `${Math.min(draft.x0, draft.x1) * 100}%`, top: `${Math.min(draft.y0, draft.y1) * 100}%`, width: `${Math.abs(draft.x1 - draft.x0) * 100}%`, height: `${Math.abs(draft.y1 - draft.y0) * 100}%` }}
+            />
+          )}
           {tile.faded && (
             <span aria-hidden="true" className="absolute inset-0 grid place-items-center text-3xl font-bold text-danger">
               ✕
@@ -194,7 +291,7 @@ function PageTile({ tile, options }: { tile: Tile; options: OptionValues }) {
   );
 }
 
-function TileGrid({ groups, options, w }: { groups: Group[]; options: OptionValues; w: WorkspaceText }) {
+function TileGrid({ groups, options, w, areas, onAreas }: { groups: Group[]; options: OptionValues; w: WorkspaceText; areas?: Area[]; onAreas?: (next: Area[]) => void }) {
   // Plusieurs fichiers produits (Diviser) : un cadre par fichier, côte à côte
   const split = groups.length > 1 && groups.every((g) => g.title);
   return (
@@ -203,9 +300,9 @@ function TileGrid({ groups, options, w }: { groups: Group[]; options: OptionValu
         <div key={i} className={split ? "rounded-xl border border-line bg-bg p-2.5" : undefined}>
           {g.title && <p className="mb-2 max-w-60 truncate text-xs font-semibold text-muted" dir="auto">{g.title}</p>}
           {g.tiles.length > 0 && (
-            <div className={split ? "flex flex-wrap gap-2 [&>figure]:w-20" : "grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3"}>
+            <div className={split ? "flex flex-wrap gap-2 [&>figure]:w-20" : `grid gap-3 ${onAreas ? "grid-cols-[repeat(auto-fill,minmax(11rem,1fr))]" : "grid-cols-[repeat(auto-fill,minmax(7rem,1fr))]"}`}>
               {g.tiles.map((t) => (
-                <PageTile key={t.key} tile={t} options={options} />
+                <PageTile key={t.key} tile={t} options={options} areas={areas} onAreas={onAreas} w={w} />
               ))}
               {g.more > 0 && <p className="grid aspect-[3/4] place-items-center rounded-md border border-dashed border-line text-xs font-semibold text-muted">{fmt(w.previewMore, { n: g.more })}</p>}
             </div>
@@ -223,12 +320,15 @@ export function InputPreview({
   options,
   templates,
   w,
+  onOption,
 }: {
   toolId: string;
   items: { id: string; file: File }[];
   options: OptionValues;
   templates?: Record<string, string>;
   w: WorkspaceText;
+  /** Modifie un réglage depuis l'aperçu (zones de caviardage tracées sur les pages). */
+  onOption?: (name: string, value: string) => void;
 }) {
   const password = toolId === "deverrouiller" ? String(options.password ?? "") : "";
   const thumbs = useThumbnails(items, password);
@@ -273,6 +373,11 @@ export function InputPreview({
     <Panel title={w.previewTitle}>
       {invalid ? (
         <p className="text-sm text-warn-ink">{w.previewInvalid}</p>
+      ) : toolId === "caviarder" && onOption ? (
+        <>
+          <p className="mb-3 text-sm text-muted">{w.areaHint}</p>
+          <TileGrid groups={groups} options={options} w={w} areas={parseAreaList(options.areas)} onAreas={(next) => onOption("areas", JSON.stringify(next))} />
+        </>
       ) : (
         <TileGrid groups={groups} options={options} w={w} />
       )}

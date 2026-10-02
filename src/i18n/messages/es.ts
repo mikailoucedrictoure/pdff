@@ -103,6 +103,18 @@ const es: Messages = {
     previewFile: "Archivo {n}",
     previewInvalid: "Revisa los números de página: la vista previa se actualiza en cuanto sean correctos.",
     localOnly: "Procesado en tu navegador: tus archivos no se envían.",
+    sigDraw: "Dibujar",
+    sigType: "Escribir",
+    sigUpload: "Importar",
+    sigClear: "Borrar",
+    sigTypePlaceholder: "Tu nombre y apellido",
+    sigDrawHint: "Firma dentro del recuadro con el ratón o el dedo.",
+    sigUploadHint: "Imagen de tu firma (PNG o JPG), mejor sobre fondo blanco.",
+    areaHint: "Dibuja un rectángulo en una página para ocultar una zona (foto, firma, sello…).",
+    areaRemove: "Quitar esta zona",
+    areaCount: "Zonas a ocultar: {n}",
+    ocrLoading: "Preparando la lectura (descarga del modelo de idioma)…",
+    ocrProgress: "Leyendo el texto: página {n} de {total}…",
   },
   language: {
     button: "Idioma",
@@ -611,6 +623,104 @@ const es: Messages = {
         clear: { label: "Borrar todos los metadatos existentes" },
       },
     },
+    signer: {
+      name: "Firmar",
+      tagline: "Poner tu firma en un PDF.",
+      seoTitle: "Firmar un PDF en línea gratis, sin registro",
+      seoDescription: "Dibuja, escribe o importa tu firma y colócala en tu PDF, con la fecha si hace falta. Gratis, sin registro, archivos eliminados al momento.",
+      intro: "Dibuja tu firma con el ratón o el dedo (o escribe tu nombre), elige la página y el lugar, y haz clic en Firmar. Es una firma visual, como una firma manuscrita escaneada.",
+      options: {
+        signature: {
+          label: "Tu firma",
+        },
+        where: {
+          label: "¿En qué página?",
+          choices: {
+            last: "Última página",
+            first: "Primera página",
+            all: "Todas las páginas",
+            custom: "Yo elijo",
+          },
+        },
+        pages: {
+          label: "Páginas",
+          placeholder: "ej.: 2, 5",
+          help: "Ej.: 1-3, 5, 8-final.",
+        },
+        position: {
+          label: "¿Dónde firmar?",
+          choices: {
+            "bottom-center": "Abajo, en el centro",
+            "bottom-right": "Abajo, a la derecha",
+            "bottom-left": "Abajo, a la izquierda",
+            "top-center": "Arriba, en el centro",
+            "top-right": "Arriba, a la derecha",
+            "top-left": "Arriba, a la izquierda",
+          },
+        },
+        size: {
+          label: "Tamaño",
+          choices: {
+            small: "Pequeña",
+            medium: "Mediana",
+            large: "Grande",
+          },
+        },
+        date: {
+          label: "Añadir la fecha de hoy debajo de la firma",
+        },
+      },
+    },
+    caviarder: {
+      name: "Tachar",
+      tagline: "Borrar para siempre información sensible de un PDF.",
+      seoTitle: "Tachar un PDF: ocultar información de forma definitiva",
+      seoDescription: "Elimina de verdad nombres, direcciones, números y zonas de un PDF: el contenido oculto se borra del archivo, no solo se tapa. Gratis, sin registro.",
+      intro: "Escribe las palabras que deben desaparecer, marca la información a detectar (correos, teléfonos…) o dibuja rectángulos en las páginas. pdff borra de verdad el contenido oculto: no se puede recuperar copiando el texto ni quitando el recuadro negro.",
+      options: {
+        terms: {
+          label: "Palabras a eliminar",
+          placeholder: "ej.: García, Calle Mayor 12",
+          help: "Sepáralas con comas. Se eliminan todas las apariciones, con o sin mayúsculas.",
+        },
+        patterns: {
+          label: "Detectar automáticamente",
+          choices: {
+            email: "Correos electrónicos",
+            phone: "Números de teléfono",
+            iban: "IBAN y números de cuenta",
+            date: "Fechas",
+            number: "Números (6 cifras o más)",
+          },
+        },
+        areas: {
+          label: "Zonas a ocultar",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR",
+      tagline: "Hacer que un documento escaneado se pueda buscar y copiar.",
+      seoTitle: "OCR en línea gratis: PDF escaneado a PDF con búsqueda",
+      seoDescription: "Convierte un PDF escaneado o una foto de un documento en un PDF donde se puede buscar y copiar el texto, o en un archivo de texto. 16 idiomas, sin enviar el documento.",
+      intro: "Deja un escaneo (PDF o foto), elige el idioma y haz clic en OCR. La lectura se hace en tu dispositivo: tu documento no se envía. Solo se descarga una vez el modelo del idioma elegido (unos pocos MB).",
+      options: {
+        lang: {
+          label: "Idioma del documento",
+        },
+        format: {
+          label: "Resultado",
+          choices: {
+            pdf: "PDF con búsqueda",
+            txt: "Texto (.txt)",
+          },
+          hints: {
+            pdf: "El mismo documento, con texto que se puede buscar y copiar.",
+            txt: "Solo el texto, para reutilizarlo.",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Herramienta desconocida.",
@@ -650,6 +760,9 @@ const es: Messages = {
     pageMissing: "La página {n} no existe (el documento tiene {total} páginas).",
     rangeInvalid: "Rango no válido: «{part}».",
     rangeRequired: "Indica al menos un rango de páginas.",
+    signatureMissing: "Crea primero tu firma: dibújala, escribe tu nombre o importa una imagen.",
+    redactNothing: "Indica palabras, marca un tipo de información o dibuja una zona a ocultar.",
+    redactNone: "Nada que tachar: no se encontró ninguna de las palabras o datos indicados en el documento.",
   },
 };
 

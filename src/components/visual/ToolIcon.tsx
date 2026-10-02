@@ -117,6 +117,48 @@ const GLYPHS: Record<string, Glyph> = {
     ),
   },
 
+  // Un paraphe tracé sur la page, la plume posée à côté.
+  signer: {
+    base: (
+      <>
+        <path d={PAGE} />
+        <path d={FOLD} />
+        <path d="M7 10.5h6M6.8 16c1.1-1.8 2.1-1.8 2.5 0s1.4 1.8 2.6-.3" />
+      </>
+    ),
+    cut: <path d="M13.5 21.5l.9-3.4 5.9-5.9 2.5 2.5-5.9 5.9z" />,
+    top: (
+      <>
+        <path d="M13.5 21.5l.9-3.4 5.9-5.9 2.5 2.5-5.9 5.9z" {...T} />
+        <path d="M18.6 13.9l2.5 2.5" />
+      </>
+    ),
+  },
+
+  // Des lignes du texte remplacées par des bandes noires.
+  caviarder: {
+    base: (
+      <>
+        <path d={PAGE} />
+        <path d={FOLD} />
+        <path d="M7 10h6" />
+        <rect x="7" y="12.6" width="7.5" height="2.4" rx="0.6" fill="currentColor" />
+        <rect x="7" y="16.4" width="4.5" height="2.4" rx="0.6" fill="currentColor" />
+      </>
+    ),
+  },
+
+  // Le cadre du scanner autour d'un texte qui devient lisible.
+  ocr: {
+    base: (
+      <>
+        <path d="M3 7.5v-3A1.5 1.5 0 0 1 4.5 3h3M16.5 3h3A1.5 1.5 0 0 1 21 4.5v3M21 16.5v3a1.5 1.5 0 0 1-1.5 1.5h-3M7.5 21h-3A1.5 1.5 0 0 1 3 19.5v-3" />
+        <rect x="6.5" y="6.5" width="11" height="11" rx="1.5" {...T} />
+        <path d="M9 9.5h6M12 9.5v5.5" />
+      </>
+    ),
+  },
+
   // La page bascule, son ancienne position reste en pointillés.
   pivoter: {
     base: (

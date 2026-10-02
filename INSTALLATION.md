@@ -15,6 +15,7 @@ LibreOffice pour Word, Excel et PowerPoint.
 | Traduction en ligne, stockage externe | aucun : les 160 langues sont déjà dans l'image |
 | Référencement | le site interne est masqué aux moteurs de recherche |
 | Données | traitées en mémoire et dans `/tmp`, supprimées aussitôt |
+| OCR (reconnaissance de texte) | se fait dans le navigateur ; le modèle de langue (quelques Mo) est téléchargé une fois depuis cdn.jsdelivr.net. Sans accès à Internet, cet outil est le seul indisponible |
 
 ## Ce qu'il faut
 
@@ -129,7 +130,7 @@ even with no Internet access.
 
 Everything ships in a single container: the website, all PDF and image tools, and LibreOffice
 for Word, Excel and PowerPoint. The self-hosted image has no analytics, no online translation,
-no external storage, and hides itself from search engines.
+no external storage, and hides itself from search engines. OCR runs in the browser and downloads its language model (a few MB) once from cdn.jsdelivr.net: on an air-gapped network, it is the only tool unavailable.
 
 ## Requirements
 

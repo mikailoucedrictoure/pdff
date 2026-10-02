@@ -122,3 +122,50 @@ describe("format du résultat et renommage", () => {
     expect(out.data).toBe(file.data);
   });
 });
+
+describe("signer et caviarder", () => {
+  const SIGNATURE = `data:image/png;base64,${Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAADjAO9DAAAAEUlEQVR4nGNgYGD4z8DAwMAAAAwAAZvWmQAAAAAASUVORK5CYII=",
+    "base64",
+  ).toString("base64")}`;
+
+  it("signer : la signature est posée sur la dernière page", async () => {
+    const [out] = await runTool("signer", [await makePdf("doc.pdf", ["1", "2"])], { signature: SIGNATURE, where: "last", position: "bottom-right", size: "medium", date: true, dateText: "02/10/2026" });
+    expect(isPdf(out)).toBe(true);
+    expect(await pageCount(out)).toBe(2);
+  });
+
+  it("signer : refuse sans signature", async () => {
+    await expect(runTool("signer", [await makePdf("doc.pdf", ["1"])], { signature: "", where: "last" })).rejects.toMatchObject({ key: "signatureMissing" });
+  });
+
+  it("caviarder : le texte disparaît vraiment du fichier", async () => {
+    const [out] = await runTool("caviarder", [await makePdf("doc.pdf", ["Jean Dupont", "jean.dupont@ex.fr"])], { terms: "DUPONT", patterns: "email", areas: "" });
+    const { extractText } = await import("@/lib/server/engines/mupdf");
+    const text = new TextDecoder().decode((await extractText(out, "txt")).data);
+    expect(text).not.toMatch(/Dupont/i);
+    expect(text).not.toContain("@");
+    expect(text).toContain("Jean");
+  });
+
+  it("caviarder : une zone tracée efface tout ce qu'elle couvre", async () => {
+    const [out] = await runTool("caviarder", [await makePdf("doc.pdf", ["Secret"])], { areas: JSON.stringify([{ page: 0, x: 0, y: 0, w: 1, h: 1 }]) });
+    const { extractText } = await import("@/lib/server/engines/mupdf");
+    expect(new TextDecoder().decode((await extractText(out, "txt")).data)).not.toContain("Secret");
+  });
+
+  it("caviarder : message clair si rien n'est trouvé ou demandé", async () => {
+    await expect(runTool("caviarder", [await makePdf("doc.pdf", ["Bonjour"])], { terms: "Introuvable" })).rejects.toMatchObject({ key: "redactNone" });
+    await expect(runTool("caviarder", [await makePdf("doc.pdf", ["Bonjour"])], {})).rejects.toMatchObject({ key: "redactNothing" });
+  });
+});
+
+describe("caviarder : textes particuliers", () => {
+  it("caractères spéciaux et espaces multiples", async () => {
+    const [out] = await runTool("caviarder", [await makePdf("doc.pdf", ["Dossier (A+B) 12$"])], { terms: "(a+b)  12$" });
+    const { extractText } = await import("@/lib/server/engines/mupdf");
+    const text = new TextDecoder().decode((await extractText(out, "txt")).data);
+    expect(text).toContain("Dossier");
+    expect(text).not.toContain("(A+B)");
+  });
+});

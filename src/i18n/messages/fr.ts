@@ -117,6 +117,18 @@ const fr = {
     previewFile: "Fichier {n}",
     previewInvalid: "Vérifiez les numéros de pages : l'aperçu se met à jour dès qu'ils sont corrects.",
     localOnly: "Traité dans votre navigateur : vos fichiers ne sont pas envoyés.",
+    sigDraw: "Dessiner",
+    sigType: "Écrire",
+    sigUpload: "Importer",
+    sigClear: "Effacer",
+    sigTypePlaceholder: "Votre nom et prénom",
+    sigDrawHint: "Signez dans le cadre avec la souris ou le doigt.",
+    sigUploadHint: "Image de votre signature (PNG ou JPG), de préférence sur fond blanc.",
+    areaHint: "Tracez un rectangle sur une page pour masquer une zone (photo, signature, tampon…).",
+    areaRemove: "Retirer cette zone",
+    areaCount: "Zones à masquer : {n}",
+    ocrLoading: "Préparation de la lecture (téléchargement du modèle de langue)…",
+    ocrProgress: "Lecture du texte : page {n} sur {total}…",
   },
   language: {
     button: "Langue",
@@ -632,6 +644,104 @@ const fr = {
         clear: { label: "Effacer toutes les métadonnées existantes" },
       },
     },
+    signer: {
+      name: "Signer",
+      tagline: "Apposer votre signature sur un PDF.",
+      seoTitle: "Signer un PDF en ligne gratuitement, sans inscription",
+      seoDescription: "Dessinez, écrivez ou importez votre signature et placez-la sur votre PDF, avec la date si besoin. Gratuit, sans inscription, fichiers supprimés aussitôt.",
+      intro: "Dessinez votre signature avec la souris ou le doigt (ou écrivez votre nom), choisissez la page et l'endroit, puis cliquez sur Signer. C'est une signature visuelle, comme une signature manuscrite scannée.",
+      options: {
+        signature: {
+          label: "Votre signature",
+        },
+        where: {
+          label: "Sur quelle page ?",
+          choices: {
+            last: "Dernière page",
+            first: "Première page",
+            all: "Toutes les pages",
+            custom: "Je choisis",
+          },
+        },
+        pages: {
+          label: "Pages",
+          placeholder: "ex. : 2, 5",
+          help: "Ex. : 1-3, 5, 8-fin.",
+        },
+        position: {
+          label: "Où signer ?",
+          choices: {
+            "bottom-center": "En bas, au milieu",
+            "bottom-right": "En bas, à droite",
+            "bottom-left": "En bas, à gauche",
+            "top-center": "En haut, au milieu",
+            "top-right": "En haut, à droite",
+            "top-left": "En haut, à gauche",
+          },
+        },
+        size: {
+          label: "Taille",
+          choices: {
+            small: "Petite",
+            medium: "Moyenne",
+            large: "Grande",
+          },
+        },
+        date: {
+          label: "Ajouter la date du jour sous la signature",
+        },
+      },
+    },
+    caviarder: {
+      name: "Caviarder",
+      tagline: "Effacer pour de bon des informations sensibles d'un PDF.",
+      seoTitle: "Caviarder un PDF : masquer définitivement des informations",
+      seoDescription: "Supprimez vraiment noms, adresses, numéros et zones d'un PDF : le contenu caché est retiré du fichier, pas seulement recouvert. Gratuit, sans inscription.",
+      intro: "Écrivez les mots à faire disparaître, cochez les informations à repérer (courriels, téléphones…) ou tracez des rectangles sur les pages. pdff supprime vraiment le contenu caché : impossible de le retrouver en copiant le texte ou en retirant le rectangle noir.",
+      options: {
+        terms: {
+          label: "Mots à faire disparaître",
+          placeholder: "ex. : Dupont, 12 rue des Lilas",
+          help: "Séparez par une virgule. Toutes les fois où ils apparaissent sont supprimées, majuscules ou non.",
+        },
+        patterns: {
+          label: "Repérer automatiquement",
+          choices: {
+            email: "Adresses courriel",
+            phone: "Numéros de téléphone",
+            iban: "IBAN et numéros de compte",
+            date: "Dates",
+            number: "Numéros (6 chiffres ou plus)",
+          },
+        },
+        areas: {
+          label: "Zones à masquer",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR",
+      tagline: "Rendre un document scanné cherchable et copiable.",
+      seoTitle: "OCR en ligne gratuit : PDF scanné en PDF cherchable",
+      seoDescription: "Transformez un PDF scanné ou une photo de document en PDF où l'on peut chercher et copier le texte, ou en fichier texte. 16 langues, sans envoi du document.",
+      intro: "Déposez un scan (PDF ou photo), choisissez la langue, puis cliquez sur OCR. La lecture se fait sur votre appareil : votre document n'est pas envoyé. Seul le modèle de la langue choisie (quelques Mo) est téléchargé une fois.",
+      options: {
+        lang: {
+          label: "Langue du document",
+        },
+        format: {
+          label: "Résultat",
+          choices: {
+            pdf: "PDF cherchable",
+            txt: "Texte (.txt)",
+          },
+          hints: {
+            pdf: "Le même document, où l'on peut chercher et copier le texte.",
+            txt: "Seulement le texte, pour le réutiliser ailleurs.",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Outil inconnu.",
@@ -671,6 +781,9 @@ const fr = {
     pageMissing: "La page {n} n'existe pas (le document compte {total} pages).",
     rangeInvalid: "Plage invalide : « {part} ».",
     rangeRequired: "Indiquez au moins une plage de pages.",
+    signatureMissing: "Créez d'abord votre signature : dessinez-la, écrivez votre nom ou importez une image.",
+    redactNothing: "Indiquez des mots, cochez un type d'information ou tracez une zone à masquer.",
+    redactNone: "Rien à caviarder : aucun des mots ou informations demandés n'a été trouvé dans le document.",
   },
 };
 

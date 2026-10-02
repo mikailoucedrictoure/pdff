@@ -20,7 +20,7 @@ const IMAGE_EXTS = new Set(["jpg", "png", "webp", "gif", "avif", "bmp", "svg"]);
 type PdfJs = typeof import("pdfjs-dist");
 let loader: Promise<PdfJs> | null = null;
 
-function loadPdfJs(): Promise<PdfJs> {
+export function loadPdfJs(): Promise<PdfJs> {
   loader ??= import("pdfjs-dist").then((pdfjs) => {
     // Le décodage tourne dans un fil séparé : la page reste fluide pendant le rendu
     pdfjs.GlobalWorkerOptions.workerPort = new Worker(new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url), { type: "module" });

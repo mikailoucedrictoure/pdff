@@ -16,7 +16,7 @@ export interface OptionUi {
    * Liste de choix affichée en grandes cartes cliquables (cards), sur une page miniature
    * (position) ou en pastilles de couleur (swatches) plutôt qu'en liste déroulante.
    */
-  display?: "cards" | "position" | "swatches";
+  display?: "cards" | "position" | "swatches" | "language";
 }
 
 export type ToolOption = OptionUi &
@@ -30,6 +30,12 @@ export type ToolOption = OptionUi &
     | { type: "target"; name: string }
     /** Format du résultat d'un outil PDF : PDF par défaut, ou tout format atteignable depuis un PDF. */
     | { type: "output"; name: string }
+    /** Signature dessinée, écrite ou importée (image PNG en data URL). */
+    | { type: "signature"; name: string }
+    /** Zones tracées sur les pages (JSON : [{ page, x, y, w, h }], fractions de la page). */
+    | { type: "areas"; name: string }
+    /** Plusieurs cases à cocher parmi des choix (valeurs séparées par des virgules). */
+    | { type: "multi"; name: string; default: string; choices: string[] }
   );
 
 export type ToolCategory = "organiser" | "convertir" | "modifier" | "securite";
@@ -48,6 +54,9 @@ export const TOOL_IDS = [
   "proteger",
   "deverrouiller",
   "metadonnees",
+  "signer",
+  "caviarder",
+  "ocr",
 ] as const;
 
 export type ToolId = (typeof TOOL_IDS)[number];
@@ -55,8 +64,8 @@ export type ToolId = (typeof TOOL_IDS)[number];
 export interface ToolMeta {
   id: ToolId;
   category: ToolCategory;
-  /** "pdf" : uniquement des PDF. "any" : tout format convertible. "all" : n'importe quel fichier. */
-  accepts: "pdf" | "any" | "all";
+  /** "pdf" : uniquement des PDF. "any" : tout format convertible. "all" : n'importe quel fichier. "scan" : PDF et images. */
+  accepts: "pdf" | "any" | "all" | "scan";
   /** Traité entièrement dans le navigateur : le fichier n'est jamais envoyé. */
   local?: boolean;
   minFiles: number;
@@ -186,6 +195,54 @@ export const TOOLS: ToolMeta[] = [
     ],
   },
   {
+    id: "signer",
+    category: "securite",
+    accepts: "pdf",
+    minFiles: 1,
+    options: [
+      { type: "signature", name: "signature" },
+      { type: "select", name: "where", default: "last", choices: ["last", "first", "all", "custom"], display: "cards" },
+      { type: "text", name: "pages", default: "", showIf: { name: "where", in: ["custom"] } },
+      {
+        type: "select",
+        name: "position",
+        default: "bottom-right",
+        choices: ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"],
+        display: "position",
+      },
+      { type: "select", name: "size", default: "medium", choices: ["small", "medium", "large"], display: "cards" },
+      { type: "checkbox", name: "date", default: false },
+    ],
+  },
+  {
+    id: "caviarder",
+    category: "securite",
+    accepts: "pdf",
+    minFiles: 1,
+    options: [
+      { type: "text", name: "terms", default: "" },
+      { type: "multi", name: "patterns", default: "", choices: ["email", "phone", "iban", "date", "number"] },
+      { type: "areas", name: "areas" },
+    ],
+  },
+  {
+    id: "ocr",
+    category: "convertir",
+    accepts: "scan",
+    local: true,
+    minFiles: 1,
+    options: [
+      {
+        type: "select",
+        name: "lang",
+        default: "fra",
+        choices: ["fra", "eng", "spa", "por", "deu", "ita", "nld", "ara", "chi_sim", "rus", "pol", "tur", "vie", "hin", "jpn", "kor"],
+        display: "language",
+      },
+      { type: "select", name: "format", default: "pdf", choices: ["pdf", "txt"], display: "cards" },
+    ],
+  },
+  {
     id: "compresser",
     category: "modifier",
     accepts: "pdf",
@@ -245,6 +302,7 @@ export function defaultOptions(tool: ToolMeta, textDefaults: Record<string, stri
   for (const opt of tool.options) {
     if (opt.type === "target") values[opt.name] = "";
     else if (opt.type === "output") values[opt.name] = "pdf";
+    else if (opt.type === "signature" || opt.type === "areas") values[opt.name] = "";
     else values[opt.name] = textDefaults[opt.name] ?? opt.default;
   }
   return values;

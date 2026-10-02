@@ -9,7 +9,7 @@ import { renamedFiles } from "@/lib/core/rename";
 import { getTool, type OptionValues } from "@/lib/core/tools";
 import { availableEngines, convertFile, ensurePdf } from "./convert";
 import * as pdf from "./engines/pdf";
-import { decrypt, encrypt } from "./engines/mupdf";
+import { decrypt, encrypt, REDACT_PATTERNS, type RedactOptions, type RedactPattern, redact } from "./engines/mupdf";
 import { type FileData, UserError } from "./types";
 
 type Runner = (files: FileData[], o: Options) => Promise<FileData[]>;
@@ -190,6 +190,55 @@ const runners: Record<string, Runner> = {
     return files.map((f, i) => ({ name: names[i], data: f.data }));
   },
 
+  signer: (files, o) =>
+    eachPdf(files, async (file, doc) => {
+      const match = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/=]+)$/.exec(o.str("signature"));
+      if (!match) throw new UserError("signatureMissing");
+      const total = doc.getPageCount();
+      const where = o.str("where") || "last";
+      const pages =
+        where === "all" ? new Set(doc.getPageIndices()) : where === "first" ? new Set([0]) : where === "custom" ? parsePageSet(o.str("pages"), total) : new Set([total - 1]);
+      const widths: Record<string, number> = { small: 0.18, medium: 0.26, large: 0.36 };
+      return {
+        name: pdf.pdfName(file, "-signe"),
+        data: await pdf.placeSignature(doc, {
+          image: new Uint8Array(Buffer.from(match[2], "base64")),
+          position: (o.str("position") || "bottom-right") as pdf.SignatureOptions["position"],
+          width: widths[o.str("size")] ?? widths.medium,
+          caption: o.bool("date") ? o.str("dateText").slice(0, 60) : "",
+          pages,
+        }),
+      };
+    }),
+
+  async caviarder(files, o) {
+    const options: RedactOptions = {
+      terms: o
+        .str("terms")
+        .split(/[\n,;]+/)
+        .map((t) => t.trim())
+        .filter((t) => t.length >= 2)
+        .slice(0, 200),
+      patterns: o
+        .str("patterns")
+        .split(",")
+        .filter((p): p is RedactPattern => p in REDACT_PATTERNS),
+      areas: parseAreas(o.str("areas")),
+    };
+    if (!options.terms.length && !options.patterns.length && !options.areas.length) throw new UserError("redactNothing");
+    const out: FileData[] = [];
+    let found = 0;
+    for (const [index, file] of files.entries()) {
+      requirePdf(file);
+      // Les zones tracées appartiennent à un fichier précis de la liste
+      const { data, count } = await redact(file, { ...options, areas: options.areas.filter((a) => a.file === index) });
+      found += count;
+      out.push({ name: pdf.pdfName(file, "-caviarde"), data });
+    }
+    if (!found) throw new UserError("redactNone");
+    return out;
+  },
+
   metadonnees: (files, o) =>
     eachPdf(files, async (file, doc) => ({
       name: file.name,
@@ -202,6 +251,22 @@ const runners: Record<string, Runner> = {
       }),
     })),
 };
+
+/** Zones de caviardage envoyées par le navigateur, vérifiées une à une. */
+function parseAreas(raw: string): RedactOptions["areas"] {
+  if (!raw) return [];
+  try {
+    const list: unknown = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    const unit = (n: unknown) => typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
+    return list
+      .filter((a) => a && Number.isInteger(a.page) && a.page >= 0 && unit(a.x) && unit(a.y) && unit(a.w) && unit(a.h))
+      .slice(0, 2000)
+      .map((a) => ({ file: Number.isInteger(a.file) && a.file >= 0 ? a.file : 0, page: a.page, x: a.x, y: a.y, w: a.w, h: a.h }));
+  } catch {
+    return [];
+  }
+}
 
 export async function runTool(toolId: string, files: FileData[], values: OptionValues): Promise<FileData[]> {
   const runner = runners[toolId];

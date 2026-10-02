@@ -103,6 +103,18 @@ const de: Messages = {
     previewFile: "Datei {n}",
     previewInvalid: "Prüfen Sie die Seitenzahlen: Die Vorschau aktualisiert sich, sobald sie gültig sind.",
     localOnly: "Wird in Ihrem Browser verarbeitet: Ihre Dateien werden nicht hochgeladen.",
+    sigDraw: "Zeichnen",
+    sigType: "Schreiben",
+    sigUpload: "Hochladen",
+    sigClear: "Löschen",
+    sigTypePlaceholder: "Ihr Vor- und Nachname",
+    sigDrawHint: "Unterschreiben Sie im Rahmen mit der Maus oder dem Finger.",
+    sigUploadHint: "Ein Bild Ihrer Unterschrift (PNG oder JPG), am besten auf weißem Hintergrund.",
+    areaHint: "Ziehen Sie ein Rechteck auf einer Seite, um einen Bereich zu verbergen (Foto, Unterschrift, Stempel…).",
+    areaRemove: "Diesen Bereich entfernen",
+    areaCount: "Zu verbergende Bereiche: {n}",
+    ocrLoading: "Lesen wird vorbereitet (Sprachmodell wird geladen)…",
+    ocrProgress: "Text wird gelesen: Seite {n} von {total}…",
   },
   language: {
     button: "Sprache",
@@ -611,6 +623,104 @@ const de: Messages = {
         clear: { label: "Alle vorhandenen Metadaten löschen" },
       },
     },
+    signer: {
+      name: "Unterschreiben",
+      tagline: "Ihre Unterschrift auf ein PDF setzen.",
+      seoTitle: "PDF online kostenlos unterschreiben, ohne Anmeldung",
+      seoDescription: "Zeichnen, schreiben oder laden Sie Ihre Unterschrift hoch und platzieren Sie sie auf Ihrem PDF, bei Bedarf mit Datum. Kostenlos, ohne Anmeldung, Dateien sofort gelöscht.",
+      intro: "Zeichnen Sie Ihre Unterschrift mit der Maus oder dem Finger (oder schreiben Sie Ihren Namen), wählen Sie Seite und Stelle und klicken Sie auf Unterschreiben. Es handelt sich um eine visuelle Unterschrift, wie eine eingescannte handschriftliche.",
+      options: {
+        signature: {
+          label: "Ihre Unterschrift",
+        },
+        where: {
+          label: "Auf welcher Seite?",
+          choices: {
+            last: "Letzte Seite",
+            first: "Erste Seite",
+            all: "Alle Seiten",
+            custom: "Selbst wählen",
+          },
+        },
+        pages: {
+          label: "Seiten",
+          placeholder: "z. B. 2, 5",
+          help: "Z. B. 1-3, 5, 8-ende.",
+        },
+        position: {
+          label: "Wo unterschreiben?",
+          choices: {
+            "bottom-center": "Unten, Mitte",
+            "bottom-right": "Unten, rechts",
+            "bottom-left": "Unten, links",
+            "top-center": "Oben, Mitte",
+            "top-right": "Oben, rechts",
+            "top-left": "Oben, links",
+          },
+        },
+        size: {
+          label: "Größe",
+          choices: {
+            small: "Klein",
+            medium: "Mittel",
+            large: "Groß",
+          },
+        },
+        date: {
+          label: "Heutiges Datum unter die Unterschrift setzen",
+        },
+      },
+    },
+    caviarder: {
+      name: "Schwärzen",
+      tagline: "Vertrauliche Informationen endgültig aus einem PDF entfernen.",
+      seoTitle: "PDF schwärzen: Informationen endgültig entfernen",
+      seoDescription: "Entfernen Sie Namen, Adressen, Nummern und Bereiche wirklich aus einem PDF: Der verdeckte Inhalt wird aus der Datei gelöscht, nicht nur überdeckt. Kostenlos, ohne Anmeldung.",
+      intro: "Geben Sie die zu entfernenden Wörter ein, wählen Sie die zu erkennenden Informationen (E-Mails, Telefonnummern…) oder ziehen Sie Rechtecke auf den Seiten. pdff löscht den verdeckten Inhalt wirklich: Er lässt sich weder durch Kopieren des Textes noch durch Entfernen des schwarzen Balkens zurückholen.",
+      options: {
+        terms: {
+          label: "Zu entfernende Wörter",
+          placeholder: "z. B. Müller, Lindenstraße 12",
+          help: "Mit Kommas trennen. Jedes Vorkommen wird entfernt, unabhängig von Groß- und Kleinschreibung.",
+        },
+        patterns: {
+          label: "Automatisch erkennen",
+          choices: {
+            email: "E-Mail-Adressen",
+            phone: "Telefonnummern",
+            iban: "IBAN und Kontonummern",
+            date: "Datumsangaben",
+            number: "Nummern (ab 6 Ziffern)",
+          },
+        },
+        areas: {
+          label: "Zu verbergende Bereiche",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR",
+      tagline: "Ein gescanntes Dokument durchsuchbar und kopierbar machen.",
+      seoTitle: "Kostenlose Online-OCR: gescanntes PDF in durchsuchbares PDF",
+      seoDescription: "Gescanntes PDF oder Foto eines Dokuments in ein PDF mit durchsuchbarem, kopierbarem Text oder eine Textdatei verwandeln. 16 Sprachen, ohne Upload.",
+      intro: "Legen Sie einen Scan ab (PDF oder Foto), wählen Sie die Sprache und klicken Sie auf OCR. Das Lesen geschieht auf Ihrem Gerät: Ihr Dokument wird nicht hochgeladen. Nur das Modell der gewählten Sprache (einige MB) wird einmal geladen.",
+      options: {
+        lang: {
+          label: "Sprache des Dokuments",
+        },
+        format: {
+          label: "Ergebnis",
+          choices: {
+            pdf: "Durchsuchbares PDF",
+            txt: "Text (.txt)",
+          },
+          hints: {
+            pdf: "Dasselbe Dokument, mit durchsuchbarem und kopierbarem Text.",
+            txt: "Nur der Text, zur Weiterverwendung.",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Unbekanntes Werkzeug.",
@@ -650,6 +760,9 @@ const de: Messages = {
     pageMissing: "Seite {n} existiert nicht (das Dokument hat {total} Seiten).",
     rangeInvalid: "Ungültiger Bereich: „{part}“.",
     rangeRequired: "Geben Sie mindestens einen Seitenbereich an.",
+    signatureMissing: "Erstellen Sie zuerst Ihre Unterschrift: zeichnen, Namen schreiben oder Bild hochladen.",
+    redactNothing: "Geben Sie Wörter ein, wählen Sie eine Art von Information oder ziehen Sie einen Bereich.",
+    redactNone: "Nichts zu schwärzen: Keines der angegebenen Wörter oder Informationen wurde im Dokument gefunden.",
   },
 };
 

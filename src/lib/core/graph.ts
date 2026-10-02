@@ -40,9 +40,10 @@ export const EDGES: Edge[] = [
   { engine: "images-to-pdf", from: [...RASTER_IN, "bmp"], to: ["pdf"], cost: 1 },
   { engine: "mupdf-to-pdf", from: ["epub", "xps", "cbz", "fb2", "mobi", "bmp"], to: ["pdf"], cost: 1 },
   { engine: "mupdf-render", from: ["pdf"], to: ["png", "jpg"], cost: 1 },
-  // Coût élevé : l'extraction de texte perd la mise en page, elle ne doit jamais servir
-  // d'étape intermédiaire (ex. PDF → TXT → DOCX) quand l'import PDF de LibreOffice existe.
-  { engine: "mupdf-text", from: ["pdf"], to: ["txt", "html"], cost: 5 },
+  // Coût choisi avec soin : plus cher que l'import PDF de LibreOffice (3), pour ne jamais servir
+  // d'étape intermédiaire (PDF → TXT → DOCX/DOC perd la mise en page), mais moins cher que le détour
+  // PDF → ODT → TXT (3 + 1), qui produit un fichier vide car LibreOffice importe le PDF en dessin.
+  { engine: "mupdf-text", from: ["pdf"], to: ["txt", "html"], cost: 3.5 },
   // Secours sans LibreOffice : MuPDF sait mettre en page du texte brut et du HTML.
   { engine: "mupdf-to-pdf", from: ["txt", "md", "csv", "html"], to: ["pdf"], cost: 4 },
   { engine: "office", from: WORD, to: ["pdf", "docx", "doc", "odt", "rtf", "txt", "html"], cost: 1 },

@@ -103,6 +103,18 @@ const pt: Messages = {
     previewFile: "Arquivo {n}",
     previewInvalid: "Confira os números das páginas: a pré-visualização se atualiza assim que estiverem corretos.",
     localOnly: "Processado no seu navegador: seus arquivos não são enviados.",
+    sigDraw: "Desenhar",
+    sigType: "Escrever",
+    sigUpload: "Importar",
+    sigClear: "Apagar",
+    sigTypePlaceholder: "Seu nome completo",
+    sigDrawHint: "Assine dentro do quadro com o mouse ou o dedo.",
+    sigUploadHint: "Imagem da sua assinatura (PNG ou JPG), de preferência com fundo branco.",
+    areaHint: "Desenhe um retângulo em uma página para esconder uma área (foto, assinatura, carimbo…).",
+    areaRemove: "Remover esta área",
+    areaCount: "Áreas a esconder: {n}",
+    ocrLoading: "Preparando a leitura (baixando o modelo do idioma)…",
+    ocrProgress: "Lendo o texto: página {n} de {total}…",
   },
   language: {
     button: "Idioma",
@@ -614,6 +626,104 @@ const pt: Messages = {
         clear: { label: "Apagar todos os metadados existentes" },
       },
     },
+    signer: {
+      name: "Assinar",
+      tagline: "Colocar sua assinatura em um PDF.",
+      seoTitle: "Assinar um PDF online grátis, sem cadastro",
+      seoDescription: "Desenhe, escreva ou importe sua assinatura e coloque-a no seu PDF, com a data se precisar. Grátis, sem cadastro, arquivos apagados na hora.",
+      intro: "Desenhe sua assinatura com o mouse ou o dedo (ou escreva seu nome), escolha a página e o lugar e clique em Assinar. É uma assinatura visual, como uma assinatura à mão digitalizada.",
+      options: {
+        signature: {
+          label: "Sua assinatura",
+        },
+        where: {
+          label: "Em qual página?",
+          choices: {
+            last: "Última página",
+            first: "Primeira página",
+            all: "Todas as páginas",
+            custom: "Eu escolho",
+          },
+        },
+        pages: {
+          label: "Páginas",
+          placeholder: "ex.: 2, 5",
+          help: "Ex.: 1-3, 5, 8-fim.",
+        },
+        position: {
+          label: "Onde assinar?",
+          choices: {
+            "bottom-center": "Embaixo, no meio",
+            "bottom-right": "Embaixo, à direita",
+            "bottom-left": "Embaixo, à esquerda",
+            "top-center": "Em cima, no meio",
+            "top-right": "Em cima, à direita",
+            "top-left": "Em cima, à esquerda",
+          },
+        },
+        size: {
+          label: "Tamanho",
+          choices: {
+            small: "Pequena",
+            medium: "Média",
+            large: "Grande",
+          },
+        },
+        date: {
+          label: "Adicionar a data de hoje abaixo da assinatura",
+        },
+      },
+    },
+    caviarder: {
+      name: "Ocultar dados",
+      tagline: "Apagar de vez informações sensíveis de um PDF.",
+      seoTitle: "Ocultar dados de um PDF de forma definitiva",
+      seoDescription: "Remova de verdade nomes, endereços, números e áreas de um PDF: o conteúdo oculto é apagado do arquivo, não apenas coberto. Grátis, sem cadastro.",
+      intro: "Escreva as palavras que devem sumir, marque as informações a detectar (e-mails, telefones…) ou desenhe retângulos nas páginas. O pdff apaga de verdade o conteúdo oculto: não dá para recuperá-lo copiando o texto nem tirando a tarja preta.",
+      options: {
+        terms: {
+          label: "Palavras a remover",
+          placeholder: "ex.: Silva, Rua das Flores 12",
+          help: "Separe com vírgulas. Todas as ocorrências são removidas, com ou sem maiúsculas.",
+        },
+        patterns: {
+          label: "Detectar automaticamente",
+          choices: {
+            email: "Endereços de e-mail",
+            phone: "Números de telefone",
+            iban: "IBAN e números de conta",
+            date: "Datas",
+            number: "Números (6 dígitos ou mais)",
+          },
+        },
+        areas: {
+          label: "Áreas a esconder",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR",
+      tagline: "Tornar um documento digitalizado pesquisável e copiável.",
+      seoTitle: "OCR online grátis: PDF digitalizado em PDF pesquisável",
+      seoDescription: "Transforme um PDF digitalizado ou a foto de um documento em um PDF em que se pode pesquisar e copiar o texto, ou em um arquivo de texto. 16 idiomas, sem enviar o documento.",
+      intro: "Envie uma digitalização (PDF ou foto), escolha o idioma e clique em OCR. A leitura acontece no seu aparelho: seu documento não é enviado. Só o modelo do idioma escolhido (alguns MB) é baixado uma vez.",
+      options: {
+        lang: {
+          label: "Idioma do documento",
+        },
+        format: {
+          label: "Resultado",
+          choices: {
+            pdf: "PDF pesquisável",
+            txt: "Texto (.txt)",
+          },
+          hints: {
+            pdf: "O mesmo documento, com texto que se pode pesquisar e copiar.",
+            txt: "Só o texto, para reutilizar.",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Ferramenta desconhecida.",
@@ -653,6 +763,9 @@ const pt: Messages = {
     pageMissing: "A página {n} não existe (o documento tem {total} páginas).",
     rangeInvalid: "Intervalo inválido: \"{part}\".",
     rangeRequired: "Informe pelo menos um intervalo de páginas.",
+    signatureMissing: "Crie primeiro sua assinatura: desenhe, escreva seu nome ou importe uma imagem.",
+    redactNothing: "Informe palavras, marque um tipo de informação ou desenhe uma área a esconder.",
+    redactNone: "Nada a ocultar: nenhuma das palavras ou informações pedidas foi encontrada no documento.",
   },
 };
 

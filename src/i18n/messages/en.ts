@@ -103,6 +103,18 @@ const en: Messages = {
     previewFile: "File {n}",
     previewInvalid: "Check the page numbers: the preview updates as soon as they are valid.",
     localOnly: "Processed in your browser: your files are not uploaded.",
+    sigDraw: "Draw",
+    sigType: "Type",
+    sigUpload: "Upload",
+    sigClear: "Clear",
+    sigTypePlaceholder: "Your full name",
+    sigDrawHint: "Sign inside the box with your mouse or finger.",
+    sigUploadHint: "An image of your signature (PNG or JPG), ideally on a white background.",
+    areaHint: "Draw a rectangle on a page to hide an area (photo, signature, stamp…).",
+    areaRemove: "Remove this area",
+    areaCount: "Areas to hide: {n}",
+    ocrLoading: "Getting ready to read (downloading the language model)…",
+    ocrProgress: "Reading text: page {n} of {total}…",
   },
   language: {
     button: "Language",
@@ -605,6 +617,104 @@ const en: Messages = {
         clear: { label: "Erase all existing metadata" },
       },
     },
+    signer: {
+      name: "Sign",
+      tagline: "Put your signature on a PDF.",
+      seoTitle: "Sign a PDF online for free, no sign-up",
+      seoDescription: "Draw, type or upload your signature and place it on your PDF, with today's date if needed. Free, no sign-up, files deleted right away.",
+      intro: "Draw your signature with your mouse or finger (or type your name), choose the page and the spot, then click Sign. This is a visual signature, like a scanned handwritten one.",
+      options: {
+        signature: {
+          label: "Your signature",
+        },
+        where: {
+          label: "On which page?",
+          choices: {
+            last: "Last page",
+            first: "First page",
+            all: "Every page",
+            custom: "Let me choose",
+          },
+        },
+        pages: {
+          label: "Pages",
+          placeholder: "e.g. 2, 5",
+          help: "E.g. 1-3, 5, 8-end.",
+        },
+        position: {
+          label: "Where to sign?",
+          choices: {
+            "bottom-center": "Bottom, middle",
+            "bottom-right": "Bottom, right",
+            "bottom-left": "Bottom, left",
+            "top-center": "Top, middle",
+            "top-right": "Top, right",
+            "top-left": "Top, left",
+          },
+        },
+        size: {
+          label: "Size",
+          choices: {
+            small: "Small",
+            medium: "Medium",
+            large: "Large",
+          },
+        },
+        date: {
+          label: "Add today's date under the signature",
+        },
+      },
+    },
+    caviarder: {
+      name: "Redact",
+      tagline: "Permanently remove sensitive information from a PDF.",
+      seoTitle: "Redact a PDF: permanently hide information",
+      seoDescription: "Truly remove names, addresses, numbers and areas from a PDF: hidden content is deleted from the file, not just covered. Free, no sign-up.",
+      intro: "Type the words to remove, tick the information to detect (emails, phone numbers…) or draw rectangles on the pages. pdff truly deletes the hidden content: it can't be recovered by copying the text or removing the black box.",
+      options: {
+        terms: {
+          label: "Words to remove",
+          placeholder: "e.g. Smith, 12 Lilac Street",
+          help: "Separate with commas. Every occurrence is removed, regardless of capitals.",
+        },
+        patterns: {
+          label: "Detect automatically",
+          choices: {
+            email: "Email addresses",
+            phone: "Phone numbers",
+            iban: "IBANs and account numbers",
+            date: "Dates",
+            number: "Numbers (6 digits or more)",
+          },
+        },
+        areas: {
+          label: "Areas to hide",
+        },
+      },
+    },
+    ocr: {
+      name: "OCR",
+      tagline: "Make a scanned document searchable and copyable.",
+      seoTitle: "Free online OCR: scanned PDF to searchable PDF",
+      seoDescription: "Turn a scanned PDF or a photo of a document into a PDF where text can be searched and copied, or into a text file. 16 languages, the document is not uploaded.",
+      intro: "Drop a scan (PDF or photo), choose the language, then click OCR. Reading happens on your device: your document is not uploaded. Only the model for the chosen language (a few MB) is downloaded once.",
+      options: {
+        lang: {
+          label: "Document language",
+        },
+        format: {
+          label: "Result",
+          choices: {
+            pdf: "Searchable PDF",
+            txt: "Text (.txt)",
+          },
+          hints: {
+            pdf: "The same document, with text you can search and copy.",
+            txt: "Just the text, to reuse elsewhere.",
+          },
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Unknown tool.",
@@ -644,6 +754,9 @@ const en: Messages = {
     pageMissing: "Page {n} doesn't exist (the document has {total} pages).",
     rangeInvalid: "Invalid range: \"{part}\".",
     rangeRequired: "Enter at least one page range.",
+    signatureMissing: "Create your signature first: draw it, type your name or upload an image.",
+    redactNothing: "Enter some words, tick a type of information or draw an area to hide.",
+    redactNone: "Nothing to redact: none of the requested words or information were found in the document.",
   },
 };
 
