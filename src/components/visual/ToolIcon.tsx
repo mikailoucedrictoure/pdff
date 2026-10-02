@@ -159,6 +159,32 @@ const GLYPHS: Record<string, Glyph> = {
     ),
   },
 
+  // Une page de formulaire : un champ rempli, une case cochée.
+  remplir: {
+    base: (
+      <>
+        <path d={PAGE} />
+        <path d={FOLD} />
+        <rect x="7" y="9" width="7.5" height="3" rx="0.8" {...T} />
+        <path d="M8.5 10.5h3" />
+        <rect x="7" y="14.5" width="3.2" height="3.2" rx="0.7" />
+        <path d="M7.8 16.1l.8.8 1.3-1.5M11.8 16.1h2.7" />
+      </>
+    ),
+  },
+
+  // Deux versions face à face, les différences marquées.
+  comparer: {
+    base: (
+      <>
+        <rect x="2.5" y="4" width="8" height="14" rx="1.5" />
+        <rect x="13.5" y="6" width="8" height="14" rx="1.5" {...T} />
+        <path d="M4.5 8h4M4.5 11h2.5M15.5 10h4M15.5 13h4M15.5 16h2.5" />
+        <path d="M10.6 12.5h2.6M12 11.2l1.3 1.3-1.3 1.3" />
+      </>
+    ),
+  },
+
   // La page bascule, son ancienne position reste en pointillés.
   pivoter: {
     base: (

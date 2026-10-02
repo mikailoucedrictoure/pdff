@@ -115,6 +115,22 @@ const es: Messages = {
     areaCount: "Zonas a ocultar: {n}",
     ocrLoading: "Preparando la lectura (descarga del modelo de idioma)…",
     ocrProgress: "Leyendo el texto: página {n} de {total}…",
+    formLoading: "Leyendo los campos del formulario…",
+    formNone: "Este PDF no tiene campos para rellenar. Para escribir en él hace falta un formulario PDF interactivo.",
+    formFilled: "Campos rellenados: {n} de {total}",
+    formChoose: "— Elegir —",
+    formFields: "Campos del formulario",
+    compareNeedTwo: "Deja dos PDF: primero la versión antigua y luego la nueva.",
+    compareOld: "Versión antigua",
+    compareNew: "Versión nueva",
+    compareLoading: "Comparando…",
+    compareSummary: "{added} palabras añadidas, {removed} palabras eliminadas",
+    compareSame: "Ninguna diferencia en el texto: las dos versiones dicen lo mismo.",
+    compareLegend: "En verde: texto añadido. En rojo tachado: texto eliminado.",
+    comparePages: "Páginas: {a} → {b}",
+    compareNoText: "Estos PDF no contienen texto legible (¿escaneos?). Pásalos antes por la herramienta OCR.",
+    compareReport: "Informe de comparación",
+    compareSkipped: "… {n} palabras idénticas …",
   },
   language: {
     button: "Idioma",
@@ -721,6 +737,33 @@ const es: Messages = {
         },
       },
     },
+    remplir: {
+      name: "Rellenar un formulario",
+      tagline: "Completar un formulario PDF directamente en el navegador.",
+      seoTitle: "Rellenar un formulario PDF en línea gratis",
+      seoDescription: "Completa los campos de un formulario PDF (texto, casillas, listas) sin programas y descárgalo relleno, bloqueado si quieres. Gratis, sin registro.",
+      intro: "Deja un formulario PDF: pdff encuentra todos los campos y te los muestra como un formulario sencillo. Rellénalo, revisa la vista previa y haz clic en Rellenar un formulario para descargar el PDF completado.",
+      options: {
+        values: {
+          label: "Respuestas",
+        },
+        lock: {
+          label: "Bloquear las respuestas (el formulario ya no se podrá modificar)",
+        },
+      },
+    },
+    comparer: {
+      name: "Comparar",
+      tagline: "Ver qué cambió entre dos versiones de un PDF.",
+      seoTitle: "Comparar dos PDF en línea: ver las diferencias",
+      seoDescription: "Compara dos versiones de un contrato o documento PDF: palabras añadidas en verde, eliminadas en rojo e informe descargable. Gratis, no se envía nada.",
+      intro: "Deja la versión antigua y luego la nueva: las diferencias aparecen al instante, palabra por palabra. Haz clic en Comparar para descargar el informe. Todo ocurre en tu navegador.",
+      options: {
+        ignoreCase: {
+          label: "Ignorar mayúsculas y minúsculas",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Herramienta desconocida.",
@@ -763,6 +806,8 @@ const es: Messages = {
     signatureMissing: "Crea primero tu firma: dibújala, escribe tu nombre o importa una imagen.",
     redactNothing: "Indica palabras, marca un tipo de información o dibuja una zona a ocultar.",
     redactNone: "Nada que tachar: no se encontró ninguna de las palabras o datos indicados en el documento.",
+    formNoFields: "«{name}» no tiene campos de formulario para rellenar.",
+    formLockUnicode: "Algunas respuestas contienen caracteres que no se pueden fijar en la página. Desmarca «Bloquear las respuestas» para mantenerlas editables.",
   },
 };
 

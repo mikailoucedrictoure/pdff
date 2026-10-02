@@ -34,6 +34,8 @@ export type ToolOption = OptionUi &
     | { type: "signature"; name: string }
     /** Zones tracées sur les pages (JSON : [{ page, x, y, w, h }], fractions de la page). */
     | { type: "areas"; name: string }
+    /** Réponses d'un formulaire PDF (JSON : { nom du champ: valeur }), saisies dans l'aperçu. */
+    | { type: "formvalues"; name: string }
     /** Plusieurs cases à cocher parmi des choix (valeurs séparées par des virgules). */
     | { type: "multi"; name: string; default: string; choices: string[] }
   );
@@ -57,6 +59,8 @@ export const TOOL_IDS = [
   "signer",
   "caviarder",
   "ocr",
+  "remplir",
+  "comparer",
 ] as const;
 
 export type ToolId = (typeof TOOL_IDS)[number];
@@ -243,6 +247,27 @@ export const TOOLS: ToolMeta[] = [
     ],
   },
   {
+    id: "remplir",
+    category: "modifier",
+    accepts: "pdf",
+    minFiles: 1,
+    maxFiles: 1,
+    options: [
+      { type: "formvalues", name: "values" },
+      { type: "checkbox", name: "lock", default: false },
+    ],
+  },
+  {
+    id: "comparer",
+    category: "organiser",
+    accepts: "pdf",
+    local: true,
+    minFiles: 2,
+    maxFiles: 2,
+    ordered: true,
+    options: [{ type: "checkbox", name: "ignoreCase", default: false }],
+  },
+  {
     id: "compresser",
     category: "modifier",
     accepts: "pdf",
@@ -302,7 +327,7 @@ export function defaultOptions(tool: ToolMeta, textDefaults: Record<string, stri
   for (const opt of tool.options) {
     if (opt.type === "target") values[opt.name] = "";
     else if (opt.type === "output") values[opt.name] = "pdf";
-    else if (opt.type === "signature" || opt.type === "areas") values[opt.name] = "";
+    else if (opt.type === "signature" || opt.type === "areas" || opt.type === "formvalues") values[opt.name] = "";
     else values[opt.name] = textDefaults[opt.name] ?? opt.default;
   }
   return values;

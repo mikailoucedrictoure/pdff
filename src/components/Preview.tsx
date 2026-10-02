@@ -8,6 +8,7 @@ import { extOf } from "@/lib/core/formats";
 import { parsePageList, parsePageSet, parseRanges } from "@/lib/core/pages";
 import { renamedFiles } from "@/lib/core/rename";
 import type { OptionValues } from "@/lib/core/tools";
+import { CompareView, FormFiller, parseFormValues } from "./DocTools";
 import { FileGlyph } from "./visual/FileGlyph";
 
 type WorkspaceText = ClientMessages["workspace"];
@@ -332,6 +333,21 @@ export function InputPreview({
 }) {
   const password = toolId === "deverrouiller" ? String(options.password ?? "") : "";
   const thumbs = useThumbnails(items, password);
+
+  if (toolId === "remplir" && items[0]) {
+    return (
+      <Panel title={w.formFields}>
+        <FormFiller file={items[0].file} values={parseFormValues(options.values)} onValues={(v) => onOption?.("values", JSON.stringify(v))} w={w} />
+      </Panel>
+    );
+  }
+  if (toolId === "comparer") {
+    return (
+      <Panel title={w.previewTitle}>
+        <CompareView files={items.map((i) => i.file)} ignoreCase={!!options.ignoreCase} w={w} />
+      </Panel>
+    );
+  }
 
   if (toolId === "renommer") {
     const names = renamedFiles(

@@ -6,6 +6,12 @@ import { inflateSync } from "node:zlib";
 import sharp, { type Sharp } from "sharp";
 import {
   PDFArray,
+  PDFBool,
+  PDFCheckBox,
+  PDFDropdown,
+  PDFOptionList,
+  PDFRadioGroup,
+  PDFTextField,
   PDFDict,
   PDFDocument,
   PDFName,
@@ -452,4 +458,55 @@ function toPageSpace(box: { x: number; y: number; width: number; height: number 
     default:
       return [box.x + vx, box.y + vy];
   }
+}
+
+/** Valeurs saisies dans un formulaire : texte, case cochée ou non, choix (un ou plusieurs). */
+export type FormValues = Record<string, string | boolean | string[]>;
+
+/**
+ * Remplit les champs d'un formulaire PDF. Avec `lock`, les réponses sont intégrées à la page
+ * (aplaties) et ne peuvent plus être modifiées. Renvoie aussi le nombre de champs remplis.
+ */
+export async function fillForm(doc: PDFDocument, values: FormValues, lock: boolean): Promise<{ data: Uint8Array; filled: number }> {
+  const form = doc.getForm();
+  let filled = 0;
+  for (const [name, value] of Object.entries(values)) {
+    const field = form.getFieldMaybe(name);
+    if (!field) continue;
+    try {
+      if (field instanceof PDFTextField) field.setText(String(value ?? ""));
+      else if (field instanceof PDFCheckBox) {
+        if (value === true || value === "true") field.check();
+        else field.uncheck();
+      }
+      else if (field instanceof PDFRadioGroup) {
+        if (value) field.select(String(value));
+        else field.clear();
+      } else if (field instanceof PDFDropdown) {
+        if (value) field.select(String(value), true);
+        else field.clear();
+      } else if (field instanceof PDFOptionList) {
+        const list = (Array.isArray(value) ? value : [String(value)]).filter(Boolean);
+        if (list.length) field.select(list);
+        else field.clear();
+      } else continue;
+      filled++;
+    } catch {
+      // Valeur refusée par le champ (choix inexistant, longueur maximale…) : le champ garde sa valeur
+    }
+  }
+  // Apparence des champs : écrite avec Helvetica quand c'est possible ; sinon (caractères hors de
+  // l'alphabet latin), le lecteur PDF la redessine lui-même à l'ouverture.
+  let appearances = true;
+  try {
+    form.updateFieldAppearances(await doc.embedFont(StandardFonts.Helvetica));
+  } catch {
+    appearances = false;
+    form.acroForm.dict.set(PDFName.of("NeedAppearances"), PDFBool.True);
+  }
+  if (lock) {
+    if (!appearances) throw new UserError("formLockUnicode");
+    form.flatten();
+  }
+  return { data: await save(doc), filled };
 }

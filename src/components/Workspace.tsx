@@ -10,6 +10,7 @@ import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/c
 import { cleanFileName, renamedFiles } from "@/lib/core/rename";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
+import { compareFiles, parseFormValues } from "./DocTools";
 import { InputPreview, parseAreaList, ResultPreview } from "./Preview";
 import { SignaturePad } from "./SignaturePad";
 import { FileGlyph } from "./visual/FileGlyph";
@@ -194,6 +195,26 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   /** Renommer : tout se fait dans le navigateur (une archive ZIP s'il y a plusieurs fichiers). */
   async function runLocal() {
     const started = window.performance.now();
+    if (tool.id === "comparer") {
+      const [a, b] = items;
+      const result = await compareFiles(a.file, b.file, !!options.ignoreCase);
+      const { comparisonReport } = await import("@/lib/client/compare");
+      const html = comparisonReport(result.comparison, {
+        title: w.compareReport,
+        oldName: a.file.name,
+        newName: b.file.name,
+        summary: result.comparison.added || result.comparison.removed ? fmt(w.compareSummary, { added: result.comparison.added, removed: result.comparison.removed }) : w.compareSame,
+        legend: w.compareLegend,
+        pages: fmt(w.comparePages, { a: result.pagesA, b: result.pagesB }),
+        skipped: (n) => fmt(w.compareSkipped, { n }),
+        lang: locale,
+        dir: document.documentElement.dir || "ltr",
+      });
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      inputSizeRef.current = a.file.size + b.file.size;
+      deliver(URL.createObjectURL(blob), `comparaison-${cleanFileName(a.file.name.replace(/.pdf$/i, ""))}.html`, blob.size, 1, started);
+      return;
+    }
     if (tool.id === "ocr") {
       try {
         const { ocrFiles } = await import("@/lib/client/ocr");
@@ -560,7 +581,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         )}
 
         {items.length > 0 &&
-          (status.kind === "done" ? (
+          (status.kind === "done" && tool.id !== "comparer" ? (
             <ResultPreview key={status.url} url={status.url} name={status.name} w={w} />
           ) : (
             <InputPreview
@@ -890,6 +911,16 @@ function OptionField({
       return null;
     case "signature":
       return <SignaturePad label={text.label} value={String(value ?? "")} onChange={onChange} w={messages.workspace} />;
+    case "formvalues": {
+      const answers = Object.values(parseFormValues(value));
+      const filled = answers.filter((v) => (Array.isArray(v) ? v.length : typeof v === "boolean" ? v : String(v ?? "").trim())).length;
+      return (
+        <div className="rounded-xl border border-dashed border-line px-3.5 py-3 text-sm">
+          <p className="font-semibold">{text.label}</p>
+          <p className="mt-0.5 text-xs text-muted">{answers.length ? fmt(messages.workspace.formFilled, { n: filled, total: answers.length }) : messages.workspace.formLoading}</p>
+        </div>
+      );
+    }
     case "areas": {
       const n = parseAreaList(value).length;
       return (

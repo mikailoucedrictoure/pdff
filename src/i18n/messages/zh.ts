@@ -115,6 +115,22 @@ const zh: Messages = {
     areaCount: "需遮盖的区域：{n}",
     ocrLoading: "正在准备识别（下载语言模型）…",
     ocrProgress: "正在识别文字：第 {n} 页，共 {total} 页…",
+    formLoading: "正在读取表单字段…",
+    formNone: "此 PDF 没有可填写的字段。需要交互式 PDF 表单才能在上面填写。",
+    formFilled: "已填写字段：{n} / {total}",
+    formChoose: "— 请选择 —",
+    formFields: "表单字段",
+    compareNeedTwo: "请放入两个 PDF：先放旧版本，再放新版本。",
+    compareOld: "旧版本",
+    compareNew: "新版本",
+    compareLoading: "正在比较…",
+    compareSummary: "新增 {added} 个词，删除 {removed} 个词",
+    compareSame: "文字没有差异：两个版本内容相同。",
+    compareLegend: "绿色：新增的文字。红色删除线：删除的文字。",
+    comparePages: "页数：{a} → {b}",
+    compareNoText: "这些 PDF 没有可读取的文字（扫描件？）。请先用 OCR 工具处理。",
+    compareReport: "比较报告",
+    compareSkipped: "…… {n} 个相同的词 ……",
   },
   language: {
     button: "语言",
@@ -691,6 +707,33 @@ const zh: Messages = {
         },
       },
     },
+    remplir: {
+      name: "填写表单",
+      tagline: "直接在浏览器中填写 PDF 表单。",
+      seoTitle: "免费在线填写 PDF 表单",
+      seoDescription: "无需任何软件即可填写 PDF 表单的字段（文本、复选框、列表），然后下载填好的文件，可选择锁定。免费、无需注册。",
+      intro: "放入 PDF 表单：pdff 会找到所有字段，并以简单表单的形式显示。填写后查看预览，然后点击“填写表单”下载完成的 PDF。",
+      options: {
+        values: {
+          label: "答案",
+        },
+        lock: {
+          label: "锁定答案（表单将无法再修改）",
+        },
+      },
+    },
+    comparer: {
+      name: "比较",
+      tagline: "查看 PDF 两个版本之间的变化。",
+      seoTitle: "在线比较两个 PDF：查看差异",
+      seoDescription: "比较合同或 PDF 文档的两个版本：新增内容为绿色，删除内容为红色，并可下载报告。免费，不上传任何内容。",
+      intro: "先放入旧版本，再放入新版本：差异会立即逐词显示。点击“比较”即可下载报告。全部在浏览器中完成。",
+      options: {
+        ignoreCase: {
+          label: "忽略大小写",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "未知工具。",
@@ -733,6 +776,8 @@ const zh: Messages = {
     signatureMissing: "请先创建签名：手写、输入姓名或上传图片。",
     redactNothing: "请输入文字、勾选信息类型或画出需要遮盖的区域。",
     redactNone: "没有可涂黑的内容：文档中没有找到所指定的文字或信息。",
+    formNoFields: "“{name}”没有可填写的表单字段。",
+    formLockUnicode: "部分答案包含无法固定到页面中的字符。取消勾选“锁定答案”即可保留为可编辑。",
   },
 };
 

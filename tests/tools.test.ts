@@ -169,3 +169,34 @@ describe("caviarder : textes particuliers", () => {
     expect(text).not.toContain("(A+B)");
   });
 });
+
+describe("remplir un formulaire", () => {
+  async function makeForm(): Promise<{ name: string; data: Uint8Array }> {
+    const doc = await PDFDocument.create();
+    const page = doc.addPage([400, 400]);
+    const form = doc.getForm();
+    form.createTextField("nom").addToPage(page, { x: 20, y: 340, width: 200, height: 24 });
+    form.createCheckBox("accord").addToPage(page, { x: 20, y: 300, width: 16, height: 16 });
+    const pays = form.createDropdown("pays");
+    pays.addOptions(["Canada", "France"]);
+    pays.addToPage(page, { x: 20, y: 260, width: 120, height: 24 });
+    return { name: "formulaire.pdf", data: await doc.save() };
+  }
+
+  it("les réponses sont écrites dans les champs", async () => {
+    const [out] = await runTool("remplir", [await makeForm()], { values: JSON.stringify({ nom: "Awa Diallo", accord: true, pays: "Canada" }), lock: false });
+    const form = (await PDFDocument.load(out.data)).getForm();
+    expect(form.getTextField("nom").getText()).toBe("Awa Diallo");
+    expect(form.getCheckBox("accord").isChecked()).toBe(true);
+    expect(form.getDropdown("pays").getSelected()).toEqual(["Canada"]);
+  });
+
+  it("verrouiller : les champs disparaissent, le texte reste sur la page", async () => {
+    const [out] = await runTool("remplir", [await makeForm()], { values: JSON.stringify({ nom: "Awa Diallo" }), lock: true });
+    expect((await PDFDocument.load(out.data)).getForm().getFields()).toHaveLength(0);
+  });
+
+  it("message clair pour un PDF sans formulaire", async () => {
+    await expect(runTool("remplir", [await makePdf("simple.pdf", ["1"])], { values: "{}" })).rejects.toMatchObject({ key: "formNoFields" });
+  });
+});

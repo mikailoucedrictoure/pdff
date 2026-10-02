@@ -115,6 +115,22 @@ const en: Messages = {
     areaCount: "Areas to hide: {n}",
     ocrLoading: "Getting ready to read (downloading the language model)…",
     ocrProgress: "Reading text: page {n} of {total}…",
+    formLoading: "Reading the form fields…",
+    formNone: "This PDF has no fields to fill in. Writing on it requires an interactive PDF form.",
+    formFilled: "Fields filled: {n} of {total}",
+    formChoose: "— Choose —",
+    formFields: "Form fields",
+    compareNeedTwo: "Drop two PDFs: the old version first, then the new one.",
+    compareOld: "Old version",
+    compareNew: "New version",
+    compareLoading: "Comparing…",
+    compareSummary: "{added} words added, {removed} words removed",
+    compareSame: "No difference in the text: both versions say the same thing.",
+    compareLegend: "Green: added text. Red, struck through: removed text.",
+    comparePages: "Pages: {a} → {b}",
+    compareNoText: "These PDFs contain no readable text (scans?). Run them through the OCR tool first.",
+    compareReport: "Comparison report",
+    compareSkipped: "… {n} identical words …",
   },
   language: {
     button: "Language",
@@ -715,6 +731,33 @@ const en: Messages = {
         },
       },
     },
+    remplir: {
+      name: "Fill in a form",
+      tagline: "Complete a PDF form right in your browser.",
+      seoTitle: "Fill in a PDF form online for free",
+      seoDescription: "Complete the fields of a PDF form (text, checkboxes, lists) without any software, then download it filled in, locked if you wish. Free, no sign-up.",
+      intro: "Drop a PDF form: pdff finds every field and shows them as a simple form. Fill it in, check the preview, then click Fill in a form to download the completed PDF.",
+      options: {
+        values: {
+          label: "Answers",
+        },
+        lock: {
+          label: "Lock the answers (the form can no longer be edited)",
+        },
+      },
+    },
+    comparer: {
+      name: "Compare",
+      tagline: "See what changed between two versions of a PDF.",
+      seoTitle: "Compare two PDFs online: see the differences",
+      seoDescription: "Compare two versions of a contract or PDF document: added words in green, removed words in red, and a downloadable report. Free, nothing is uploaded.",
+      intro: "Drop the old version, then the new one: the differences appear instantly, word by word. Click Compare to download the report. Everything happens in your browser.",
+      options: {
+        ignoreCase: {
+          label: "Ignore upper and lower case",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Unknown tool.",
@@ -757,6 +800,8 @@ const en: Messages = {
     signatureMissing: "Create your signature first: draw it, type your name or upload an image.",
     redactNothing: "Enter some words, tick a type of information or draw an area to hide.",
     redactNone: "Nothing to redact: none of the requested words or information were found in the document.",
+    formNoFields: "\"{name}\" has no form fields to fill in.",
+    formLockUnicode: "Some answers contain characters that cannot be fixed into the page. Untick \"Lock the answers\" to keep them editable.",
   },
 };
 

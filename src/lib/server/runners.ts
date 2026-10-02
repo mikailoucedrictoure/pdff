@@ -211,6 +211,20 @@ const runners: Record<string, Runner> = {
       };
     }),
 
+  remplir: (files, o) =>
+    eachPdf(files, async (file, doc) => {
+      let values: pdf.FormValues = {};
+      try {
+        const parsed: unknown = JSON.parse(o.str("values") || "{}");
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) values = parsed as pdf.FormValues;
+      } catch {
+        throw new UserError("badOptions");
+      }
+      if (!doc.getForm().getFields().length) throw new UserError("formNoFields", { name: file.name });
+      const { data } = await pdf.fillForm(doc, values, o.bool("lock"));
+      return { name: pdf.pdfName(file, "-rempli"), data };
+    }),
+
   async caviarder(files, o) {
     const options: RedactOptions = {
       terms: o

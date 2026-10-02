@@ -129,6 +129,22 @@ const fr = {
     areaCount: "Zones à masquer : {n}",
     ocrLoading: "Préparation de la lecture (téléchargement du modèle de langue)…",
     ocrProgress: "Lecture du texte : page {n} sur {total}…",
+    formLoading: "Lecture des champs du formulaire…",
+    formNone: "Ce PDF ne contient pas de champs à remplir. Pour écrire dessus, il faut un formulaire PDF interactif.",
+    formFilled: "Champs remplis : {n} sur {total}",
+    formChoose: "— Choisir —",
+    formFields: "Champs du formulaire",
+    compareNeedTwo: "Déposez deux PDF : d'abord l'ancienne version, puis la nouvelle.",
+    compareOld: "Ancienne version",
+    compareNew: "Nouvelle version",
+    compareLoading: "Comparaison en cours…",
+    compareSummary: "{added} mots ajoutés, {removed} mots supprimés",
+    compareSame: "Aucune différence dans le texte : les deux versions disent la même chose.",
+    compareLegend: "En vert : texte ajouté. En rouge barré : texte supprimé.",
+    comparePages: "Pages : {a} → {b}",
+    compareNoText: "Ces PDF ne contiennent pas de texte lisible (scans ?). Passez-les d'abord par l'outil OCR.",
+    compareReport: "Rapport de comparaison",
+    compareSkipped: "… {n} mots identiques …",
   },
   language: {
     button: "Langue",
@@ -742,6 +758,33 @@ const fr = {
         },
       },
     },
+    remplir: {
+      name: "Remplir un formulaire",
+      tagline: "Compléter un formulaire PDF directement dans le navigateur.",
+      seoTitle: "Remplir un formulaire PDF en ligne gratuitement",
+      seoDescription: "Complétez les champs d'un formulaire PDF (texte, cases à cocher, listes) sans logiciel, puis téléchargez-le rempli, verrouillé si vous le souhaitez. Gratuit, sans inscription.",
+      intro: "Déposez un formulaire PDF : pdff trouve tous les champs et vous les présente comme un formulaire simple. Remplissez, vérifiez l'aperçu, puis cliquez sur Remplir pour télécharger le PDF complété.",
+      options: {
+        values: {
+          label: "Réponses",
+        },
+        lock: {
+          label: "Verrouiller les réponses (le formulaire ne pourra plus être modifié)",
+        },
+      },
+    },
+    comparer: {
+      name: "Comparer",
+      tagline: "Voir ce qui a changé entre deux versions d'un PDF.",
+      seoTitle: "Comparer deux PDF en ligne : voir les différences",
+      seoDescription: "Comparez deux versions d'un contrat ou d'un document PDF : mots ajoutés en vert, supprimés en rouge, et rapport téléchargeable. Gratuit, rien n'est envoyé.",
+      intro: "Déposez l'ancienne version puis la nouvelle : les différences s'affichent aussitôt, mot par mot. Cliquez sur Comparer pour télécharger le rapport. Tout se fait dans votre navigateur.",
+      options: {
+        ignoreCase: {
+          label: "Ignorer les majuscules et minuscules",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Outil inconnu.",
@@ -784,6 +827,8 @@ const fr = {
     signatureMissing: "Créez d'abord votre signature : dessinez-la, écrivez votre nom ou importez une image.",
     redactNothing: "Indiquez des mots, cochez un type d'information ou tracez une zone à masquer.",
     redactNone: "Rien à caviarder : aucun des mots ou informations demandés n'a été trouvé dans le document.",
+    formNoFields: "« {name} » ne contient pas de champs de formulaire à remplir.",
+    formLockUnicode: "Certaines réponses contiennent des caractères qui ne peuvent pas être figés dans la page. Décochez « Verrouiller les réponses » pour les garder modifiables.",
   },
 };
 

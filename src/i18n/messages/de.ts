@@ -115,6 +115,22 @@ const de: Messages = {
     areaCount: "Zu verbergende Bereiche: {n}",
     ocrLoading: "Lesen wird vorbereitet (Sprachmodell wird geladen)…",
     ocrProgress: "Text wird gelesen: Seite {n} von {total}…",
+    formLoading: "Formularfelder werden gelesen…",
+    formNone: "Dieses PDF enthält keine ausfüllbaren Felder. Dafür ist ein interaktives PDF-Formular nötig.",
+    formFilled: "Ausgefüllte Felder: {n} von {total}",
+    formChoose: "— Auswählen —",
+    formFields: "Formularfelder",
+    compareNeedTwo: "Legen Sie zwei PDFs ab: zuerst die alte Fassung, dann die neue.",
+    compareOld: "Alte Fassung",
+    compareNew: "Neue Fassung",
+    compareLoading: "Vergleich läuft…",
+    compareSummary: "{added} Wörter hinzugefügt, {removed} Wörter entfernt",
+    compareSame: "Kein Unterschied im Text: Beide Fassungen sagen dasselbe.",
+    compareLegend: "Grün: hinzugefügter Text. Rot durchgestrichen: entfernter Text.",
+    comparePages: "Seiten: {a} → {b}",
+    compareNoText: "Diese PDFs enthalten keinen lesbaren Text (Scans?). Verarbeiten Sie sie zuerst mit dem OCR-Werkzeug.",
+    compareReport: "Vergleichsbericht",
+    compareSkipped: "… {n} identische Wörter …",
   },
   language: {
     button: "Sprache",
@@ -721,6 +737,33 @@ const de: Messages = {
         },
       },
     },
+    remplir: {
+      name: "Formular ausfüllen",
+      tagline: "Ein PDF-Formular direkt im Browser ausfüllen.",
+      seoTitle: "PDF-Formular online kostenlos ausfüllen",
+      seoDescription: "Füllen Sie die Felder eines PDF-Formulars (Text, Kontrollkästchen, Listen) ohne Software aus und laden Sie es ausgefüllt herunter, auf Wunsch gesperrt. Kostenlos, ohne Anmeldung.",
+      intro: "Legen Sie ein PDF-Formular ab: pdff findet alle Felder und zeigt sie als einfaches Formular. Ausfüllen, Vorschau prüfen, dann auf Formular ausfüllen klicken, um das fertige PDF herunterzuladen.",
+      options: {
+        values: {
+          label: "Antworten",
+        },
+        lock: {
+          label: "Antworten sperren (das Formular kann nicht mehr geändert werden)",
+        },
+      },
+    },
+    comparer: {
+      name: "Vergleichen",
+      tagline: "Sehen, was sich zwischen zwei Fassungen eines PDFs geändert hat.",
+      seoTitle: "Zwei PDFs online vergleichen: Unterschiede sehen",
+      seoDescription: "Vergleichen Sie zwei Fassungen eines Vertrags oder PDF-Dokuments: hinzugefügte Wörter grün, entfernte rot, mit Bericht zum Herunterladen. Kostenlos, kein Upload.",
+      intro: "Legen Sie die alte und dann die neue Fassung ab: Die Unterschiede erscheinen sofort, Wort für Wort. Klicken Sie auf Vergleichen, um den Bericht herunterzuladen. Alles geschieht in Ihrem Browser.",
+      options: {
+        ignoreCase: {
+          label: "Groß- und Kleinschreibung ignorieren",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Unbekanntes Werkzeug.",
@@ -763,6 +806,8 @@ const de: Messages = {
     signatureMissing: "Erstellen Sie zuerst Ihre Unterschrift: zeichnen, Namen schreiben oder Bild hochladen.",
     redactNothing: "Geben Sie Wörter ein, wählen Sie eine Art von Information oder ziehen Sie einen Bereich.",
     redactNone: "Nichts zu schwärzen: Keines der angegebenen Wörter oder Informationen wurde im Dokument gefunden.",
+    formNoFields: "„{name}“ enthält keine ausfüllbaren Formularfelder.",
+    formLockUnicode: "Einige Antworten enthalten Zeichen, die nicht fest in die Seite übernommen werden können. Deaktivieren Sie „Antworten sperren“, damit sie bearbeitbar bleiben.",
   },
 };
 

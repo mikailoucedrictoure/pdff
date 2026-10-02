@@ -115,6 +115,22 @@ const pt: Messages = {
     areaCount: "Áreas a esconder: {n}",
     ocrLoading: "Preparando a leitura (baixando o modelo do idioma)…",
     ocrProgress: "Lendo o texto: página {n} de {total}…",
+    formLoading: "Lendo os campos do formulário…",
+    formNone: "Este PDF não tem campos para preencher. Para escrever nele, é preciso um formulário PDF interativo.",
+    formFilled: "Campos preenchidos: {n} de {total}",
+    formChoose: "— Escolher —",
+    formFields: "Campos do formulário",
+    compareNeedTwo: "Envie dois PDFs: primeiro a versão antiga, depois a nova.",
+    compareOld: "Versão antiga",
+    compareNew: "Versão nova",
+    compareLoading: "Comparando…",
+    compareSummary: "{added} palavras adicionadas, {removed} palavras removidas",
+    compareSame: "Nenhuma diferença no texto: as duas versões dizem a mesma coisa.",
+    compareLegend: "Em verde: texto adicionado. Em vermelho riscado: texto removido.",
+    comparePages: "Páginas: {a} → {b}",
+    compareNoText: "Estes PDFs não contêm texto legível (digitalizações?). Passe-os antes pela ferramenta OCR.",
+    compareReport: "Relatório de comparação",
+    compareSkipped: "… {n} palavras idênticas …",
   },
   language: {
     button: "Idioma",
@@ -724,6 +740,33 @@ const pt: Messages = {
         },
       },
     },
+    remplir: {
+      name: "Preencher formulário",
+      tagline: "Completar um formulário PDF direto no navegador.",
+      seoTitle: "Preencher um formulário PDF online grátis",
+      seoDescription: "Complete os campos de um formulário PDF (texto, caixas de seleção, listas) sem programas e baixe-o preenchido, bloqueado se quiser. Grátis, sem cadastro.",
+      intro: "Envie um formulário PDF: o pdff encontra todos os campos e os mostra como um formulário simples. Preencha, confira a pré-visualização e clique em Preencher formulário para baixar o PDF completo.",
+      options: {
+        values: {
+          label: "Respostas",
+        },
+        lock: {
+          label: "Bloquear as respostas (o formulário não poderá mais ser alterado)",
+        },
+      },
+    },
+    comparer: {
+      name: "Comparar",
+      tagline: "Ver o que mudou entre duas versões de um PDF.",
+      seoTitle: "Comparar dois PDFs online: ver as diferenças",
+      seoDescription: "Compare duas versões de um contrato ou documento PDF: palavras adicionadas em verde, removidas em vermelho e relatório para baixar. Grátis, nada é enviado.",
+      intro: "Envie a versão antiga e depois a nova: as diferenças aparecem na hora, palavra por palavra. Clique em Comparar para baixar o relatório. Tudo acontece no seu navegador.",
+      options: {
+        ignoreCase: {
+          label: "Ignorar maiúsculas e minúsculas",
+        },
+      },
+    },
   },
   errors: {
     unknownTool: "Ferramenta desconhecida.",
@@ -766,6 +809,8 @@ const pt: Messages = {
     signatureMissing: "Crie primeiro sua assinatura: desenhe, escreva seu nome ou importe uma imagem.",
     redactNothing: "Informe palavras, marque um tipo de informação ou desenhe uma área a esconder.",
     redactNone: "Nada a ocultar: nenhuma das palavras ou informações pedidas foi encontrada no documento.",
+    formNoFields: "“{name}” não tem campos de formulário para preencher.",
+    formLockUnicode: "Algumas respostas contêm caracteres que não podem ser fixados na página. Desmarque “Bloquear as respostas” para mantê-las editáveis.",
   },
 };
 
