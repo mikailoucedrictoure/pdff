@@ -20,6 +20,8 @@ const nextConfig: NextConfig = {
     outputFileTracingIncludes: { "/**": ["./node_modules/mupdf/dist/**/*"] },
   }),
   poweredByHeader: false,
+  // Pas de logo Next.js à l'écran pendant le développement (les erreurs restent affichées)
+  devIndicators: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
