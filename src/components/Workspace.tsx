@@ -131,6 +131,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     if (tool.accepts === "all") return null;
     if (tool.accepts === "pdf") return ["pdf"];
     if (tool.accepts === "scan") return ["pdf", "jpg", "jpeg", "png", "webp", "bmp", "gif", "tif", "tiff"];
+    if (tool.accepts === "image") return ["jpg", "jpeg", "png", "webp", "avif", "gif", "tif", "tiff"];
     if (!caps) return ALL_EXTENSIONS;
     const inputs = new Set(supportedInputs(engines).concat("pdf"));
     return ALL_EXTENSIONS.filter((e) => inputs.has(canonicalExt(e)));
@@ -187,9 +188,11 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     (!!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate))) ||
     (output !== "pdf" && !!findPath("pdf", output, engines)?.some((s) => s.approximate));
 
-  function visible(opt: ToolOption) {
+  function visible(opt: ToolOption): boolean {
     if (!opt.showIf) return true;
-    return opt.showIf.in.includes(String(options[opt.showIf.name] ?? ""));
+    // Un réglage dépend d'un autre : caché aussi quand cet autre réglage est lui-même caché
+    const parent = tool.options.find((o) => o.name === opt.showIf!.name);
+    return opt.showIf.in.includes(String(options[opt.showIf.name] ?? "")) && (!parent || visible(parent));
   }
 
   /** Renommer : tout se fait dans le navigateur (une archive ZIP s'il y a plusieurs fichiers). */

@@ -2,6 +2,7 @@
  * Les 13 outils de bout en bout (hors formats Office, testés à part).
  */
 import JSZip from "jszip";
+import sharp from "sharp";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import { renamedFiles } from "@/lib/core/rename";
@@ -198,5 +199,65 @@ describe("remplir un formulaire", () => {
 
   it("message clair pour un PDF sans formulaire", async () => {
     await expect(runTool("remplir", [await makePdf("simple.pdf", ["1"])], { values: "{}" })).rejects.toMatchObject({ key: "formNoFields" });
+  });
+});
+
+describe("extraire les images d'un PDF", () => {
+  async function pdfWithImages(): Promise<{ name: string; data: Uint8Array }> {
+    const doc = await PDFDocument.create();
+    const photo = await doc.embedPng((await makePng("photo.png", 200, 120)).data);
+    const icon = await doc.embedPng((await makePng("icon.png", 16, 16)).data);
+    for (let i = 0; i < 2; i++) {
+      const page = doc.addPage([400, 400]);
+      page.drawImage(photo, { x: 20, y: 200, width: 200, height: 120 }); // même photo sur 2 pages : gardée une fois
+      page.drawImage(icon, { x: 300, y: 300, width: 16, height: 16 });
+    }
+    return { name: "catalogue.pdf", data: await doc.save() };
+  }
+
+  it("une image par photo, sans doublon ni petite icône", async () => {
+    const out = await runTool("images", [await pdfWithImages()], { format: "png", small: false });
+    expect(out).toHaveLength(1);
+    expect(out[0].name).toMatch(/catalogue-page-1-image-1\.png$/);
+    const meta = await sharp(Buffer.from(out[0].data)).metadata();
+    expect([meta.width, meta.height]).toEqual([200, 120]);
+  });
+
+  it("avec les petites images, en JPG", async () => {
+    const out = await runTool("images", [await pdfWithImages()], { format: "jpg", small: true });
+    expect(out).toHaveLength(2);
+    expect(out.every((f) => f.data[0] === 0xff && f.data[1] === 0xd8)).toBe(true);
+  });
+
+  it("message clair pour un PDF sans image", async () => {
+    await expect(runTool("images", [await makePdf("texte.pdf", ["Bonjour"])], {})).rejects.toMatchObject({ key: "noImages" });
+  });
+});
+
+describe("redimensionner / recadrer", () => {
+  const size = async (f: { data: Uint8Array }) => {
+    const m = await sharp(Buffer.from(f.data)).metadata();
+    return [m.width, m.height, m.format];
+  };
+
+  it("réduire de moitié", async () => {
+    const [out] = await runTool("redimensionner", [await makePng("photo.png", 200, 100)], { mode: "resize", scale: "50", format: "same" });
+    expect(await size(out)).toEqual([100, 50, "png"]);
+    expect(out.name).toBe("photo-redimensionne.png");
+  });
+
+  it("largeur précise en gardant les proportions, en WebP", async () => {
+    const [out] = await runTool("redimensionner", [await makePng("photo.png", 200, 100)], { mode: "resize", scale: "custom", width: 80, height: 0, format: "webp" });
+    expect(await size(out)).toEqual([80, 40, "webp"]);
+  });
+
+  it("recadrer en carré au centre, en JPG", async () => {
+    const [out] = await runTool("redimensionner", [await makePng("photo.png", 200, 100)], { mode: "crop", ratio: "1:1", format: "jpg" });
+    expect(await size(out)).toEqual([100, 100, "jpeg"]);
+    expect(out.name).toBe("photo-recadre.jpg");
+  });
+
+  it("refuse un fichier qui n'est pas une image", async () => {
+    await expect(runTool("redimensionner", [await makePdf("doc.pdf", ["1"])], { mode: "resize" })).rejects.toMatchObject({ key: "notImage" });
   });
 });

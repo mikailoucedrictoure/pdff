@@ -61,6 +61,8 @@ export const TOOL_IDS = [
   "ocr",
   "remplir",
   "comparer",
+  "images",
+  "redimensionner",
 ] as const;
 
 export type ToolId = (typeof TOOL_IDS)[number];
@@ -69,7 +71,7 @@ export interface ToolMeta {
   id: ToolId;
   category: ToolCategory;
   /** "pdf" : uniquement des PDF. "any" : tout format convertible. "all" : n'importe quel fichier. "scan" : PDF et images. */
-  accepts: "pdf" | "any" | "all" | "scan";
+  accepts: "pdf" | "any" | "all" | "scan" | "image";
   /** Traité entièrement dans le navigateur : le fichier n'est jamais envoyé. */
   local?: boolean;
   minFiles: number;
@@ -266,6 +268,30 @@ export const TOOLS: ToolMeta[] = [
     maxFiles: 2,
     ordered: true,
     options: [{ type: "checkbox", name: "ignoreCase", default: false }],
+  },
+  {
+    id: "images",
+    category: "convertir",
+    accepts: "pdf",
+    minFiles: 1,
+    options: [
+      { type: "select", name: "format", default: "png", choices: ["png", "jpg"], display: "cards" },
+      { type: "checkbox", name: "small", default: false },
+    ],
+  },
+  {
+    id: "redimensionner",
+    category: "modifier",
+    accepts: "image",
+    minFiles: 1,
+    options: [
+      { type: "select", name: "mode", default: "resize", choices: ["resize", "crop"], display: "cards" },
+      { type: "select", name: "scale", default: "50", choices: ["75", "50", "25", "custom"], display: "cards", showIf: { name: "mode", in: ["resize"] } },
+      { type: "number", name: "width", default: 1200, min: 1, max: 20000, showIf: { name: "scale", in: ["custom"] } },
+      { type: "number", name: "height", default: 0, min: 0, max: 20000, showIf: { name: "scale", in: ["custom"] } },
+      { type: "select", name: "ratio", default: "1:1", choices: ["1:1", "4:3", "3:4", "16:9", "9:16", "3:2"], display: "cards", showIf: { name: "mode", in: ["crop"] } },
+      { type: "select", name: "format", default: "same", choices: ["same", "jpg", "png", "webp"], display: "cards" },
+    ],
   },
   {
     id: "compresser",

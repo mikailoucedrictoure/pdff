@@ -131,6 +131,7 @@ const en: Messages = {
     compareNoText: "These PDFs contain no readable text (scans?). Run them through the OCR tool first.",
     compareReport: "Comparison report",
     compareSkipped: "… {n} identical words …",
+    sizeChange: "{from} → {to} pixels",
   },
   language: {
     button: "Language",
@@ -1336,6 +1337,149 @@ const en: Messages = {
         ],
       },
     },
+    images: {
+      name: "Extract images",
+      tagline: "Get the photos and illustrations out of a PDF.",
+      seoTitle: "Extract images from a PDF online for free",
+      seoDescription: "Get every photo, illustration and logo out of a PDF as PNG or JPG, without duplicates. Free, no sign-up, files deleted right away.",
+      intro: "Drop a PDF: pdff finds every image it contains and gives them to you one by one, as PNG or JPG, in a ZIP archive. Small decorative images and duplicates are left out.",
+      options: {
+        format: {
+          label: "Image format",
+          choices: {
+            png: "PNG",
+            jpg: "JPG",
+          },
+          hints: {
+            png: "Perfect quality, keeps transparency.",
+            jpg: "Lighter files, ideal for photos.",
+          },
+        },
+        small: {
+          label: "Also keep small images (icons, bullets)",
+        },
+      },
+      guide: {
+        keywords: "extract images from pdf, save images from pdf, get photos out of a pdf, pdf image extractor",
+        uses: [
+          "Get the photos out of a PDF catalog, report or brochure.",
+          "Reuse a logo or chart in a presentation.",
+          "Save a document's images before deleting it.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "One or more.",
+          },
+          {
+            title: "Choose PNG or JPG",
+            text: "PNG for perfect quality, JPG for lighter files.",
+          },
+          {
+            title: "Click Extract images",
+            text: "You get all the images in a ZIP archive.",
+          },
+        ],
+        faq: [
+          {
+            q: "How is this different from converting a PDF to JPG?",
+            a: "Converting turns each whole page into an image. Extracting images only gets the photos and illustrations inside the pages, at their original size.",
+          },
+          {
+            q: "Why are some images missing?",
+            a: "Small images (icons, bullets) are skipped by default: tick \"Also keep small images\". Text and vector drawings are not images, so they are not extracted.",
+          },
+        ],
+      },
+    },
+    redimensionner: {
+      name: "Resize / crop",
+      tagline: "Change the size of an image or crop it.",
+      seoTitle: "Resize and crop images online for free",
+      seoDescription: "Shrink a photo (by % or in pixels) or crop it to square, 16:9 or 4:3, then save it as JPG, PNG or WebP. Free, no sign-up.",
+      intro: "Drop your images, choose to shrink or crop them, check the preview, then click Resize / crop. Handy for a profile picture, an attachment that's too heavy or a form that requires a specific size.",
+      options: {
+        mode: {
+          label: "What to do?",
+          choices: {
+            resize: "Resize",
+            crop: "Crop",
+          },
+          hints: {
+            resize: "Keep the whole image, smaller.",
+            crop: "Trim the edges to get an exact format.",
+          },
+        },
+        scale: {
+          label: "New size",
+          choices: {
+            "25": "25% (quarter)",
+            "50": "50% (half)",
+            "75": "75%",
+            custom: "Exact size in pixels",
+          },
+        },
+        width: {
+          label: "Width (pixels)",
+        },
+        height: {
+          label: "Height (pixels)",
+          help: "0 = calculated to keep proportions.",
+        },
+        ratio: {
+          label: "Format",
+          choices: {
+            "1:1": "Square (1:1)",
+            "4:3": "Landscape (4:3)",
+            "3:4": "Portrait (3:4)",
+            "16:9": "Widescreen (16:9)",
+            "9:16": "Vertical (9:16)",
+            "3:2": "Photo (3:2)",
+          },
+        },
+        format: {
+          label: "File format",
+          choices: {
+            same: "Keep the format",
+            jpg: "JPG",
+            png: "PNG",
+            webp: "WebP",
+          },
+        },
+      },
+      guide: {
+        keywords: "resize image, reduce photo size, crop image online, resize photo, make image smaller, square image",
+        uses: [
+          "Shrink a photo that's too heavy for an email or an online form.",
+          "Crop a photo to a square for a profile.",
+          "Prepare 16:9 images for a presentation or website.",
+        ],
+        steps: [
+          {
+            title: "Drop your images",
+            text: "JPG, PNG, WebP…",
+          },
+          {
+            title: "Choose the size or format",
+            text: "The preview shows the area kept and the new size.",
+          },
+          {
+            title: "Click Resize / crop",
+            text: "You download the edited images.",
+          },
+        ],
+        faq: [
+          {
+            q: "Does the photo lose quality?",
+            a: "A smaller image has fewer pixels but stays sharp at its new size.",
+          },
+          {
+            q: "Where is the crop made?",
+            a: "In the center of the image: the edges are trimmed evenly to reach the chosen format, as the preview shows.",
+          },
+        ],
+      },
+    },
   },
   errors: {
     unknownTool: "Unknown tool.",
@@ -1380,6 +1524,8 @@ const en: Messages = {
     redactNone: "Nothing to redact: none of the requested words or information were found in the document.",
     formNoFields: "\"{name}\" has no form fields to fill in.",
     formLockUnicode: "Some answers contain characters that cannot be fixed into the page. Untick \"Lock the answers\" to keep them editable.",
+    noImages: "No images found in this PDF. Text and vector drawings are not images.",
+    notImage: "\"{name}\" is not an image (JPG, PNG, WebP…).",
   },
 };
 

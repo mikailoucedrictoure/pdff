@@ -244,3 +244,41 @@ function matchQuads(page: MuPDF.PDFPage, regexes: RegExp[]): MuPDF.Quad[][] {
   }
   return out;
 }
+
+/**
+ * Extrait les images contenues dans un PDF (photos, illustrations, logos), sans les petites
+ * images décoratives ni les doublons (un même logo répété sur chaque page n'est gardé qu'une fois).
+ */
+export async function extractImages(file: FileData, format: "png" | "jpg", minSize = 48): Promise<FileData[]> {
+  const { m, doc } = await open(file);
+  const count = doc.countPages();
+  assertPageLimit(count);
+  const { createHash } = await import("node:crypto");
+  const seen = new Set<string>();
+  const out: FileData[] = [];
+  for (let i = 0; i < count; i++) {
+    const page = doc.loadPage(i);
+    const stext = page.toStructuredText("preserve-images");
+    const images: MuPDF.Image[] = [];
+    stext.walk({ onImageBlock: (_bbox, _transform, image) => void images.push(image) });
+    let k = 0;
+    for (const image of images) {
+      if (image.getWidth() < minSize || image.getHeight() < minSize) continue;
+      const raw = image.toPixmap();
+      // Couleurs d'impression (CMJN) ou en niveaux de gris : converties en RGB, lisibles partout
+      const pixmap = raw.convertToColorSpace(m.ColorSpace.DeviceRGB, format === "png");
+      const data = new Uint8Array(format === "png" ? pixmap.asPNG() : pixmap.asJPEG(90, false));
+      pixmap.destroy();
+      raw.destroy();
+      const hash = createHash("sha1").update(data).digest("hex");
+      if (seen.has(hash)) continue;
+      seen.add(hash);
+      k++;
+      out.push({ name: `${baseName(file.name)}-page-${pad(i + 1, count)}-image-${k}.${format}`, data });
+    }
+    stext.destroy();
+    page.destroy();
+  }
+  doc.destroy();
+  return out;
+}

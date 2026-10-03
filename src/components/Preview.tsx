@@ -8,6 +8,7 @@ import { extOf } from "@/lib/core/formats";
 import { parsePageList, parsePageSet, parseRanges } from "@/lib/core/pages";
 import { renamedFiles } from "@/lib/core/rename";
 import type { OptionValues } from "@/lib/core/tools";
+import { centeredCrop, resizedSize } from "@/lib/core/crop";
 import { CompareView, FormFiller, parseFormValues } from "./DocTools";
 import { FileGlyph } from "./visual/FileGlyph";
 
@@ -349,6 +350,18 @@ export function InputPreview({
     );
   }
 
+  if (toolId === "redimensionner") {
+    return (
+      <Panel title={w.previewTitle}>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-4">
+          {items.map((it) => (
+            <ResizeTile key={it.id} file={it.file} options={options} w={w} />
+          ))}
+        </div>
+      </Panel>
+    );
+  }
+
   if (toolId === "renommer") {
     const names = renamedFiles(
       items.map((i) => i.file.name),
@@ -481,6 +494,48 @@ export function ResultPreview({ url, name, w }: { url: string; name: string; w: 
         </div>
       )}
     </Panel>
+  );
+}
+
+/** Une image avec la zone gardée (recadrage) et sa taille avant → après. */
+function ResizeTile({ file, options, w }: { file: File; options: OptionValues; w: WorkspaceText }) {
+  const src = useMemo(() => URL.createObjectURL(file), [file]);
+  const [natural, setNatural] = useState<[number, number] | null>(null);
+  useEffect(() => () => URL.revokeObjectURL(src), [src]);
+  const o = {
+    mode: String(options.mode ?? "resize"),
+    scale: String(options.scale ?? "50"),
+    width: Number(options.width) || 0,
+    height: Number(options.height) || 0,
+    ratio: String(options.ratio ?? "1:1"),
+  };
+  const crop = natural && o.mode === "crop" ? centeredCrop(natural[0], natural[1], o.ratio) : null;
+  const after = natural ? resizedSize(natural[0], natural[1], o) : null;
+  return (
+    <figure className="flex min-w-0 flex-col gap-1.5">
+      <div className="relative overflow-hidden rounded-md bg-[repeating-conic-gradient(#e5e7eb_0_25%,#fff_0_50%)] bg-[length:16px_16px] ring-1 ring-black/10">
+        {/* eslint-disable-next-line @next/next/no-img-element -- image déposée, affichée sans envoi */}
+        <img src={src} alt="" className="block w-full" onLoad={(e) => setNatural([e.currentTarget.naturalWidth, e.currentTarget.naturalHeight])} />
+        {crop && natural && (
+          <span
+            aria-hidden="true"
+            className="absolute border-2 border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.55)]"
+            style={{
+              left: `${(crop.left / natural[0]) * 100}%`,
+              top: `${(crop.top / natural[1]) * 100}%`,
+              width: `${(crop.width / natural[0]) * 100}%`,
+              height: `${(crop.height / natural[1]) * 100}%`,
+            }}
+          />
+        )}
+      </div>
+      <figcaption className="text-xs text-muted">
+        <span className="block truncate font-medium text-ink" dir="auto">
+          {file.name}
+        </span>
+        {natural && after && <span className="tabular-nums">{fmt(w.sizeChange, { from: `${natural[0]} × ${natural[1]}`, to: `${after[0]} × ${after[1]}` })}</span>}
+      </figcaption>
+    </figure>
   );
 }
 

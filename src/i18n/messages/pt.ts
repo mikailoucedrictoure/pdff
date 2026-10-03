@@ -131,6 +131,7 @@ const pt: Messages = {
     compareNoText: "Estes PDFs não contêm texto legível (digitalizações?). Passe-os antes pela ferramenta OCR.",
     compareReport: "Relatório de comparação",
     compareSkipped: "… {n} palavras idênticas …",
+    sizeChange: "{from} → {to} pixels",
   },
   language: {
     button: "Idioma",
@@ -1345,6 +1346,149 @@ const pt: Messages = {
         ],
       },
     },
+    images: {
+      name: "Extrair imagens",
+      tagline: "Tirar as fotos e ilustrações de um PDF.",
+      seoTitle: "Extrair imagens de um PDF online grátis",
+      seoDescription: "Tire todas as fotos, ilustrações e logotipos de um PDF em PNG ou JPG, sem duplicatas. Grátis, sem cadastro, arquivos apagados na hora.",
+      intro: "Envie um PDF: o pdff encontra todas as imagens que ele contém e as entrega uma a uma, em PNG ou JPG, em um arquivo ZIP. Imagens decorativas pequenas e duplicatas ficam de fora.",
+      options: {
+        format: {
+          label: "Formato das imagens",
+          choices: {
+            png: "PNG",
+            jpg: "JPG",
+          },
+          hints: {
+            png: "Qualidade perfeita, mantém a transparência.",
+            jpg: "Arquivos mais leves, ideal para fotos.",
+          },
+        },
+        small: {
+          label: "Manter também as imagens pequenas (ícones, marcadores)",
+        },
+      },
+      guide: {
+        keywords: "extrair imagens de pdf, tirar fotos de um pdf, salvar imagens de um pdf",
+        uses: [
+          "Tirar as fotos de um catálogo, relatório ou folheto em PDF.",
+          "Reutilizar um logotipo ou gráfico em uma apresentação.",
+          "Salvar as imagens de um documento antes de apagá-lo.",
+        ],
+        steps: [
+          {
+            title: "Envie seu PDF",
+            text: "Um ou vários.",
+          },
+          {
+            title: "Escolha PNG ou JPG",
+            text: "PNG para qualidade perfeita, JPG para arquivos mais leves.",
+          },
+          {
+            title: "Clique em Extrair imagens",
+            text: "Você recebe todas as imagens em um arquivo ZIP.",
+          },
+        ],
+        faq: [
+          {
+            q: "Qual a diferença para a conversão de PDF em JPG?",
+            a: "A conversão transforma cada página inteira em imagem. Extrair imagens tira só as fotos e ilustrações das páginas, no tamanho original.",
+          },
+          {
+            q: "Por que faltam algumas imagens?",
+            a: "Imagens pequenas (ícones, marcadores) são ignoradas por padrão: marque “Manter também as imagens pequenas”. Textos e desenhos vetoriais não são imagens.",
+          },
+        ],
+      },
+    },
+    redimensionner: {
+      name: "Redimensionar / recortar",
+      tagline: "Mudar o tamanho de uma imagem ou recortá-la.",
+      seoTitle: "Redimensionar e recortar imagens online grátis",
+      seoDescription: "Reduza uma foto (em % ou em pixels) ou recorte-a em quadrado, 16:9 ou 4:3 e salve em JPG, PNG ou WebP. Grátis, sem cadastro.",
+      intro: "Envie suas imagens, escolha reduzir ou recortar, confira a pré-visualização e clique em Redimensionar / recortar. Prático para foto de perfil, anexo pesado demais ou formulário que exige um tamanho.",
+      options: {
+        mode: {
+          label: "O que fazer?",
+          choices: {
+            resize: "Redimensionar",
+            crop: "Recortar",
+          },
+          hints: {
+            resize: "Manter a imagem inteira, menor.",
+            crop: "Cortar as bordas para obter um formato exato.",
+          },
+        },
+        scale: {
+          label: "Novo tamanho",
+          choices: {
+            "25": "25% (um quarto)",
+            "50": "50% (metade)",
+            "75": "75%",
+            custom: "Tamanho exato em pixels",
+          },
+        },
+        width: {
+          label: "Largura (pixels)",
+        },
+        height: {
+          label: "Altura (pixels)",
+          help: "0 = calculada para manter as proporções.",
+        },
+        ratio: {
+          label: "Formato",
+          choices: {
+            "1:1": "Quadrado (1:1)",
+            "4:3": "Paisagem (4:3)",
+            "3:4": "Retrato (3:4)",
+            "16:9": "Widescreen (16:9)",
+            "9:16": "Vertical (9:16)",
+            "3:2": "Foto (3:2)",
+          },
+        },
+        format: {
+          label: "Formato do arquivo",
+          choices: {
+            same: "Manter o formato",
+            jpg: "JPG",
+            png: "PNG",
+            webp: "WebP",
+          },
+        },
+      },
+      guide: {
+        keywords: "redimensionar imagem, diminuir tamanho de foto, recortar imagem online, reduzir imagem, imagem quadrada",
+        uses: [
+          "Diminuir uma foto pesada demais para um e-mail ou formulário online.",
+          "Recortar uma foto em quadrado para um perfil.",
+          "Preparar imagens 16:9 para uma apresentação ou site.",
+        ],
+        steps: [
+          {
+            title: "Envie suas imagens",
+            text: "JPG, PNG, WebP…",
+          },
+          {
+            title: "Escolha o tamanho ou o formato",
+            text: "A pré-visualização mostra a área mantida e o novo tamanho.",
+          },
+          {
+            title: "Clique em Redimensionar / recortar",
+            text: "Você baixa as imagens modificadas.",
+          },
+        ],
+        faq: [
+          {
+            q: "A foto perde qualidade?",
+            a: "Uma imagem reduzida tem menos pixels, mas fica nítida no novo tamanho.",
+          },
+          {
+            q: "Onde é feito o recorte?",
+            a: "No centro da imagem: as bordas são cortadas por igual para obter o formato escolhido, como mostra a pré-visualização.",
+          },
+        ],
+      },
+    },
   },
   errors: {
     unknownTool: "Ferramenta desconhecida.",
@@ -1389,6 +1533,8 @@ const pt: Messages = {
     redactNone: "Nada a ocultar: nenhuma das palavras ou informações pedidas foi encontrada no documento.",
     formNoFields: "“{name}” não tem campos de formulário para preencher.",
     formLockUnicode: "Algumas respostas contêm caracteres que não podem ser fixados na página. Desmarque “Bloquear as respostas” para mantê-las editáveis.",
+    noImages: "Nenhuma imagem encontrada neste PDF. Textos e desenhos vetoriais não são imagens.",
+    notImage: "“{name}” não é uma imagem (JPG, PNG, WebP…).",
   },
 };
 

@@ -131,6 +131,7 @@ const de: Messages = {
     compareNoText: "Diese PDFs enthalten keinen lesbaren Text (Scans?). Verarbeiten Sie sie zuerst mit dem OCR-Werkzeug.",
     compareReport: "Vergleichsbericht",
     compareSkipped: "… {n} identische Wörter …",
+    sizeChange: "{from} → {to} Pixel",
   },
   language: {
     button: "Sprache",
@@ -1342,6 +1343,149 @@ const de: Messages = {
         ],
       },
     },
+    images: {
+      name: "Bilder extrahieren",
+      tagline: "Fotos und Abbildungen aus einem PDF herausholen.",
+      seoTitle: "Bilder aus PDF online kostenlos extrahieren",
+      seoDescription: "Holen Sie alle Fotos, Abbildungen und Logos aus einem PDF als PNG oder JPG heraus, ohne Duplikate. Kostenlos, ohne Anmeldung, Dateien sofort gelöscht.",
+      intro: "Legen Sie ein PDF ab: pdff findet alle enthaltenen Bilder und gibt sie Ihnen einzeln als PNG oder JPG in einem ZIP-Archiv. Kleine Zierbilder und Duplikate werden weggelassen.",
+      options: {
+        format: {
+          label: "Bildformat",
+          choices: {
+            png: "PNG",
+            jpg: "JPG",
+          },
+          hints: {
+            png: "Perfekte Qualität, behält Transparenz.",
+            jpg: "Kleinere Dateien, ideal für Fotos.",
+          },
+        },
+        small: {
+          label: "Auch kleine Bilder behalten (Symbole, Aufzählungszeichen)",
+        },
+      },
+      guide: {
+        keywords: "bilder aus pdf extrahieren, fotos aus pdf speichern, pdf bilder herausholen",
+        uses: [
+          "Die Fotos aus einem PDF-Katalog, Bericht oder Prospekt herausholen.",
+          "Ein Logo oder Diagramm in einer Präsentation wiederverwenden.",
+          "Die Bilder eines Dokuments sichern, bevor es gelöscht wird.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Eine oder mehrere Dateien.",
+          },
+          {
+            title: "PNG oder JPG wählen",
+            text: "PNG für perfekte Qualität, JPG für kleinere Dateien.",
+          },
+          {
+            title: "Auf Bilder extrahieren klicken",
+            text: "Sie erhalten alle Bilder in einem ZIP-Archiv.",
+          },
+        ],
+        faq: [
+          {
+            q: "Was ist der Unterschied zur Umwandlung von PDF in JPG?",
+            a: "Die Umwandlung macht aus jeder ganzen Seite ein Bild. Bilder extrahieren holt nur die Fotos und Abbildungen aus den Seiten, in Originalgröße.",
+          },
+          {
+            q: "Warum fehlen manche Bilder?",
+            a: "Kleine Bilder (Symbole, Aufzählungszeichen) werden standardmäßig übersprungen: Aktivieren Sie „Auch kleine Bilder behalten“. Text und Vektorzeichnungen sind keine Bilder.",
+          },
+        ],
+      },
+    },
+    redimensionner: {
+      name: "Größe ändern / zuschneiden",
+      tagline: "Die Größe eines Bildes ändern oder es zuschneiden.",
+      seoTitle: "Bildgröße ändern und Bilder zuschneiden, online und kostenlos",
+      seoDescription: "Verkleinern Sie ein Foto (in % oder Pixeln) oder schneiden Sie es quadratisch, 16:9 oder 4:3 zu und speichern Sie es als JPG, PNG oder WebP. Kostenlos.",
+      intro: "Legen Sie Ihre Bilder ab, wählen Sie Verkleinern oder Zuschneiden, prüfen Sie die Vorschau und klicken Sie auf Größe ändern / zuschneiden. Praktisch für ein Profilbild, einen zu großen Anhang oder ein Formular mit Größenvorgabe.",
+      options: {
+        mode: {
+          label: "Was soll passieren?",
+          choices: {
+            resize: "Größe ändern",
+            crop: "Zuschneiden",
+          },
+          hints: {
+            resize: "Das ganze Bild behalten, nur kleiner.",
+            crop: "Ränder abschneiden, um ein genaues Format zu erhalten.",
+          },
+        },
+        scale: {
+          label: "Neue Größe",
+          choices: {
+            "25": "25 % (Viertel)",
+            "50": "50 % (Hälfte)",
+            "75": "75 %",
+            custom: "Genaue Größe in Pixeln",
+          },
+        },
+        width: {
+          label: "Breite (Pixel)",
+        },
+        height: {
+          label: "Höhe (Pixel)",
+          help: "0 = wird berechnet, um die Proportionen zu wahren.",
+        },
+        ratio: {
+          label: "Format",
+          choices: {
+            "1:1": "Quadrat (1:1)",
+            "4:3": "Querformat (4:3)",
+            "3:4": "Hochformat (3:4)",
+            "16:9": "Breitbild (16:9)",
+            "9:16": "Vertikal (9:16)",
+            "3:2": "Foto (3:2)",
+          },
+        },
+        format: {
+          label: "Dateiformat",
+          choices: {
+            same: "Format beibehalten",
+            jpg: "JPG",
+            png: "PNG",
+            webp: "WebP",
+          },
+        },
+      },
+      guide: {
+        keywords: "bildgröße ändern, foto verkleinern, bild zuschneiden online, bild kleiner machen, quadratisches bild",
+        uses: [
+          "Ein zu großes Foto für eine E-Mail oder ein Online-Formular verkleinern.",
+          "Ein Foto für ein Profil quadratisch zuschneiden.",
+          "Bilder im Format 16:9 für eine Präsentation oder Website vorbereiten.",
+        ],
+        steps: [
+          {
+            title: "Bilder ablegen",
+            text: "JPG, PNG, WebP…",
+          },
+          {
+            title: "Größe oder Format wählen",
+            text: "Die Vorschau zeigt den behaltenen Bereich und die neue Größe.",
+          },
+          {
+            title: "Auf Größe ändern / zuschneiden klicken",
+            text: "Sie laden die bearbeiteten Bilder herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Verliert das Foto an Qualität?",
+            a: "Ein verkleinertes Bild hat weniger Pixel, bleibt aber in seiner neuen Größe scharf.",
+          },
+          {
+            q: "Wo wird zugeschnitten?",
+            a: "In der Bildmitte: Die Ränder werden gleichmäßig abgeschnitten, um das gewählte Format zu erhalten, wie die Vorschau zeigt.",
+          },
+        ],
+      },
+    },
   },
   errors: {
     unknownTool: "Unbekanntes Werkzeug.",
@@ -1386,6 +1530,8 @@ const de: Messages = {
     redactNone: "Nichts zu schwärzen: Keines der angegebenen Wörter oder Informationen wurde im Dokument gefunden.",
     formNoFields: "„{name}“ enthält keine ausfüllbaren Formularfelder.",
     formLockUnicode: "Einige Antworten enthalten Zeichen, die nicht fest in die Seite übernommen werden können. Deaktivieren Sie „Antworten sperren“, damit sie bearbeitbar bleiben.",
+    noImages: "In diesem PDF wurden keine Bilder gefunden. Text und Vektorzeichnungen sind keine Bilder.",
+    notImage: "„{name}“ ist kein Bild (JPG, PNG, WebP…).",
   },
 };
 

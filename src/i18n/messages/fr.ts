@@ -145,6 +145,7 @@ const fr = {
     compareNoText: "Ces PDF ne contiennent pas de texte lisible (scans ?). Passez-les d'abord par l'outil OCR.",
     compareReport: "Rapport de comparaison",
     compareSkipped: "… {n} mots identiques …",
+    sizeChange: "{from} → {to} pixels",
   },
   language: {
     button: "Langue",
@@ -1363,6 +1364,149 @@ const fr = {
         ],
       },
     },
+    images: {
+      name: "Extraire les images",
+      tagline: "Récupérer les photos et illustrations contenues dans un PDF.",
+      seoTitle: "Extraire les images d'un PDF en ligne gratuitement",
+      seoDescription: "Récupérez toutes les photos, illustrations et logos d'un PDF en PNG ou JPG, sans doublons. Gratuit, sans inscription, fichiers supprimés aussitôt.",
+      intro: "Déposez un PDF : pdff retrouve toutes les images qu'il contient et vous les donne une par une, en PNG ou en JPG, dans une archive ZIP. Les petites images décoratives et les doublons sont écartés.",
+      options: {
+        format: {
+          label: "Format des images",
+          choices: {
+            png: "PNG",
+            jpg: "JPG",
+          },
+          hints: {
+            png: "Qualité parfaite, garde la transparence.",
+            jpg: "Fichiers plus légers, idéal pour les photos.",
+          },
+        },
+        small: {
+          label: "Garder aussi les petites images (icônes, puces)",
+        },
+      },
+      guide: {
+        keywords: "extraire images pdf, récupérer les images d'un pdf, enregistrer les photos d'un pdf, sortir une image d'un pdf",
+        uses: [
+          "Récupérer les photos d'un catalogue, d'un rapport ou d'une brochure en PDF.",
+          "Réutiliser un logo ou un graphique dans une présentation.",
+          "Sauvegarder les images d'un document avant de le supprimer.",
+        ],
+        steps: [
+          {
+            title: "Déposez votre PDF",
+            text: "Un ou plusieurs.",
+          },
+          {
+            title: "Choisissez PNG ou JPG",
+            text: "PNG pour une qualité parfaite, JPG pour des fichiers plus légers.",
+          },
+          {
+            title: "Cliquez sur Extraire les images",
+            text: "Vous recevez toutes les images dans une archive ZIP.",
+          },
+        ],
+        faq: [
+          {
+            q: "Quelle différence avec la conversion d'un PDF en JPG ?",
+            a: "La conversion transforme chaque page entière en image. Extraire les images récupère seulement les photos et illustrations contenues dans les pages, dans leur taille d'origine.",
+          },
+          {
+            q: "Pourquoi certaines images manquent-elles ?",
+            a: "Les petites images (icônes, puces) sont ignorées par défaut : cochez « Garder aussi les petites images ». Un texte ou un dessin vectoriel n'est pas une image et n'est donc pas extrait.",
+          },
+        ],
+      },
+    },
+    redimensionner: {
+      name: "Redimensionner / recadrer",
+      tagline: "Changer la taille d'une image ou la recadrer.",
+      seoTitle: "Redimensionner et recadrer une image en ligne gratuitement",
+      seoDescription: "Réduisez une photo (en % ou en pixels) ou recadrez-la en carré, 16:9 ou 4:3, puis enregistrez-la en JPG, PNG ou WebP. Gratuit, sans inscription.",
+      intro: "Déposez vos images, choisissez de les réduire ou de les recadrer, regardez l'aperçu, puis cliquez sur Redimensionner / recadrer. Pratique pour une photo de profil, une pièce jointe trop lourde ou un formulaire qui impose une taille.",
+      options: {
+        mode: {
+          label: "Que faire ?",
+          choices: {
+            resize: "Redimensionner",
+            crop: "Recadrer",
+          },
+          hints: {
+            resize: "Garder toute l'image, en plus petit.",
+            crop: "Couper les bords pour obtenir un format précis.",
+          },
+        },
+        scale: {
+          label: "Nouvelle taille",
+          choices: {
+            "25": "25 % (quart)",
+            "50": "50 % (moitié)",
+            "75": "75 %",
+            custom: "Taille précise en pixels",
+          },
+        },
+        width: {
+          label: "Largeur (pixels)",
+        },
+        height: {
+          label: "Hauteur (pixels)",
+          help: "0 = calculée pour garder les proportions.",
+        },
+        ratio: {
+          label: "Format",
+          choices: {
+            "1:1": "Carré (1:1)",
+            "4:3": "Paysage (4:3)",
+            "3:4": "Portrait (3:4)",
+            "16:9": "Écran large (16:9)",
+            "9:16": "Vertical (9:16)",
+            "3:2": "Photo (3:2)",
+          },
+        },
+        format: {
+          label: "Format du fichier",
+          choices: {
+            same: "Garder le format",
+            jpg: "JPG",
+            png: "PNG",
+            webp: "WebP",
+          },
+        },
+      },
+      guide: {
+        keywords: "redimensionner image, réduire taille photo, recadrer image en ligne, redimensionner photo, réduire poids image, image en carré",
+        uses: [
+          "Réduire une photo trop lourde pour un courriel ou un formulaire en ligne.",
+          "Recadrer une photo en carré pour un profil.",
+          "Préparer des images au format 16:9 pour une présentation ou un site.",
+        ],
+        steps: [
+          {
+            title: "Déposez vos images",
+            text: "JPG, PNG, WebP…",
+          },
+          {
+            title: "Choisissez la taille ou le format",
+            text: "L'aperçu montre la zone gardée et la nouvelle taille.",
+          },
+          {
+            title: "Cliquez sur Redimensionner / recadrer",
+            text: "Vous téléchargez les images modifiées.",
+          },
+        ],
+        faq: [
+          {
+            q: "La photo perd-elle en qualité ?",
+            a: "Une image réduite contient moins de pixels, mais reste nette à sa nouvelle taille.",
+          },
+          {
+            q: "Où se fait le recadrage ?",
+            a: "Au centre de l'image : les bords sont coupés de façon égale pour obtenir le format choisi, comme le montre l'aperçu.",
+          },
+        ],
+      },
+    },
   },
   errors: {
     unknownTool: "Outil inconnu.",
@@ -1407,6 +1551,8 @@ const fr = {
     redactNone: "Rien à caviarder : aucun des mots ou informations demandés n'a été trouvé dans le document.",
     formNoFields: "« {name} » ne contient pas de champs de formulaire à remplir.",
     formLockUnicode: "Certaines réponses contiennent des caractères qui ne peuvent pas être figés dans la page. Décochez « Verrouiller les réponses » pour les garder modifiables.",
+    noImages: "Aucune image trouvée dans ce PDF. Les textes et les dessins vectoriels ne sont pas des images.",
+    notImage: "« {name} » n'est pas une image (JPG, PNG, WebP…).",
   },
 };
 

@@ -9,7 +9,8 @@ import { renamedFiles } from "@/lib/core/rename";
 import { getTool, type OptionValues } from "@/lib/core/tools";
 import { availableEngines, convertFile, ensurePdf } from "./convert";
 import * as pdf from "./engines/pdf";
-import { decrypt, encrypt, REDACT_PATTERNS, type RedactOptions, type RedactPattern, redact } from "./engines/mupdf";
+import { resizeImage } from "./engines/resize";
+import { decrypt, encrypt, extractImages, REDACT_PATTERNS, type RedactOptions, type RedactPattern, redact } from "./engines/mupdf";
 import { type FileData, UserError } from "./types";
 
 type Runner = (files: FileData[], o: Options) => Promise<FileData[]>;
@@ -210,6 +211,35 @@ const runners: Record<string, Runner> = {
         }),
       };
     }),
+
+  async images(files, o) {
+    const out: FileData[] = [];
+    for (const file of files) {
+      requirePdf(file);
+      // Sans l'option « small », les petites images décoratives (puces, icônes) sont ignorées
+      out.push(...(await extractImages(file, o.str("format") === "jpg" ? "jpg" : "png", o.bool("small") ? 1 : 48)));
+    }
+    if (!out.length) throw new UserError("noImages");
+    return out;
+  },
+
+  async redimensionner(files, o) {
+    const out: FileData[] = [];
+    for (const file of files) {
+      if (!["jpg", "png", "webp", "avif", "tiff", "gif"].includes(canonicalExt(extOf(file.name)))) throw new UserError("notImage", { name: file.name });
+      out.push(
+        await resizeImage(file, {
+          mode: o.str("mode") === "crop" ? "crop" : "resize",
+          scale: o.str("scale") || "50",
+          width: o.num("width", 1200),
+          height: o.num("height", 0),
+          ratio: o.str("ratio") || "1:1",
+          format: (["jpg", "png", "webp"].includes(o.str("format")) ? o.str("format") : "same") as "same" | "jpg" | "png" | "webp",
+        }),
+      );
+    }
+    return out;
+  },
 
   remplir: (files, o) =>
     eachPdf(files, async (file, doc) => {

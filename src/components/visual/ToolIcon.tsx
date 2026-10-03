@@ -185,6 +185,35 @@ const GLYPHS: Record<string, Glyph> = {
     ),
   },
 
+  // Une photo qui sort de la page.
+  images: {
+    base: (
+      <>
+        <path d={PAGE} />
+        <path d={FOLD} />
+      </>
+    ),
+    cut: <rect x="9.5" y="10" width="12.5" height="10" rx="1.5" />,
+    top: (
+      <>
+        <rect x="9.5" y="10" width="12.5" height="10" rx="1.5" {...T} />
+        <path d="M10.5 18.5l3-3.2 2.2 2.2 1.6-1.6 3.2 2.6" />
+        <circle cx="13.2" cy="13" r="1" fill="currentColor" stroke="none" />
+      </>
+    ),
+  },
+
+  // Les équerres du recadrage autour d'une photo.
+  redimensionner: {
+    base: (
+      <>
+        <path d="M6.5 2.5v13a2 2 0 0 0 2 2h13M2.5 6.5h13a2 2 0 0 1 2 2v13" />
+        <rect x="8.5" y="8.5" width="7" height="7" rx="1" {...T} />
+        <path d="M9.2 14.6l2-2.2 1.6 1.5 2.2-2.4" />
+      </>
+    ),
+  },
+
   // La page bascule, son ancienne position reste en pointillés.
   pivoter: {
     base: (
