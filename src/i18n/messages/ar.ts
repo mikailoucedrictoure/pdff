@@ -131,6 +131,7 @@ const ar: Messages = {
     compareNoText: "لا تحتوي هذه الملفات على نص مقروء (ممسوحة ضوئيًا؟). مرّرها أولًا عبر أداة OCR.",
     compareReport: "تقرير المقارنة",
     compareSkipped: "… {n} كلمات متطابقة …",
+    heicConverting: "جارٍ تجهيز صور iPhone ‏(HEIC)…",
     sizeChange: "{from} ← {to} بكسل",
   },
   language: {
@@ -179,7 +180,7 @@ const ar: Messages = {
       },
       {
         q: "ما الصيغ المدعومة؟",
-        a: "PDF وWord (DOCX وDOC) وExcel (XLSX وXLS وCSV) وPowerPoint (PPTX وPPT) وOpenDocument (ODT وODS وODP) وRTF والصور (JPG وPNG وWebP وAVIF وTIFF وGIF وSVG) وEPUB وTXT وHTML وغيرها.",
+        a: "PDF وWord (DOCX وDOC) وExcel (XLSX وXLS وCSV) وPowerPoint (PPTX وPPT) وOpenDocument (ODT وODS وODP) وRTF والصور (JPG وPNG وWebP وAVIF وHEIC (iPhone) وTIFF وGIF وSVG) وEPUB وTXT وHTML وغيرها.",
       },
       {
         q: "هل هناك حدود؟",
@@ -456,7 +457,7 @@ const ar: Messages = {
           },
           {
             q: "ما الصيغ التي يمكن تحويلها؟",
-            a: "أكثر من 40: PDF وWord وExcel وPowerPoint وOpenDocument والصور (JPG وPNG وWebP وAVIF…) وEPUB والنصوص وHTML وغيرها.",
+            a: "أكثر من 40: PDF وWord وExcel وPowerPoint وOpenDocument والصور (JPG وPNG وWebP وAVIF وHEIC…) وEPUB والنصوص وHTML وغيرها.",
           },
         ],
       },

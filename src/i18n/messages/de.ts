@@ -131,6 +131,7 @@ const de: Messages = {
     compareNoText: "Diese PDFs enthalten keinen lesbaren Text (Scans?). Verarbeiten Sie sie zuerst mit dem OCR-Werkzeug.",
     compareReport: "Vergleichsbericht",
     compareSkipped: "… {n} identische Wörter …",
+    heicConverting: "iPhone-Fotos (HEIC) werden vorbereitet…",
     sizeChange: "{from} → {to} Pixel",
   },
   language: {
@@ -185,7 +186,7 @@ const de: Messages = {
       },
       {
         q: "Welche Formate werden unterstützt?",
-        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, Bilder (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML und mehr.",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, Bilder (JPG, PNG, WebP, AVIF, HEIC (iPhone), TIFF, GIF, SVG), EPUB, TXT, HTML und mehr.",
       },
       {
         q: "Gibt es Grenzen?",
@@ -468,7 +469,7 @@ const de: Messages = {
           },
           {
             q: "Welche Formate lassen sich umwandeln?",
-            a: "Mehr als 40: PDF, Word, Excel, PowerPoint, OpenDocument, Bilder (JPG, PNG, WebP, AVIF…), EPUB, Text, HTML und mehr.",
+            a: "Mehr als 40: PDF, Word, Excel, PowerPoint, OpenDocument, Bilder (JPG, PNG, WebP, AVIF, HEIC…), EPUB, Text, HTML und mehr.",
           },
         ],
       },

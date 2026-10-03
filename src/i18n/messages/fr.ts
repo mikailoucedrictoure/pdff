@@ -145,6 +145,7 @@ const fr = {
     compareNoText: "Ces PDF ne contiennent pas de texte lisible (scans ?). Passez-les d'abord par l'outil OCR.",
     compareReport: "Rapport de comparaison",
     compareSkipped: "… {n} mots identiques …",
+    heicConverting: "Préparation des photos d'iPhone (HEIC)…",
     sizeChange: "{from} → {to} pixels",
   },
   language: {
@@ -202,7 +203,7 @@ const fr = {
       },
       {
         q: "Quels formats sont pris en charge ?",
-        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, images (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML et d'autres encore.",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, images (JPG, PNG, WebP, AVIF, HEIC d'iPhone, TIFF, GIF, SVG), EPUB, TXT, HTML et d'autres encore.",
       },
       {
         q: "Y a-t-il une limite ?",
@@ -487,7 +488,7 @@ const fr = {
           },
           {
             q: "Quels formats peut-on convertir ?",
-            a: "Plus de 40 : PDF, Word, Excel, PowerPoint, OpenDocument, images (JPG, PNG, WebP, AVIF…), EPUB, texte, HTML et d'autres.",
+            a: "Plus de 40 : PDF, Word, Excel, PowerPoint, OpenDocument, images (JPG, PNG, WebP, AVIF, HEIC…), EPUB, texte, HTML et d'autres.",
           },
         ],
       },

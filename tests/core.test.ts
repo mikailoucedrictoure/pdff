@@ -84,3 +84,15 @@ describe("chemins de conversion depuis un PDF", () => {
     expect(findPath("pdf", "doc", all)?.map((s) => s.engine)).toEqual(["office-pdf-import", "office"]);
   });
 });
+
+describe("photos d'iPhone (HEIC)", () => {
+  it("reconnues et présentées parmi les formats", async () => {
+    const { isHeicName } = await import("@/lib/client/heic");
+    const { SHOWCASE_EXTENSIONS } = await import("@/lib/core/formats");
+    expect(isHeicName("IMG_0042.HEIC")).toBe(true);
+    expect(isHeicName("photo.heif")).toBe(true);
+    expect(isHeicName("photo.jpg")).toBe(false);
+    expect(SHOWCASE_EXTENSIONS).toContain("heic");
+    expect(SHOWCASE_EXTENSIONS).not.toContain("heif");
+  });
+});

@@ -131,6 +131,7 @@ const pt: Messages = {
     compareNoText: "Estes PDFs não contêm texto legível (digitalizações?). Passe-os antes pela ferramenta OCR.",
     compareReport: "Relatório de comparação",
     compareSkipped: "… {n} palavras idênticas …",
+    heicConverting: "Preparando as fotos do iPhone (HEIC)…",
     sizeChange: "{from} → {to} pixels",
   },
   language: {
@@ -188,7 +189,7 @@ const pt: Messages = {
       },
       {
         q: "Quais formatos são aceitos?",
-        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, imagens (JPG, PNG, WebP, AVIF, TIFF, GIF, SVG), EPUB, TXT, HTML e outros.",
+        a: "PDF, Word (DOCX, DOC), Excel (XLSX, XLS, CSV), PowerPoint (PPTX, PPT), OpenDocument (ODT, ODS, ODP), RTF, imagens (JPG, PNG, WebP, AVIF, HEIC (iPhone), TIFF, GIF, SVG), EPUB, TXT, HTML e outros.",
       },
       {
         q: "Existe algum limite?",
@@ -471,7 +472,7 @@ const pt: Messages = {
           },
           {
             q: "Quais formatos podem ser convertidos?",
-            a: "Mais de 40: PDF, Word, Excel, PowerPoint, OpenDocument, imagens (JPG, PNG, WebP, AVIF…), EPUB, texto, HTML e outros.",
+            a: "Mais de 40: PDF, Word, Excel, PowerPoint, OpenDocument, imagens (JPG, PNG, WebP, AVIF, HEIC…), EPUB, texto, HTML e outros.",
           },
         ],
       },

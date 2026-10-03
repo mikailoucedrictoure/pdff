@@ -131,6 +131,7 @@ const zh: Messages = {
     compareNoText: "这些 PDF 没有可读取的文字（扫描件？）。请先用 OCR 工具处理。",
     compareReport: "比较报告",
     compareSkipped: "…… {n} 个相同的词 ……",
+    heicConverting: "正在处理 iPhone 照片（HEIC）…",
     sizeChange: "{from} → {to} 像素",
   },
   language: {
@@ -167,7 +168,7 @@ const zh: Messages = {
       },
       {
         q: "支持哪些格式？",
-        a: "PDF、Word（DOCX、DOC）、Excel（XLSX、XLS、CSV）、PowerPoint（PPTX、PPT）、OpenDocument（ODT、ODS、ODP）、RTF、图片（JPG、PNG、WebP、AVIF、TIFF、GIF、SVG）、EPUB、TXT、HTML 等。",
+        a: "PDF、Word（DOCX、DOC）、Excel（XLSX、XLS、CSV）、PowerPoint（PPTX、PPT）、OpenDocument（ODT、ODS、ODP）、RTF、图片（JPG、PNG、WebP、AVIF、HEIC（iPhone）、TIFF、GIF、SVG）、EPUB、TXT、HTML 等。",
       },
       { q: "有什么限制吗？", a: "每次最多可处理 {files} 个文件，生成的文档最多可达 {pages} 页。" },
     ],
@@ -438,7 +439,7 @@ const zh: Messages = {
           },
           {
             q: "可以转换哪些格式？",
-            a: "40 多种：PDF、Word、Excel、PowerPoint、OpenDocument、图片（JPG、PNG、WebP、AVIF 等）、EPUB、文本、HTML 等。",
+            a: "40 多种：PDF、Word、Excel、PowerPoint、OpenDocument、图片（JPG、PNG、WebP、AVIF、HEIC 等）、EPUB、文本、HTML 等。",
           },
         ],
       },

@@ -35,6 +35,9 @@ const list: FormatInfo[] = [
   { ext: "gif", label: "GIF", category: "image", mime: "image/gif" },
   { ext: "bmp", label: "BMP", category: "image", mime: "image/bmp" },
   { ext: "svg", label: "SVG", category: "image", mime: "image/svg+xml" },
+  // Photos d'iPhone : converties en JPG dans le navigateur dès le dépôt (src/lib/client/heic.ts)
+  { ext: "heic", label: "HEIC (iPhone)", category: "image", mime: "image/heic" },
+  { ext: "heif", label: "HEIF", category: "image", mime: "image/heif" },
 
   // Traitement de texte
   { ext: "docx", label: "Word (DOCX)", category: "document", mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
@@ -120,7 +123,7 @@ const EXT_COLORS: Record<string, string> = {
   xlsx: "#1d9e5a", xls: "#1d9e5a", ods: "#1d9e5a", csv: "#2f8f5b",
   pptx: "#f0662b", ppt: "#f0662b", odp: "#f0662b",
   jpg: "#a24bf0", jpeg: "#a24bf0", png: "#8b5cf6", webp: "#7c3aed", avif: "#9333ea",
-  tiff: "#b15bd6", tif: "#b15bd6", gif: "#c026d3", bmp: "#a855f7", svg: "#f59e0b",
+  tiff: "#b15bd6", tif: "#b15bd6", gif: "#c026d3", bmp: "#a855f7", svg: "#f59e0b", heic: "#6366f1", heif: "#6366f1",
   epub: "#0ea5a4", xps: "#0891b2", oxps: "#0891b2", cbz: "#14b8a6", fb2: "#0d9488", mobi: "#0f766e",
   txt: "#64748b", md: "#475569", html: "#e44d26", htm: "#e44d26",
 };
@@ -129,5 +132,5 @@ export function formatColor(ext: string): string {
   return EXT_COLORS[ext.toLowerCase()] ?? "#6d5cff";
 }
 
-/** Formats à montrer (sans les alias jpeg, tif, htm, oxps). */
-export const SHOWCASE_EXTENSIONS = list.map((f) => f.ext).filter((e) => !["jpeg", "tif", "htm", "oxps"].includes(e));
+/** Formats à montrer (sans les alias jpeg, tif, htm, oxps, heif). */
+export const SHOWCASE_EXTENSIONS = list.map((f) => f.ext).filter((e) => !["jpeg", "tif", "htm", "oxps", "heif"].includes(e));

@@ -7,6 +7,7 @@ import type { ClientMessages as Messages } from "@/i18n/client-messages";
 import { ALL_EXTENSIONS, canonicalExt, extOf, FORMATS, type FormatCategory } from "@/lib/core/formats";
 import type { Capabilities } from "@/lib/core/capabilities";
 import { commonTargets, findPath, supportedInputs, type EngineId } from "@/lib/core/graph";
+import { heicToJpeg, isHeicName } from "@/lib/client/heic";
 import { cleanFileName, renamedFiles } from "@/lib/core/rename";
 import { defaultOptions, getTool, type OptionValues, type ToolOption } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
@@ -119,6 +120,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   /** Nom souhaité pour le fichier produit (vide = nom automatique). */
   const [resultName, setResultName] = useState("");
   const [rejected, setRejected] = useState<string[]>([]);
+  /** Photos d'iPhone en cours de conversion en JPG. */
+  const [preparing, setPreparing] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -148,10 +151,25 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     };
   }, [status]);
 
+  /** L'outil accepte-t-il les photos (et donc les photos d'iPhone, converties en JPG) ? */
+  const takesPhotos = !acceptedExts || acceptedExts.includes("jpg");
+
   function addFiles(list: FileList | File[]) {
+    const files = Array.from(list);
+    const heic = takesPhotos ? files.filter((f) => isHeicName(f.name)).length : 0;
+    if (!heic) return acceptFiles(files);
+    // Photos d'iPhone : converties en JPG dans le navigateur avant d'être ajoutées
+    setPreparing((n) => n + heic);
+    void Promise.all(files.map((f) => (isHeicName(f.name) ? heicToJpeg(f).catch(() => f) : f))).then((converted) => {
+      setPreparing((n) => n - heic);
+      acceptFiles(converted);
+    });
+  }
+
+  function acceptFiles(files: File[]) {
     const accepted: Item[] = [];
     const refused: string[] = [];
-    for (const file of Array.from(list)) {
+    for (const file of files) {
       if (!acceptedExts || acceptedExts.includes(extOf(file.name))) accepted.push({ id: newId(), file });
       else refused.push(file.name);
     }
@@ -456,7 +474,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
             ref={inputRef}
             type="file"
             multiple={maxFiles > 1}
-            accept={acceptedExts?.map((e) => `.${e}`).join(",")}
+            accept={acceptedExts ? [...acceptedExts, ...(takesPhotos ? ["heic", "heif"] : [])].map((e) => `.${e}`).join(",") : undefined}
             className="hidden"
             onChange={(e) => {
               if (e.target.files) addFiles(e.target.files);
@@ -579,6 +597,12 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
           )}
         </div>
 
+        {preparing > 0 && (
+          <p role="status" className="mt-3 flex items-center gap-2 rounded-2xl bg-bg px-4 py-3 text-sm text-muted">
+            <span aria-hidden="true" className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {w.heicConverting}
+          </p>
+        )}
         {rejected.length > 0 && (
           <p role="alert" className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
         )}

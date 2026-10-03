@@ -7,6 +7,7 @@ Conçu et développé par [Mikailou Cedric Toure](https://www.linkedin.com/in/mi
 
 - **Installer pdff sur vos propres serveurs** (administrations, entreprises, écoles) : [INSTALLATION.md](INSTALLATION.md) — une commande Docker, fonctionne sans Internet.
 - **Signaler une faille** : [SECURITY.md](SECURITY.md).
+- Bibliothèques chargées dans le navigateur à la demande : pdf.js (aperçus, Apache-2.0), tesseract.js (Lire un scan, Apache-2.0), heic-to / libheif (photos d'iPhone HEIC converties en JPG, LGPL-3.0, module séparé et non modifié).
 - Sur le site : Conditions d’utilisation (`/conditions`), Confidentialité, Sécurité et données (`/securite`), Accessibilité (`/accessibilite`, WCAG 2.2 AA).
 
 ## Démarrer en local
