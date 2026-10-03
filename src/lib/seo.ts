@@ -33,6 +33,9 @@ const OG_LOCALE: Record<string, string> = { fr: "fr_FR", en: "en_US", es: "es_ES
 export function languageAlternates(path: string): Record<string, string> {
   const languages: Record<string, string> = {};
   for (const l of VERIFIED_LOCALES) languages[HREFLANG[l] ?? l] = localePath(`/${l}`, path);
+  // Canada : les pages françaises et anglaises s'adressent aussi explicitement aux Canadiens
+  languages["fr-CA"] = localePath("/fr", path);
+  languages["en-CA"] = localePath("/en", path);
   languages["x-default"] = path;
   return languages;
 }

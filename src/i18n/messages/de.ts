@@ -194,6 +194,8 @@ const de: Messages = {
     moreTools: "Weitere Werkzeuge",
     privacyLink: "Datenschutz",
     sourceLink: "Offener Quellcode",
+    usesTitle: "Wofür ist das gut?",
+    toolFaqTitle: "Fragen zu diesem Werkzeug",
   },
   privacy: {
     title: "Datenschutz",
@@ -393,6 +395,38 @@ const de: Messages = {
       seoDescription: "Fügen Sie PDF, Word, Excel, PowerPoint und Bilder in der gewünschten Reihenfolge zu einem PDF zusammen. Kostenlos, ohne Anmeldung und Wasserzeichen.",
       intro: "Alle Unterlagen in einer Datei: pdff nimmt PDFs, aber auch Word-Dokumente, Excel-Tabellen, Präsentationen und Fotos an und fügt sie zu einem sauberen PDF mit einem Lesezeichen pro Datei zusammen.",
       options: { bookmarks: { label: "Ein Lesezeichen pro Datei hinzufügen" } },
+      guide: {
+        keywords: "pdf zusammenführen, pdf zusammenfügen, pdf kombinieren, mehrere pdf zu einem, word und pdf zusammenführen",
+        uses: [
+          "Eine vollständige Bewerbung oder einen Antrag (Ausweis, Nachweise, Formulare) als eine einzige Datei senden, wie es die meisten Behörden verlangen.",
+          "Die Kapitel einer Abschlussarbeit oder eines Berichts aus getrennten Dateien zusammenführen.",
+          "Handyfotos von Dokumenten in ein sauberes PDF verwandeln.",
+        ],
+        steps: [
+          {
+            title: "Dateien ablegen",
+            text: "PDF, Word, Excel, Bilder… so viele wie nötig.",
+          },
+          {
+            title: "Reihenfolge festlegen",
+            text: "Ziehen oder mit den Pfeilen und der A→Z-Sortierung ordnen.",
+          },
+          {
+            title: "Auf Zusammenführen klicken",
+            text: "Sie laden ein einziges PDF mit einem Lesezeichen pro Datei herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann ich Word-Dateien und Fotos mit PDFs zusammenführen?",
+            a: "Ja. pdff wandelt jede Datei automatisch in PDF um und fügt sie in der gewählten Reihenfolge zusammen.",
+          },
+          {
+            q: "Wie viele Dateien kann ich zusammenführen?",
+            a: "Bis zu mehreren hundert auf einmal, ohne Wasserzeichen und ohne Anmeldung.",
+          },
+        ],
+      },
     },
     convertir: {
       name: "Umwandeln",
@@ -404,6 +438,38 @@ const de: Messages = {
         target: { label: "Umwandeln in" },
         dpi: { label: "Bildauflösung (DPI)" },
         quality: { label: "Qualität JPG / WebP / AVIF (1-100)" },
+      },
+      guide: {
+        keywords: "pdf in word umwandeln, word in pdf, jpg in pdf, pdf in jpg, excel in pdf, powerpoint in pdf, pdf konverter kostenlos",
+        uses: [
+          "Ein PDF in Word umwandeln, um den Text zu bearbeiten.",
+          "Ein Foto oder einen Screenshot als PDF an eine Stelle senden.",
+          "Ein Word-, Excel- oder PowerPoint-Dokument in PDF umwandeln, damit es überall gleich aussieht.",
+        ],
+        steps: [
+          {
+            title: "Dateien ablegen",
+            text: "Eine oder mehrere, in jedem gängigen Format.",
+          },
+          {
+            title: "Format wählen",
+            text: "pdff bietet nur die für Ihre Dateien möglichen Umwandlungen an.",
+          },
+          {
+            title: "Auf Umwandeln klicken",
+            text: "Die umgewandelte Datei wird sofort heruntergeladen.",
+          },
+        ],
+        faq: [
+          {
+            q: "Bleibt das Layout bei PDF zu Word erhalten?",
+            a: "So gut wie möglich; ein komplexes PDF (Spalten, verschachtelte Tabellen) kann Nacharbeit brauchen – pdff weist Sie darauf hin.",
+          },
+          {
+            q: "Welche Formate lassen sich umwandeln?",
+            a: "Mehr als 40: PDF, Word, Excel, PowerPoint, OpenDocument, Bilder (JPG, PNG, WebP, AVIF…), EPUB, Text, HTML und mehr.",
+          },
+        ],
       },
     },
     diviser: {
@@ -435,6 +501,38 @@ const de: Messages = {
           label: "Wie viele Seiten pro Datei?",
         },
       },
+      guide: {
+        keywords: "pdf teilen, pdf aufteilen, pdf trennen, pdf seiten trennen, jede seite eines pdf einzeln",
+        uses: [
+          "Einen großen Scan mit mehreren Dokumenten auftrennen.",
+          "Nur einen Teil eines zu großen Dokuments senden.",
+          "Jede Seite eines PDFs als eigene Datei oder als Bild erhalten.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Aufteilung wählen",
+            text: "Jede Seite einzeln, nach Seitenbereichen oder in Paketen.",
+          },
+          {
+            title: "Auf Teilen klicken",
+            text: "Sie erhalten alle Teile in einer einzigen ZIP-Datei.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann ich die Seiten jeder Datei genau festlegen?",
+            a: "Ja: Schreiben Sie z. B. „1-3, 4-10“ für eine Datei mit den Seiten 1 bis 3 und eine mit den Seiten 4 bis 10.",
+          },
+          {
+            q: "Kann ich Bilder statt PDFs erhalten?",
+            a: "Ja: Wählen Sie JPG oder PNG unter „Format des Ergebnisses“.",
+          },
+        ],
+      },
     },
     extraire: {
       name: "Seiten extrahieren / löschen",
@@ -446,6 +544,38 @@ const de: Messages = {
         mode: { label: "Aktion", choices: { keep: "Nur diese Seiten behalten", remove: "Diese Seiten löschen" } },
         pages: { label: "Seiten", placeholder: "1, 3-5", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
       },
+      guide: {
+        keywords: "pdf seiten löschen, seiten aus pdf entfernen, pdf seiten extrahieren, bestimmte seiten behalten",
+        uses: [
+          "Eine leere oder doppelte Seite aus einem Scan entfernen.",
+          "Nur die nützlichen Seiten eines langen Dokuments vor dem Versand behalten.",
+          "Eine Seite mit persönlichen Daten entfernen.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Seiten angeben",
+            text: "Behalten oder löschen: Die Vorschau streicht entfernte Seiten durch.",
+          },
+          {
+            title: "Auf die Schaltfläche klicken",
+            text: "Sie laden das schlankere PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Wie lösche ich eine einzelne Seite?",
+            a: "Wählen Sie „Diese Seiten löschen“ und geben Sie die Nummer ein, z. B. „3“.",
+          },
+          {
+            q: "Wird der Rest des Dokuments verändert?",
+            a: "Nein: Die übrigen Seiten bleiben unverändert, ohne Qualitätsverlust.",
+          },
+        ],
+      },
     },
     organiser: {
       name: "Seiten neu anordnen",
@@ -456,6 +586,38 @@ const de: Messages = {
       options: {
         order: { label: "Neue Reihenfolge", placeholder: "3, 1, 2, 4-ende", help: "Nicht genannte Seiten werden entfernt." },
         reverse: { label: "Gesamtes Dokument umkehren (ignoriert die Reihenfolge oben)" },
+      },
+      guide: {
+        keywords: "pdf seiten neu anordnen, reihenfolge pdf ändern, pdf seite verschieben, pdf umkehren",
+        uses: [
+          "Durcheinander gescannte Seiten wieder ordnen.",
+          "Ein Deckblatt oder Inhaltsverzeichnis an den Anfang setzen.",
+          "Ein falsch herum gescanntes Dokument umkehren.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Neue Reihenfolge eingeben",
+            text: "Zum Beispiel „3, 1, 2“: Die Vorschau zeigt das Ergebnis.",
+          },
+          {
+            title: "Auf Seiten neu anordnen klicken",
+            text: "Sie laden das geordnete PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann ich eine Seite verdoppeln?",
+            a: "Ja: Geben Sie ihre Nummer zweimal ein, z. B. „1, 2, 2, 3“.",
+          },
+          {
+            q: "Wie kehre ich das ganze Dokument um?",
+            a: "Aktivieren Sie die Umkehr-Option: Die letzte Seite wird zur ersten.",
+          },
+        ],
       },
     },
     renommer: {
@@ -476,6 +638,38 @@ const de: Messages = {
           help: "Eine andere Endung ändert nicht das Dateiformat. Zum Umwandeln nutzen Sie Umwandeln.",
         },
       },
+      guide: {
+        keywords: "dateien umbenennen, mehrere dateien umbenennen, dateiname ändern, pdf online umbenennen",
+        uses: [
+          "Den Unterlagen eines Antrags klare Namen geben (Rechnung-1, Rechnung-2…).",
+          "Dutzende Fotos oder Scans auf einmal umbenennen.",
+          "Einen Dateinamen ohne andere Software korrigieren.",
+        ],
+        steps: [
+          {
+            title: "Dateien ablegen",
+            text: "Beliebigen Typs, in der gewünschten Reihenfolge.",
+          },
+          {
+            title: "Neuen Namen eingeben",
+            text: "Bei mehreren Dateien wird eine Nummer angehängt; die Vorschau zeigt jeden neuen Namen.",
+          },
+          {
+            title: "Auf Umbenennen klicken",
+            text: "Eine Datei oder ein ZIP-Archiv wird heruntergeladen.",
+          },
+        ],
+        faq: [
+          {
+            q: "Werden meine Dateien hochgeladen?",
+            a: "Nein: Das Umbenennen geschieht vollständig in Ihrem Browser.",
+          },
+          {
+            q: "Wandelt eine neue Endung die Datei um?",
+            a: "Nein. Um das Format wirklich zu ändern (z. B. von Word zu PDF), nutzen Sie das Werkzeug Umwandeln.",
+          },
+        ],
+      },
     },
     pivoter: {
       name: "Drehen",
@@ -486,6 +680,38 @@ const de: Messages = {
       options: {
         angle: { label: "Drehung", choices: { "90": "90° im Uhrzeigersinn", "180": "180°", "270": "90° gegen den Uhrzeigersinn" } },
         pages: { label: "Seiten", placeholder: "alle", help: "Z. B. 1-3, 5, 8-ende. Leer = alle Seiten." },
+      },
+      guide: {
+        keywords: "pdf drehen, pdf seite drehen, pdf rotieren, gescanntes pdf gerade richten",
+        uses: [
+          "Eine kopfüber oder seitlich gescannte Seite gerade richten.",
+          "Tabellenseiten ins Querformat drehen.",
+          "Die Ausrichtung eines mit dem Handy fotografierten Dokuments korrigieren.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Richtung und Seiten wählen",
+            text: "Viertel- oder halbe Drehung, für das ganze Dokument oder einzelne Seiten.",
+          },
+          {
+            title: "Auf Drehen klicken",
+            text: "Sie laden das gerade gerichtete PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann ich nur eine Seite drehen?",
+            a: "Ja: Geben Sie ihre Nummer unter „Seiten“ ein; die anderen bleiben unverändert.",
+          },
+          {
+            q: "Verschlechtert das Drehen die Qualität?",
+            a: "Nein, die Seite wird nur gedreht, nicht neu komprimiert.",
+          },
+        ],
       },
     },
     numeroter: {
@@ -534,6 +760,38 @@ const de: Messages = {
           help: "Leer lassen für alle Seiten. „2-ende“ überspringt die erste Seite.",
         },
       },
+      guide: {
+        keywords: "pdf seitenzahlen hinzufügen, pdf seiten nummerieren, pdf paginieren",
+        uses: [
+          "Eine Abschlussarbeit, einen Bericht oder eine Bewerbung nummerieren.",
+          "„1 / 10“ hinzufügen, damit beim Drucken keine Seite fehlt.",
+          "Unterlagen vor der Abgabe bei Gericht oder Behörde paginieren.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Stelle und Stil anklicken",
+            text: "Die Nummer erscheint sofort auf jeder Seite der Vorschau.",
+          },
+          {
+            title: "Auf Seiten nummerieren klicken",
+            text: "Sie laden das nummerierte PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann die erste Seite ohne Nummer bleiben?",
+            a: "Ja: Geben Sie unter „Weitere Einstellungen“ bei „Zu nummerierende Seiten“ „2-ende“ ein.",
+          },
+          {
+            q: "Kann die Zählung bei einer anderen Zahl als 1 beginnen?",
+            a: "Ja, unter „Weitere Einstellungen“ im Feld „Erste Nummer“.",
+          },
+        ],
+      },
     },
     filigrane: {
       name: "Wasserzeichen",
@@ -581,6 +839,38 @@ const de: Messages = {
           help: "Leer lassen für alle Seiten. Z. B. 1-3, 5, 8-ende.",
         },
       },
+      guide: {
+        keywords: "pdf wasserzeichen, wasserzeichen hinzufügen, pdf kopie stempeln, pdf vertraulich markieren",
+        uses: [
+          "Die Kopie Ihres Ausweises mit „Kopie nur für die Wohnungsbewerbung“ markieren, damit sie nicht missbraucht wird.",
+          "„VERTRAULICH“ oder „ENTWURF“ auf ein internes Dokument setzen.",
+          "Kennzeichnen, dass ein Dokument nicht die endgültige Fassung ist.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Text und Stil wählen",
+            text: "Farbe, Sichtbarkeit und Richtung: Die Vorschau aktualisiert sich sofort.",
+          },
+          {
+            title: "Auf Wasserzeichen klicken",
+            text: "Sie laden das markierte PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Warum ein Wasserzeichen auf einer Ausweiskopie?",
+            a: "Ein Vermerk wie „Kopie für Antrag X vom 2. Oktober“ verhindert, dass eine gestohlene Kopie anderweitig verwendet wird.",
+          },
+          {
+            q: "Bleibt der Text des Dokuments lesbar?",
+            a: "Ja: Wählen Sie die Sichtbarkeit „Dezent“ oder „Normal“.",
+          },
+        ],
+      },
     },
     compresser: {
       name: "Komprimieren",
@@ -603,6 +893,38 @@ const de: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "pdf komprimieren, pdf verkleinern, pdf größe reduzieren, pdf zu groß, pdf für e-mail verkleinern",
+        uses: [
+          "Ein zu großes PDF per E-Mail senden.",
+          "Ein Dokument in einem Portal mit Größenlimit hochladen (oft 2 bis 5 MB).",
+          "Platz in Ihren Ordnern sparen.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Eine oder mehrere Dateien.",
+          },
+          {
+            title: "„Empfohlen“ beibehalten",
+            text: "Oder Leicht bzw. Maximal je nach Zielgröße wählen.",
+          },
+          {
+            title: "Auf Komprimieren klicken",
+            text: "pdff zeigt die Ersparnis, z. B. „8 MB → 2 MB“.",
+          },
+        ],
+        faq: [
+          {
+            q: "Wird der Text durch die Komprimierung unscharf?",
+            a: "Nein: Der Text bleibt scharf. Nur Bilder werden verkleinert, im Modus Empfohlen nur wenig.",
+          },
+          {
+            q: "Warum wird mein PDF nicht kleiner?",
+            a: "Es war wahrscheinlich schon optimiert; pdff weist darauf hin.",
+          },
+        ],
+      },
     },
     proteger: {
       name: "Schützen",
@@ -616,6 +938,38 @@ const de: Messages = {
         noCopy: { label: "Kopieren von Text verbieten" },
         noEdit: { label: "Bearbeiten verbieten" },
       },
+      guide: {
+        keywords: "pdf mit passwort schützen, pdf verschlüsseln, pdf sichern, drucken von pdf verhindern",
+        uses: [
+          "Eine Gehaltsabrechnung, Krankenakte oder einen Vertrag senden, den Fremde nicht öffnen können.",
+          "Drucken, Kopieren oder Bearbeiten eines Dokuments verhindern.",
+          "Die Vertraulichkeitsregeln Ihrer Organisation einhalten.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Eine oder mehrere Dateien.",
+          },
+          {
+            title: "Passwort wählen",
+            text: "Und bei Bedarf, was verboten ist: Drucken, Kopieren, Bearbeiten.",
+          },
+          {
+            title: "Auf Schützen klicken",
+            text: "Das PDF wird mit AES-256 verschlüsselt; teilen Sie das Passwort auf anderem Weg mit.",
+          },
+        ],
+        faq: [
+          {
+            q: "Ist diese Verschlüsselung sicher?",
+            a: "Ja: AES-256, das Niveau von Banken und Regierungen. Ohne Passwort ist der Inhalt unlesbar.",
+          },
+          {
+            q: "Speichert pdff mein Passwort?",
+            a: "Nein, es wird nie gespeichert. Wenn Sie es vergessen, kann niemand die Datei öffnen.",
+          },
+        ],
+      },
     },
     deverrouiller: {
       name: "Entsperren",
@@ -624,6 +978,38 @@ const de: Messages = {
       seoDescription: "Entfernen Sie das Passwort eines PDFs, dessen Passwort Sie kennen, um es frei zu öffnen, zu drucken oder zusammenzufügen. Kostenlos.",
       intro: "Sie kennen das Passwort, aber es jedes Mal einzugeben nervt? Entfernen Sie es ein für alle Mal. pdff umgeht niemals ein unbekanntes Passwort.",
       options: { password: { label: "Aktuelles Passwort", help: "Leer lassen, wenn das PDF nur ein Berechtigungspasswort hat." } },
+      guide: {
+        keywords: "pdf entsperren, pdf passwort entfernen, pdf schutz aufheben",
+        uses: [
+          "Nicht mehr bei jedem Öffnen eines eigenen Dokuments das Passwort eingeben.",
+          "Den Schutz vor dem Zusammenführen oder Bearbeiten eines PDFs entfernen.",
+          "Dokumente archivieren, ohne ihr Passwort zu verlieren.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Das geschützte PDF.",
+          },
+          {
+            title: "Passwort eingeben",
+            text: "Die Vorschau erscheint, sobald es stimmt.",
+          },
+          {
+            title: "Auf Entsperren klicken",
+            text: "Sie laden das PDF ohne Schutz herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Kann ich ein PDF ohne Passwort entsperren?",
+            a: "Nein. pdff entfernt den Schutz nur bei Dokumenten, deren Passwort Sie kennen.",
+          },
+          {
+            q: "Werden auch Druckbeschränkungen entfernt?",
+            a: "Ja, das erzeugte PDF hat keine Beschränkungen mehr.",
+          },
+        ],
+      },
     },
     metadonnees: {
       name: "Metadaten",
@@ -637,6 +1023,38 @@ const de: Messages = {
         subject: { label: "Betreff" },
         keywords: { label: "Schlüsselwörter (durch Kommas getrennt)" },
         clear: { label: "Alle vorhandenen Metadaten löschen" },
+      },
+      guide: {
+        keywords: "pdf metadaten bearbeiten, pdf titel ändern, pdf autor, pdf eigenschaften, pdf metadaten löschen",
+        uses: [
+          "Einem PDF einen echten Titel geben (der im Browser-Tab angezeigt wird).",
+          "Den Namen des Autors oder der Software vor einer Veröffentlichung löschen.",
+          "Schlüsselwörter hinzufügen, um Dokumente leicht wiederzufinden.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Eine oder mehrere Dateien.",
+          },
+          {
+            title: "Felder ausfüllen",
+            text: "Titel, Autor, Thema, Schlüsselwörter – oder die Option zum Löschen aller Angaben wählen.",
+          },
+          {
+            title: "Auf Metadaten klicken",
+            text: "Sie laden das aktualisierte PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Was sind PDF-Metadaten?",
+            a: "Versteckte Angaben in der Datei: Titel, Autor, verwendete Software, Daten. Sie können verraten, wer das Dokument erstellt hat.",
+          },
+          {
+            q: "Ändert sich der Inhalt der Seiten?",
+            a: "Nein, nur diese Angaben werden geändert.",
+          },
+        ],
       },
     },
     signer: {
@@ -686,6 +1104,38 @@ const de: Messages = {
           label: "Heutiges Datum unter die Unterschrift setzen",
         },
       },
+      guide: {
+        keywords: "pdf unterschreiben, pdf online signieren, unterschrift in pdf einfügen, dokument kostenlos unterschreiben",
+        uses: [
+          "Einen Mietvertrag, Arbeitsvertrag oder eine Vollmacht unterschreiben, ohne zu drucken oder zu scannen.",
+          "Jede Seite eines Vertrags paraphieren.",
+          "Mit dem Finger auf dem Smartphone unterschreiben.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Das zu unterschreibende Dokument.",
+          },
+          {
+            title: "Unterschrift erstellen",
+            text: "Zeichnen, Namen schreiben oder ein Bild hochladen.",
+          },
+          {
+            title: "Seite und Stelle wählen",
+            text: "Vorschau prüfen, dann auf Unterschreiben klicken.",
+          },
+        ],
+        faq: [
+          {
+            q: "Ist diese Unterschrift rechtsgültig?",
+            a: "Es ist eine einfache elektronische Signatur, wie eine eingescannte Unterschrift: Sie genügt für die meisten Alltagsvorgänge. Manche Rechtsgeschäfte verlangen eine qualifizierte elektronische Signatur mit Zertifikat.",
+          },
+          {
+            q: "Wird meine Unterschrift gespeichert?",
+            a: "Nein: Sie dient nur Ihrem Dokument und wird mit ihm gelöscht.",
+          },
+        ],
+      },
     },
     caviarder: {
       name: "Schwärzen",
@@ -713,13 +1163,45 @@ const de: Messages = {
           label: "Zu verbergende Bereiche",
         },
       },
+      guide: {
+        keywords: "pdf schwärzen, pdf anonymisieren, text in pdf schwärzen, sensible daten aus pdf entfernen",
+        uses: [
+          "Ein Dokument vor der Veröffentlichung oder Weitergabe anonymisieren (Namen, Adressen, Nummern).",
+          "Eine Informationsanfrage beantworten und geschützte Daten entfernen.",
+          "Einen Kontoauszug teilen und dabei Kontonummern verbergen.",
+        ],
+        steps: [
+          {
+            title: "PDF ablegen",
+            text: "Die Vorschau zeigt alle Seiten.",
+          },
+          {
+            title: "Angeben, was verschwinden soll",
+            text: "Wörter eingeben, Informationsarten wählen oder Bereiche auf den Seiten ziehen.",
+          },
+          {
+            title: "Auf Schwärzen klicken",
+            text: "Der verdeckte Inhalt wird aus der Datei gelöscht, nicht nur überdeckt.",
+          },
+        ],
+        faq: [
+          {
+            q: "Warum nicht einfach ein schwarzes Rechteck zeichnen?",
+            a: "Ein darübergelegtes Rechteck lässt den Text in der Datei: Man kann ihn kopieren oder das Rechteck entfernen. pdff löscht Text und Bilder unter dem Bereich wirklich.",
+          },
+          {
+            q: "Spielt Groß- und Kleinschreibung eine Rolle?",
+            a: "Nein: „Müller“ entfernt auch „MÜLLER“ und „müller“.",
+          },
+        ],
+      },
     },
     ocr: {
-      name: "OCR",
-      tagline: "Ein gescanntes Dokument durchsuchbar und kopierbar machen.",
-      seoTitle: "Kostenlose Online-OCR: gescanntes PDF in durchsuchbares PDF",
-      seoDescription: "Gescanntes PDF oder Foto eines Dokuments in ein PDF mit durchsuchbarem, kopierbarem Text oder eine Textdatei verwandeln. 16 Sprachen, ohne Upload.",
-      intro: "Legen Sie einen Scan ab (PDF oder Foto), wählen Sie die Sprache und klicken Sie auf OCR. Das Lesen geschieht auf Ihrem Gerät: Ihr Dokument wird nicht hochgeladen. Nur das Modell der gewählten Sprache (einige MB) wird einmal geladen.",
+      name: "Scan lesen",
+      tagline: "Den Text eines gescannten oder fotografierten Dokuments durchsuchbar und kopierbar machen.",
+      seoTitle: "Kostenlose Online-OCR: gescanntes PDF durchsuchbar machen",
+      seoDescription: "Text aus einem gescannten PDF oder Foto lesen (OCR), um ihn zu durchsuchen, zu kopieren oder vorlesen zu lassen. 16 Sprachen, kostenlos, ohne Upload.",
+      intro: "Ein gescanntes oder fotografiertes Dokument ist nur ein Bild: Man kann weder nach einem Wort suchen noch einen Satz kopieren. Scan lesen erkennt jeden Buchstaben (das nennt man OCR) und fügt dem Dokument den echten Text hinzu, ohne sein Aussehen zu ändern. Das Lesen geschieht auf Ihrem Gerät: Ihr Dokument wird nicht hochgeladen. Nur das Modell der gewählten Sprache (einige MB) wird einmal geladen.",
       options: {
         lang: {
           label: "Sprache des Dokuments",
@@ -736,6 +1218,38 @@ const de: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "ocr online, kostenlose ocr, gescanntes pdf in text, pdf durchsuchbar machen, texterkennung, bild in text",
+        uses: [
+          "Mit Strg + F ein Wort in einem langen gescannten Vertrag finden.",
+          "Den Text einer fotografierten Rechnung oder eines Briefs kopieren.",
+          "Digitalisierte Papierarchive für blinde Menschen zugänglich machen.",
+        ],
+        steps: [
+          {
+            title: "Scan ablegen",
+            text: "Ein gescanntes PDF oder ein Foto eines Dokuments.",
+          },
+          {
+            title: "Sprache wählen",
+            text: "Die Sprache des Dokumenttextes.",
+          },
+          {
+            title: "Auf Scan lesen klicken",
+            text: "Sie erhalten ein PDF mit durchsuchbarem, kopierbarem Text oder eine Textdatei.",
+          },
+        ],
+        faq: [
+          {
+            q: "Was bedeutet OCR?",
+            a: "Optische Zeichenerkennung: Der Computer erkennt die Buchstaben in einem Bild und macht daraus echten Text.",
+          },
+          {
+            q: "Wird mein Dokument hochgeladen?",
+            a: "Nein: Das Lesen geschieht vollständig auf Ihrem Gerät. Nur das Sprachmodell wird einmal geladen.",
+          },
+        ],
+      },
     },
     remplir: {
       name: "Formular ausfüllen",
@@ -751,6 +1265,38 @@ const de: Messages = {
           label: "Antworten sperren (das Formular kann nicht mehr geändert werden)",
         },
       },
+      guide: {
+        keywords: "pdf ausfüllen, pdf formular online ausfüllen, pdf formular ausfüllen kostenlos, in pdf schreiben",
+        uses: [
+          "Ein Behördenformular (Antrag, Anmeldung, Erklärung) ohne Ausdrucken ausfüllen.",
+          "Ein Formular auf dem Smartphone ausfüllen.",
+          "Ihre Antworten vor dem Versand sperren.",
+        ],
+        steps: [
+          {
+            title: "Formular ablegen",
+            text: "pdff findet alle auszufüllenden Felder.",
+          },
+          {
+            title: "Felder ausfüllen",
+            text: "Die Vorschau zeigt Ihre Antworten an der richtigen Stelle der Seite.",
+          },
+          {
+            title: "Auf Formular ausfüllen klicken",
+            text: "Sie laden das ausgefüllte PDF herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Warum findet pdff kein Feld?",
+            a: "Das PDF ist kein interaktives Formular (oft ein Scan). Drucken Sie es aus oder fordern Sie bei der Stelle eine interaktive Fassung an.",
+          },
+          {
+            q: "Was bewirkt „Antworten sperren“?",
+            a: "Die Antworten werden Teil der Seite und lassen sich nicht mehr ändern.",
+          },
+        ],
+      },
     },
     comparer: {
       name: "Vergleichen",
@@ -762,6 +1308,38 @@ const de: Messages = {
         ignoreCase: {
           label: "Groß- und Kleinschreibung ignorieren",
         },
+      },
+      guide: {
+        keywords: "zwei pdf vergleichen, pdf unterschiede finden, zwei versionen eines dokuments vergleichen, verträge vergleichen",
+        uses: [
+          "Vor dem Unterschreiben prüfen, was sich in einem Vertrag oder Mietvertrag geändert hat.",
+          "Korrekturen an einem Bericht oder einer Abschlussarbeit kontrollieren.",
+          "Zwei Fassungen einer Vorschrift oder eines amtlichen Textes vergleichen.",
+        ],
+        steps: [
+          {
+            title: "Alte Fassung ablegen",
+            text: "Dann die neue, in dieser Reihenfolge.",
+          },
+          {
+            title: "Unterschiede lesen",
+            text: "Grün: hinzugefügt, rot durchgestrichen: entfernt.",
+          },
+          {
+            title: "Auf Vergleichen klicken",
+            text: "Sie laden einen Bericht zum Aufbewahren oder Drucken herunter.",
+          },
+        ],
+        faq: [
+          {
+            q: "Werden meine Dokumente hochgeladen?",
+            a: "Nein: Der Vergleich geschieht vollständig in Ihrem Browser.",
+          },
+          {
+            q: "Kann ich gescannte Dokumente vergleichen?",
+            a: "Ja, nachdem Sie sie mit dem Werkzeug Scan lesen verarbeitet haben, das ihren Text erkennt.",
+          },
+        ],
       },
     },
   },

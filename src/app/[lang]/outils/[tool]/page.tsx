@@ -18,7 +18,15 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/outils/[to
   if (!tool) return {};
   const { messages, prefix, locale } = await getI18n();
   const text = messages.tools[tool.id];
-  return pageMetadata({ title: text.seoTitle, description: text.seoDescription, path: `/outils/${tool.id}`, prefix, locale, image: tool.id });
+  return pageMetadata({
+    title: text.seoTitle,
+    description: text.seoDescription,
+    keywords: text.guide.keywords,
+    path: `/outils/${tool.id}`,
+    prefix,
+    locale,
+    image: tool.id,
+  });
 }
 
 const DECOR_ANY = ["pdf", "docx", "xlsx", "pptx", "jpg"];

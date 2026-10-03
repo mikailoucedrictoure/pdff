@@ -12,8 +12,10 @@ import { ToolIcon } from "./visual/ToolIcon";
  */
 export function SeoSections({ t, prefix, toolId, locale }: { t: Messages; prefix: string; toolId?: ToolId; locale: string }) {
   const values = { files: limits.maxFiles.toLocaleString(locale), pages: limits.maxPages.toLocaleString(locale) };
-  const faq = t.seo.faq.map((item) => ({ q: item.q, a: fmt(item.a, values) }));
   const tool = toolId ? t.tools[toolId] : null;
+  // Questions propres à l'outil d'abord, puis les questions générales
+  const faq = [...(tool?.guide.faq ?? []), ...t.seo.faq].map((item) => ({ q: item.q, a: fmt(item.a, values) }));
+  const steps = tool?.guide.steps ?? t.home.steps;
 
   return (
     <div className="space-y-12">
@@ -21,9 +23,15 @@ export function SeoSections({ t, prefix, toolId, locale }: { t: Messages; prefix
         <section className="rounded-[2rem] border border-line bg-surface p-6 sm:p-10">
           <h2 className="font-display text-2xl font-bold tracking-tight">{tool.seoTitle}</h2>
           <p className="mt-3 max-w-3xl leading-relaxed text-muted">{tool.intro}</p>
+          <h3 className="font-display mt-8 text-lg font-semibold">{t.seo.usesTitle}</h3>
+          <ul className="mt-3 max-w-3xl list-disc space-y-1.5 ps-5 leading-relaxed text-muted marker:text-brand">
+            {tool.guide.uses.map((use, i) => (
+              <li key={i}>{use}</li>
+            ))}
+          </ul>
           <h3 className="font-display mt-8 text-lg font-semibold">{t.seo.howTitle}</h3>
           <ol className="mt-4 grid gap-6 sm:grid-cols-3">
-            {t.home.steps.map((s, i) => (
+            {steps.map((s, i) => (
               <li key={i} className="flex gap-4">
                 <span className="font-display grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand text-base font-bold text-brand-ink">
                   {i + 1}

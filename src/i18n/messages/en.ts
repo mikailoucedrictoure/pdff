@@ -194,6 +194,8 @@ const en: Messages = {
     moreTools: "More tools",
     privacyLink: "Privacy",
     sourceLink: "Open source code",
+    usesTitle: "What is it for?",
+    toolFaqTitle: "Questions about this tool",
   },
   privacy: {
     title: "Privacy",
@@ -387,6 +389,38 @@ const en: Messages = {
       seoDescription: "Combine PDF, Word, Excel, PowerPoint and image files into one PDF, in the order you want. Free, no sign-up, no watermark, files deleted right away.",
       intro: "Put all your paperwork in a single file: pdff takes PDFs but also Word documents, Excel sheets, presentations and photos, and combines them into one clean PDF with a bookmark per file.",
       options: { bookmarks: { label: "Add one bookmark per file" } },
+      guide: {
+        keywords: "merge pdf, combine pdf, join pdf files, combine pdfs into one, merge word and pdf, pdf merger free",
+        uses: [
+          "Send a complete application (ID, proof documents, forms) as a single file, as most government offices require.",
+          "Bring together the chapters of a thesis or report written in separate files.",
+          "Turn phone photos of documents into one clean PDF.",
+        ],
+        steps: [
+          {
+            title: "Drop your files",
+            text: "PDF, Word, Excel, images… as many as you need.",
+          },
+          {
+            title: "Put them in order",
+            text: "Drag them, or use the arrows and A→Z sorting.",
+          },
+          {
+            title: "Click Merge",
+            text: "You download a single PDF with one bookmark per file.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I merge Word files and photos with PDFs?",
+            a: "Yes. pdff converts each file to PDF automatically before combining them, in the order you chose.",
+          },
+          {
+            q: "How many files can I merge?",
+            a: "Up to several hundred at once, with no watermark and no sign-up.",
+          },
+        ],
+      },
     },
     convertir: {
       name: "Convert",
@@ -398,6 +432,38 @@ const en: Messages = {
         target: { label: "Convert to" },
         dpi: { label: "Image resolution (DPI)" },
         quality: { label: "JPG / WebP / AVIF quality (1-100)" },
+      },
+      guide: {
+        keywords: "pdf to word, word to pdf, jpg to pdf, pdf to jpg, excel to pdf, powerpoint to pdf, free pdf converter, png to pdf",
+        uses: [
+          "Turn a PDF into Word so you can edit the text.",
+          "Turn a photo or screenshot into a PDF to send to an organization.",
+          "Turn a Word, Excel or PowerPoint document into a PDF so it looks the same everywhere.",
+        ],
+        steps: [
+          {
+            title: "Drop your files",
+            text: "One or more, in any common format.",
+          },
+          {
+            title: "Choose the format",
+            text: "pdff only offers the conversions possible for your files.",
+          },
+          {
+            title: "Click Convert",
+            text: "The converted file downloads right away.",
+          },
+        ],
+        faq: [
+          {
+            q: "Does PDF to Word keep the layout?",
+            a: "As much as possible, but a complex PDF (columns, nested tables) may need a few touch-ups: pdff warns you when that's the case.",
+          },
+          {
+            q: "Which formats can be converted?",
+            a: "More than 40: PDF, Word, Excel, PowerPoint, OpenDocument, images (JPG, PNG, WebP, AVIF…), EPUB, text, HTML and more.",
+          },
+        ],
       },
     },
     diviser: {
@@ -429,6 +495,38 @@ const en: Messages = {
           label: "How many pages per file?",
         },
       },
+      guide: {
+        keywords: "split pdf, separate pdf pages, cut pdf, extract each page of a pdf, divide pdf",
+        uses: [
+          "Separate a big scan that contains several different documents.",
+          "Send only part of a document that is too large.",
+          "Get every page of a PDF as its own file, or as images.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Choose how to cut it",
+            text: "Every page separately, by page ranges, or in batches.",
+          },
+          {
+            title: "Click Split",
+            text: "You get all the pieces in a single ZIP file.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I choose exactly which pages go in each file?",
+            a: "Yes: type for example \"1-3, 4-10\" to get one file with pages 1 to 3 and another with pages 4 to 10.",
+          },
+          {
+            q: "Can I get images instead of PDFs?",
+            a: "Yes: choose JPG or PNG under \"Result format\".",
+          },
+        ],
+      },
     },
     extraire: {
       name: "Extract / delete pages",
@@ -440,6 +538,38 @@ const en: Messages = {
         mode: { label: "Action", choices: { keep: "Keep only these pages", remove: "Delete these pages" } },
         pages: { label: "Pages", placeholder: "1, 3-5", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
       },
+      guide: {
+        keywords: "delete pdf pages, remove pages from pdf, extract pages from pdf, keep certain pages pdf",
+        uses: [
+          "Remove a blank or duplicate page from a scan.",
+          "Keep only the useful pages of a long document before sending it.",
+          "Remove a page that contains personal information.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Enter the pages",
+            text: "Choose to keep or delete them: the preview crosses out removed pages.",
+          },
+          {
+            title: "Click the button",
+            text: "You download the lighter PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "How do I delete a single page from a PDF?",
+            a: "Choose \"Delete these pages\" and type its number, for example \"3\".",
+          },
+          {
+            q: "Is the rest of the document changed?",
+            a: "No: the other pages stay exactly as they were, with no loss of quality.",
+          },
+        ],
+      },
     },
     organiser: {
       name: "Reorder pages",
@@ -450,6 +580,38 @@ const en: Messages = {
       options: {
         order: { label: "New order", placeholder: "3, 1, 2, 4-end", help: "Pages not listed are removed." },
         reverse: { label: "Reverse the whole document (ignores the order above)" },
+      },
+      guide: {
+        keywords: "reorder pdf pages, rearrange pdf pages, move pdf page, reverse pdf, sort pdf pages",
+        uses: [
+          "Put pages scanned out of order back in sequence.",
+          "Move a cover page or table of contents to the front.",
+          "Reverse a document that was scanned back to front.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Type the new order",
+            text: "For example \"3, 1, 2\": the preview shows the result.",
+          },
+          {
+            title: "Click Reorder pages",
+            text: "You download the reordered PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I duplicate a page?",
+            a: "Yes: type its number twice, for example \"1, 2, 2, 3\".",
+          },
+          {
+            q: "How do I reverse the whole document?",
+            a: "Tick the reverse option: the last page becomes the first.",
+          },
+        ],
       },
     },
     renommer: {
@@ -470,6 +632,38 @@ const en: Messages = {
           help: "Changing the extension does not change the file format. To transform a file, use Convert.",
         },
       },
+      guide: {
+        keywords: "rename files, batch rename files, rename multiple files online, rename pdf, number files",
+        uses: [
+          "Give clear names to the documents in an application before sending them (Invoice-1, Invoice-2…).",
+          "Rename dozens of photos or scans at once.",
+          "Fix a file name without opening any other software.",
+        ],
+        steps: [
+          {
+            title: "Drop your files",
+            text: "Of any type, in the order you want.",
+          },
+          {
+            title: "Type the new name",
+            text: "A number is added for several files; the preview shows each new name.",
+          },
+          {
+            title: "Click Rename",
+            text: "A file or a ZIP archive downloads.",
+          },
+        ],
+        faq: [
+          {
+            q: "Are my files uploaded?",
+            a: "No: renaming happens entirely in your browser.",
+          },
+          {
+            q: "Does changing the extension convert the file?",
+            a: "No. To really change the format (for example from Word to PDF), use the Convert tool.",
+          },
+        ],
+      },
     },
     pivoter: {
       name: "Rotate",
@@ -480,6 +674,38 @@ const en: Messages = {
       options: {
         angle: { label: "Rotation", choices: { "90": "90° clockwise", "180": "180°", "270": "90° counter-clockwise" } },
         pages: { label: "Pages", placeholder: "all", help: "E.g. 1-3, 5, 8-end. Leave empty = all pages." },
+      },
+      guide: {
+        keywords: "rotate pdf, turn pdf pages, rotate a pdf page, fix upside down pdf, rotate scanned pdf",
+        uses: [
+          "Straighten a page scanned upside down or sideways.",
+          "Turn table pages into landscape.",
+          "Fix the orientation of a document photographed with a phone.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Choose the direction and pages",
+            text: "Quarter turn or half turn, on the whole document or certain pages.",
+          },
+          {
+            title: "Click Rotate",
+            text: "You download the straightened PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I rotate a single page?",
+            a: "Yes: type its number under \"Pages\"; the others stay as they are.",
+          },
+          {
+            q: "Does rotating reduce quality?",
+            a: "No, the page is simply turned, not recompressed.",
+          },
+        ],
       },
     },
     numeroter: {
@@ -528,6 +754,38 @@ const en: Messages = {
           help: "Leave empty for all pages. \"2-end\" skips the first page.",
         },
       },
+      guide: {
+        keywords: "add page numbers to pdf, number pdf pages, paginate pdf, pdf page numbering",
+        uses: [
+          "Number a thesis, a report or an application file.",
+          "Add \"1 / 10\" so no page goes missing when printed.",
+          "Paginate exhibits before filing them with a court or a government office.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Click the spot and the style",
+            text: "The number appears right away on every page of the preview.",
+          },
+          {
+            title: "Click Number pages",
+            text: "You download the numbered PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I skip numbering the first page?",
+            a: "Yes: under \"More settings\", type \"2-end\" in \"Pages to number\".",
+          },
+          {
+            q: "Can numbering start at something other than 1?",
+            a: "Yes, under \"More settings\", in the \"First number\" field.",
+          },
+        ],
+      },
     },
     filigrane: {
       name: "Watermark",
@@ -575,6 +833,38 @@ const en: Messages = {
           help: "Leave empty for all pages. E.g. 1-3, 5, 8-end.",
         },
       },
+      guide: {
+        keywords: "watermark pdf, add watermark to pdf, stamp copy on pdf, mark pdf confidential, protect a copy of an id",
+        uses: [
+          "Mark a copy of your ID \"Copy for rental application only\" so it can't be reused.",
+          "Show \"CONFIDENTIAL\" or \"DRAFT\" on an internal document.",
+          "Make clear a document is not the final version.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Choose the text and style",
+            text: "Color, visibility and direction: the preview updates live.",
+          },
+          {
+            title: "Click Watermark",
+            text: "You download the marked PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "Why watermark a copy of an ID?",
+            a: "A note such as \"Copy for application X, October 2\" stops a stolen copy from being reused for something else.",
+          },
+          {
+            q: "Does the document text stay readable?",
+            a: "Yes: choose \"Subtle\" or \"Normal\" visibility.",
+          },
+        ],
+      },
     },
     compresser: {
       name: "Compress",
@@ -597,6 +887,38 @@ const en: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "compress pdf, reduce pdf size, make pdf smaller, pdf too large, shrink pdf for email",
+        uses: [
+          "Email a PDF that is too large.",
+          "Upload a document to a portal with a size limit (often 2 to 5 MB).",
+          "Save space in your folders.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "One or more.",
+          },
+          {
+            title: "Keep \"Recommended\"",
+            text: "Or choose Light or Maximum depending on the size you need.",
+          },
+          {
+            title: "Click Compress",
+            text: "pdff shows the gain, for example \"8 MB → 2 MB\".",
+          },
+        ],
+        faq: [
+          {
+            q: "Does compression blur the text?",
+            a: "No: text stays sharp. Only images are lightened, very little in Recommended mode.",
+          },
+          {
+            q: "Why doesn't my PDF get smaller?",
+            a: "It was probably already optimized; pdff tells you so.",
+          },
+        ],
+      },
     },
     proteger: {
       name: "Protect",
@@ -610,6 +932,38 @@ const en: Messages = {
         noCopy: { label: "Block copying text" },
         noEdit: { label: "Block editing" },
       },
+      guide: {
+        keywords: "password protect pdf, encrypt pdf, secure a pdf, add password to pdf, prevent printing pdf",
+        uses: [
+          "Send a pay stub, medical file or contract that strangers can't open.",
+          "Prevent printing, copying or editing of a document.",
+          "Follow your organization's confidentiality rules.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "One or more.",
+          },
+          {
+            title: "Choose a password",
+            text: "And, if needed, what's not allowed: printing, copying, editing.",
+          },
+          {
+            title: "Click Protect",
+            text: "The PDF is encrypted with AES-256; share the password another way.",
+          },
+        ],
+        faq: [
+          {
+            q: "Is this encryption secure?",
+            a: "Yes: AES-256, the level used by banks and governments. Without the password, the content is unreadable.",
+          },
+          {
+            q: "Does pdff keep my password?",
+            a: "No, it is never stored. If you forget it, nobody can open the file.",
+          },
+        ],
+      },
     },
     deverrouiller: {
       name: "Unlock",
@@ -618,6 +972,38 @@ const en: Messages = {
       seoDescription: "Remove the password from a PDF you know the password of, to open, print or merge it freely. Free.",
       intro: "You know the password, but typing it every time is a pain? Remove it once and for all. pdff never bypasses a password you don't know.",
       options: { password: { label: "Current password", help: "Leave empty if the PDF only has a permissions password." } },
+      guide: {
+        keywords: "unlock pdf, remove pdf password, remove pdf protection, decrypt pdf",
+        uses: [
+          "Stop typing the password every time you open a document that belongs to you.",
+          "Remove protection before merging or editing a PDF.",
+          "Archive documents without risking losing their password.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The protected PDF.",
+          },
+          {
+            title: "Enter its password",
+            text: "The preview appears as soon as it is correct.",
+          },
+          {
+            title: "Click Unlock",
+            text: "You download the PDF without protection.",
+          },
+        ],
+        faq: [
+          {
+            q: "Can I unlock a PDF without the password?",
+            a: "No. pdff only removes protection from documents whose password you know.",
+          },
+          {
+            q: "Are printing restrictions removed too?",
+            a: "Yes, the resulting PDF has no restrictions.",
+          },
+        ],
+      },
     },
     metadonnees: {
       name: "Metadata",
@@ -631,6 +1017,38 @@ const en: Messages = {
         subject: { label: "Subject" },
         keywords: { label: "Keywords (comma-separated)" },
         clear: { label: "Erase all existing metadata" },
+      },
+      guide: {
+        keywords: "edit pdf metadata, change pdf title, pdf author, pdf properties, remove pdf metadata",
+        uses: [
+          "Give a PDF a real title (the one shown in the browser tab).",
+          "Remove the author or software name before publishing a document.",
+          "Add keywords to find your documents easily.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "One or more.",
+          },
+          {
+            title: "Fill in the fields",
+            text: "Title, author, subject, keywords, or tick the option to clear them all.",
+          },
+          {
+            title: "Click Metadata",
+            text: "You download the updated PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "What is PDF metadata?",
+            a: "Hidden information in the file: title, author, software used, dates. It can reveal who created the document.",
+          },
+          {
+            q: "Does the page content change?",
+            a: "No, only this information is changed.",
+          },
+        ],
       },
     },
     signer: {
@@ -680,6 +1098,38 @@ const en: Messages = {
           label: "Add today's date under the signature",
         },
       },
+      guide: {
+        keywords: "sign pdf, sign pdf online free, add signature to pdf, e-sign a document, handwritten signature pdf",
+        uses: [
+          "Sign a lease, employment contract or authorization without printing or scanning.",
+          "Add your initials to every page of a contract.",
+          "Sign from your phone, with your finger.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The document to sign.",
+          },
+          {
+            title: "Create your signature",
+            text: "Draw it, type your name or upload an image.",
+          },
+          {
+            title: "Choose the page and spot",
+            text: "Check the preview, then click Sign.",
+          },
+        ],
+        faq: [
+          {
+            q: "Is this signature legally valid?",
+            a: "It is a simple electronic signature, like a scanned handwritten one: it is enough for most everyday paperwork. Some formal acts require a qualified electronic signature with a certificate.",
+          },
+          {
+            q: "Is my signature kept?",
+            a: "No: it is only used for your document, then deleted with it.",
+          },
+        ],
+      },
     },
     caviarder: {
       name: "Redact",
@@ -707,13 +1157,45 @@ const en: Messages = {
           label: "Areas to hide",
         },
       },
+      guide: {
+        keywords: "redact pdf, anonymize pdf, black out text in pdf, remove sensitive information pdf, censor pdf",
+        uses: [
+          "Anonymize a document before publishing or sharing it (names, addresses, numbers).",
+          "Answer an access-to-information request by removing protected data.",
+          "Share a bank statement while hiding account numbers.",
+        ],
+        steps: [
+          {
+            title: "Drop your PDF",
+            text: "The preview shows all of its pages.",
+          },
+          {
+            title: "Say what to hide",
+            text: "Type words, tick types of information or draw areas on the pages.",
+          },
+          {
+            title: "Click Redact",
+            text: "Hidden content is deleted from the file, not just covered.",
+          },
+        ],
+        faq: [
+          {
+            q: "Why not just draw a black rectangle?",
+            a: "A rectangle placed on top leaves the text in the file: it can be copied or the rectangle removed. pdff's redaction truly deletes the text and images under the area.",
+          },
+          {
+            q: "Does capitalization matter?",
+            a: "No: \"Smith\" also removes \"SMITH\" and \"smith\".",
+          },
+        ],
+      },
     },
     ocr: {
-      name: "OCR",
-      tagline: "Make a scanned document searchable and copyable.",
-      seoTitle: "Free online OCR: scanned PDF to searchable PDF",
-      seoDescription: "Turn a scanned PDF or a photo of a document into a PDF where text can be searched and copied, or into a text file. 16 languages, the document is not uploaded.",
-      intro: "Drop a scan (PDF or photo), choose the language, then click OCR. Reading happens on your device: your document is not uploaded. Only the model for the chosen language (a few MB) is downloaded once.",
+      name: "Read a scan",
+      tagline: "Make the text of a scanned or photographed document searchable and copyable.",
+      seoTitle: "Free online OCR: make a scanned PDF searchable",
+      seoDescription: "Read the text of a scanned PDF or photo (OCR) so you can search it, copy it or have it read aloud. 16 languages, free, the document is not uploaded.",
+      intro: "A scanned or photographed document is just an image: you can't search for a word or copy a sentence. Read a scan recognizes every letter (this is called OCR) and adds the real text to the document without changing how it looks. Reading happens on your device: your document is not uploaded. Only the model for the chosen language (a few MB) is downloaded once.",
       options: {
         lang: {
           label: "Document language",
@@ -730,6 +1212,38 @@ const en: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "online ocr, free ocr, scanned pdf to text, make pdf searchable, text recognition, copy text from a scan, image to text",
+        uses: [
+          "Find a word in a long scanned contract with Ctrl + F.",
+          "Copy the text of a photographed invoice or letter.",
+          "Make digitized paper archives accessible to blind people.",
+        ],
+        steps: [
+          {
+            title: "Drop your scan",
+            text: "A scanned PDF or a photo of a document.",
+          },
+          {
+            title: "Choose the language",
+            text: "The language of the document's text.",
+          },
+          {
+            title: "Click Read a scan",
+            text: "You get a PDF where text can be searched and copied, or a text file.",
+          },
+        ],
+        faq: [
+          {
+            q: "What does OCR mean?",
+            a: "Optical character recognition: the computer recognizes the letters in an image to turn them into real text.",
+          },
+          {
+            q: "Is my document uploaded?",
+            a: "No: reading happens entirely on your device. Only the language model is downloaded, once.",
+          },
+        ],
+      },
     },
     remplir: {
       name: "Fill in a form",
@@ -745,6 +1259,38 @@ const en: Messages = {
           label: "Lock the answers (the form can no longer be edited)",
         },
       },
+      guide: {
+        keywords: "fill pdf, fill pdf form online, complete a pdf form, type on pdf form, free pdf form filler",
+        uses: [
+          "Complete a government form (application, registration, declaration) without printing it.",
+          "Fill in a form from your phone.",
+          "Lock your answers before sending the document.",
+        ],
+        steps: [
+          {
+            title: "Drop the form",
+            text: "pdff finds every field to fill in.",
+          },
+          {
+            title: "Fill in the fields",
+            text: "The preview shows your answers in place on the page.",
+          },
+          {
+            title: "Click Fill in a form",
+            text: "You download the completed PDF.",
+          },
+        ],
+        faq: [
+          {
+            q: "Why doesn't pdff find any field?",
+            a: "The PDF is not an interactive form (it is often a scan). You'll need to print it or ask the organization for an interactive version.",
+          },
+          {
+            q: "What does \"Lock the answers\" do?",
+            a: "The answers become part of the page and can no longer be changed.",
+          },
+        ],
+      },
     },
     comparer: {
       name: "Compare",
@@ -756,6 +1302,38 @@ const en: Messages = {
         ignoreCase: {
           label: "Ignore upper and lower case",
         },
+      },
+      guide: {
+        keywords: "compare two pdfs, pdf diff, compare two versions of a document, compare contracts, find changes in pdf",
+        uses: [
+          "Check what changed in a contract or lease before signing it.",
+          "Review the corrections made to a report or thesis.",
+          "Compare two versions of a regulation or official text.",
+        ],
+        steps: [
+          {
+            title: "Drop the old version",
+            text: "Then the new one, in that order.",
+          },
+          {
+            title: "Read the differences",
+            text: "Green shows what was added, red struck through what was removed.",
+          },
+          {
+            title: "Click Compare",
+            text: "You download a report to keep or print.",
+          },
+        ],
+        faq: [
+          {
+            q: "Are my documents uploaded?",
+            a: "No: the comparison happens entirely in your browser.",
+          },
+          {
+            q: "Can I compare scanned documents?",
+            a: "Yes, after running them through the Read a scan tool, which extracts their text.",
+          },
+        ],
       },
     },
   },

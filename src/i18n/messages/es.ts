@@ -197,6 +197,8 @@ const es: Messages = {
     moreTools: "Más herramientas",
     privacyLink: "Privacidad",
     sourceLink: "Código abierto",
+    usesTitle: "¿Para qué sirve?",
+    toolFaqTitle: "Preguntas sobre esta herramienta",
   },
   privacy: {
     title: "Privacidad",
@@ -393,6 +395,38 @@ const es: Messages = {
       seoDescription: "Combina PDF, Word, Excel, PowerPoint e imágenes en un solo PDF, en el orden que quieras. Gratis, sin registro ni marca de agua, archivos eliminados al instante.",
       intro: "Reúne todos tus papeles en un solo archivo: pdff acepta PDF, pero también documentos Word, hojas de Excel, presentaciones y fotos, y los une en un PDF limpio con un marcador por archivo.",
       options: { bookmarks: { label: "Añadir un marcador por archivo" } },
+      guide: {
+        keywords: "unir pdf, combinar pdf, juntar pdf, fusionar pdf, unir word y pdf, unir varios pdf en uno",
+        uses: [
+          "Enviar un expediente completo (identificación, justificantes, formularios) en un solo archivo, como piden la mayoría de las administraciones.",
+          "Reunir los capítulos de una tesis o un informe escritos en archivos separados.",
+          "Convertir fotos de documentos hechas con el móvil en un único PDF limpio.",
+        ],
+        steps: [
+          {
+            title: "Deja tus archivos",
+            text: "PDF, Word, Excel, imágenes… los que necesites.",
+          },
+          {
+            title: "Ordénalos",
+            text: "Arrástralos o usa las flechas y el orden A→Z.",
+          },
+          {
+            title: "Haz clic en Unir",
+            text: "Descargas un solo PDF, con un marcador por archivo.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se pueden unir archivos Word y fotos con PDF?",
+            a: "Sí. pdff convierte cada archivo a PDF automáticamente antes de unirlos, en el orden elegido.",
+          },
+          {
+            q: "¿Cuántos archivos se pueden unir?",
+            a: "Hasta varios cientos a la vez, sin marca de agua ni registro.",
+          },
+        ],
+      },
     },
     convertir: {
       name: "Convertir",
@@ -404,6 +438,38 @@ const es: Messages = {
         target: { label: "Convertir a" },
         dpi: { label: "Resolución de las imágenes (DPI)" },
         quality: { label: "Calidad JPG / WebP / AVIF (1-100)" },
+      },
+      guide: {
+        keywords: "pdf a word, word a pdf, jpg a pdf, pdf a jpg, excel a pdf, powerpoint a pdf, convertidor pdf gratis",
+        uses: [
+          "Pasar un PDF a Word para poder modificar el texto.",
+          "Pasar una foto o captura de pantalla a PDF para enviarla a un organismo.",
+          "Pasar un documento Word, Excel o PowerPoint a PDF para que se vea igual en todas partes.",
+        ],
+        steps: [
+          {
+            title: "Deja tus archivos",
+            text: "Uno o varios, en cualquier formato habitual.",
+          },
+          {
+            title: "Elige el formato",
+            text: "pdff solo propone las conversiones posibles para tus archivos.",
+          },
+          {
+            title: "Haz clic en Convertir",
+            text: "El archivo convertido se descarga al momento.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿La conversión de PDF a Word mantiene el diseño?",
+            a: "Lo mantiene lo mejor posible, pero un PDF complejo (columnas, tablas anidadas) puede necesitar retoques: pdff te avisa cuando es el caso.",
+          },
+          {
+            q: "¿Qué formatos se pueden convertir?",
+            a: "Más de 40: PDF, Word, Excel, PowerPoint, OpenDocument, imágenes (JPG, PNG, WebP, AVIF…), EPUB, texto, HTML y más.",
+          },
+        ],
       },
     },
     diviser: {
@@ -435,6 +501,38 @@ const es: Messages = {
           label: "¿Cuántas páginas por archivo?",
         },
       },
+      guide: {
+        keywords: "dividir pdf, separar pdf, cortar pdf, separar páginas pdf, extraer cada página de un pdf",
+        uses: [
+          "Separar un escaneo grande que contiene varios documentos distintos.",
+          "Enviar solo una parte de un documento demasiado pesado.",
+          "Obtener cada página de un PDF en un archivo aparte, o en imágenes.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Elige cómo cortarlo",
+            text: "Cada página por separado, por rangos o por bloques.",
+          },
+          {
+            title: "Haz clic en Dividir",
+            text: "Recibes todas las partes en un solo archivo ZIP.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Puedo elegir exactamente las páginas de cada archivo?",
+            a: "Sí: escribe por ejemplo «1-3, 4-10» para obtener un archivo con las páginas 1 a 3 y otro con las 4 a 10.",
+          },
+          {
+            q: "¿Se pueden obtener imágenes en lugar de PDF?",
+            a: "Sí: elige JPG o PNG en «Formato del resultado».",
+          },
+        ],
+      },
     },
     extraire: {
       name: "Extraer / eliminar páginas",
@@ -446,6 +544,38 @@ const es: Messages = {
         mode: { label: "Acción", choices: { keep: "Conservar solo estas páginas", remove: "Eliminar estas páginas" } },
         pages: { label: "Páginas", placeholder: "1, 3-5", help: "Ej.: 1-3, 5, 8-fin. Vacío = todas las páginas." },
       },
+      guide: {
+        keywords: "eliminar páginas pdf, quitar páginas de un pdf, extraer páginas pdf, conservar páginas pdf",
+        uses: [
+          "Quitar una página en blanco o repetida de un escaneo.",
+          "Conservar solo las páginas útiles de un documento largo antes de enviarlo.",
+          "Quitar una página con datos personales.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Indica las páginas",
+            text: "Elige conservarlas o eliminarlas: la vista previa tacha las páginas quitadas.",
+          },
+          {
+            title: "Haz clic en el botón",
+            text: "Descargas el PDF aligerado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Cómo elimino una sola página de un PDF?",
+            a: "Elige «Eliminar estas páginas» y escribe su número, por ejemplo «3».",
+          },
+          {
+            q: "¿Se modifica el resto del documento?",
+            a: "No: las demás páginas quedan igual, sin pérdida de calidad.",
+          },
+        ],
+      },
     },
     organiser: {
       name: "Reordenar páginas",
@@ -456,6 +586,38 @@ const es: Messages = {
       options: {
         order: { label: "Nuevo orden", placeholder: "3, 1, 2, 4-fin", help: "Las páginas no indicadas se eliminan." },
         reverse: { label: "Invertir todo el documento (ignora el orden anterior)" },
+      },
+      guide: {
+        keywords: "ordenar páginas pdf, cambiar el orden de un pdf, mover páginas pdf, invertir pdf",
+        uses: [
+          "Volver a ordenar páginas escaneadas desordenadas.",
+          "Poner una portada o un índice al principio.",
+          "Invertir un documento escaneado al revés.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Escribe el nuevo orden",
+            text: "Por ejemplo «3, 1, 2»: la vista previa muestra el resultado.",
+          },
+          {
+            title: "Haz clic en Reordenar páginas",
+            text: "Descargas el PDF ordenado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se puede duplicar una página?",
+            a: "Sí: escribe su número dos veces, por ejemplo «1, 2, 2, 3».",
+          },
+          {
+            q: "¿Cómo invierto todo el documento?",
+            a: "Marca la opción de invertir: la última página pasa a ser la primera.",
+          },
+        ],
       },
     },
     renommer: {
@@ -476,6 +638,38 @@ const es: Messages = {
           help: "Cambiar la extensión no cambia el formato del archivo. Para transformarlo, usa Convertir.",
         },
       },
+      guide: {
+        keywords: "renombrar archivos, renombrar varios archivos, cambiar el nombre de un archivo, renombrar pdf en línea",
+        uses: [
+          "Dar nombres claros a los documentos de un expediente antes de enviarlos (Factura-1, Factura-2…).",
+          "Renombrar de una vez decenas de fotos o escaneos.",
+          "Corregir un nombre de archivo sin abrir otro programa.",
+        ],
+        steps: [
+          {
+            title: "Deja tus archivos",
+            text: "De cualquier tipo, en el orden deseado.",
+          },
+          {
+            title: "Escribe el nuevo nombre",
+            text: "Se añade un número si hay varios archivos; la vista previa muestra cada nombre nuevo.",
+          },
+          {
+            title: "Haz clic en Renombrar",
+            text: "Se descarga un archivo o un ZIP.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se envían mis archivos por internet?",
+            a: "No: el cambio de nombre se hace por completo en tu navegador.",
+          },
+          {
+            q: "¿Cambiar la extensión convierte el archivo?",
+            a: "No. Para cambiar realmente de formato (por ejemplo de Word a PDF), usa la herramienta Convertir.",
+          },
+        ],
+      },
     },
     pivoter: {
       name: "Girar",
@@ -486,6 +680,38 @@ const es: Messages = {
       options: {
         angle: { label: "Rotación", choices: { "90": "90° en sentido horario", "180": "180°", "270": "90° en sentido antihorario" } },
         pages: { label: "Páginas", placeholder: "todas", help: "Ej.: 1-3, 5, 8-fin. Vacío = todas las páginas." },
+      },
+      guide: {
+        keywords: "girar pdf, rotar pdf, rotar una página pdf, enderezar un pdf escaneado",
+        uses: [
+          "Enderezar una página escaneada al revés o de lado.",
+          "Poner en horizontal las páginas de una tabla.",
+          "Corregir la orientación de un documento fotografiado con el móvil.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Elige el sentido y las páginas",
+            text: "Un cuarto de vuelta o media vuelta, en todo el documento o en algunas páginas.",
+          },
+          {
+            title: "Haz clic en Girar",
+            text: "Descargas el PDF enderezado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se puede girar una sola página?",
+            a: "Sí: escribe su número en «Páginas»; las demás no se mueven.",
+          },
+          {
+            q: "¿Girar reduce la calidad?",
+            a: "No, la página solo se gira, sin volver a comprimirse.",
+          },
+        ],
       },
     },
     numeroter: {
@@ -534,6 +760,38 @@ const es: Messages = {
           help: "Déjalo vacío para todas las páginas. «2-final» salta la primera página.",
         },
       },
+      guide: {
+        keywords: "numerar páginas pdf, añadir número de página pdf, paginar un pdf",
+        uses: [
+          "Numerar una tesis, un informe o una solicitud.",
+          "Añadir «1 / 10» para que no falte ninguna página al imprimir.",
+          "Paginar documentos antes de presentarlos ante un juzgado o una administración.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Haz clic en el lugar y el estilo",
+            text: "El número aparece al instante en cada página de la vista previa.",
+          },
+          {
+            title: "Haz clic en Numerar páginas",
+            text: "Descargas el PDF numerado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se puede no numerar la primera página?",
+            a: "Sí: en «Más ajustes», escribe «2-final» en «Páginas a numerar».",
+          },
+          {
+            q: "¿Se puede empezar en un número distinto de 1?",
+            a: "Sí, en «Más ajustes», campo «Primer número».",
+          },
+        ],
+      },
     },
     filigrane: {
       name: "Marca de agua",
@@ -581,6 +839,38 @@ const es: Messages = {
           help: "Déjalo vacío para todas las páginas. Ej.: 1-3, 5, 8-final.",
         },
       },
+      guide: {
+        keywords: "marca de agua pdf, añadir marca de agua, sello copia pdf, marcar confidencial pdf",
+        uses: [
+          "Marcar la copia de tu documento de identidad «Copia solo para el alquiler» para que no se reutilice.",
+          "Indicar «CONFIDENCIAL» o «BORRADOR» en un documento interno.",
+          "Señalar que un documento no es la versión final.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Elige el texto y el estilo",
+            text: "Color, visibilidad y dirección: la vista previa se actualiza al momento.",
+          },
+          {
+            title: "Haz clic en Marca de agua",
+            text: "Descargas el PDF marcado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Por qué poner una marca de agua en un documento de identidad?",
+            a: "Una mención como «Copia para el trámite X del 2 de octubre» impide que una copia robada se use para otra gestión.",
+          },
+          {
+            q: "¿El texto del documento sigue siendo legible?",
+            a: "Sí: elige una visibilidad «Discreta» o «Normal».",
+          },
+        ],
+      },
     },
     compresser: {
       name: "Comprimir",
@@ -603,6 +893,38 @@ const es: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "comprimir pdf, reducir tamaño pdf, pdf demasiado pesado, hacer un pdf más ligero, comprimir pdf para correo",
+        uses: [
+          "Enviar por correo un PDF demasiado pesado.",
+          "Subir un documento a un portal con límite de tamaño (a menudo de 2 a 5 MB).",
+          "Ahorrar espacio en tus carpetas.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "Uno o varios.",
+          },
+          {
+            title: "Mantén «Recomendado»",
+            text: "O elige Ligero o Máximo según el tamaño que necesites.",
+          },
+          {
+            title: "Haz clic en Comprimir",
+            text: "pdff muestra la reducción, por ejemplo «8 MB → 2 MB».",
+          },
+        ],
+        faq: [
+          {
+            q: "¿La compresión vuelve borroso el texto?",
+            a: "No: el texto sigue nítido. Solo se aligeran las imágenes, muy poco en modo Recomendado.",
+          },
+          {
+            q: "¿Por qué mi PDF no se reduce?",
+            a: "Seguramente ya estaba optimizado; pdff te lo indica.",
+          },
+        ],
+      },
     },
     proteger: {
       name: "Proteger",
@@ -616,6 +938,38 @@ const es: Messages = {
         noCopy: { label: "Prohibir copiar el texto" },
         noEdit: { label: "Prohibir la edición" },
       },
+      guide: {
+        keywords: "proteger pdf con contraseña, cifrar pdf, poner contraseña a un pdf, bloquear impresión pdf",
+        uses: [
+          "Enviar una nómina, un historial médico o un contrato que nadie más pueda abrir.",
+          "Impedir imprimir, copiar o modificar un documento.",
+          "Cumplir las normas de confidencialidad de tu organización.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "Uno o varios.",
+          },
+          {
+            title: "Elige una contraseña",
+            text: "Y, si hace falta, qué se prohíbe: imprimir, copiar, modificar.",
+          },
+          {
+            title: "Haz clic en Proteger",
+            text: "El PDF se cifra con AES-256; envía la contraseña por otro medio.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Es seguro este cifrado?",
+            a: "Sí: AES-256, el nivel que usan bancos y gobiernos. Sin la contraseña, el contenido es ilegible.",
+          },
+          {
+            q: "¿pdff guarda mi contraseña?",
+            a: "No, nunca se guarda. Si la olvidas, nadie podrá abrir el archivo.",
+          },
+        ],
+      },
     },
     deverrouiller: {
       name: "Desbloquear",
@@ -624,6 +978,38 @@ const es: Messages = {
       seoDescription: "Quita la contraseña de un PDF cuya contraseña conoces, para abrirlo, imprimirlo o unirlo libremente. Gratis.",
       intro: "¿Conoces la contraseña pero escribirla cada vez es un fastidio? Quítala de una vez por todas. pdff nunca se salta una contraseña que no conoces.",
       options: { password: { label: "Contraseña actual", help: "Déjalo vacío si el PDF solo tiene contraseña de permisos." } },
+      guide: {
+        keywords: "desbloquear pdf, quitar contraseña pdf, eliminar protección pdf",
+        uses: [
+          "Dejar de escribir la contraseña cada vez que abres un documento que es tuyo.",
+          "Quitar una protección antes de unir o modificar un PDF.",
+          "Archivar documentos sin riesgo de perder su contraseña.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "El PDF protegido.",
+          },
+          {
+            title: "Escribe su contraseña",
+            text: "La vista previa aparece en cuanto es correcta.",
+          },
+          {
+            title: "Haz clic en Desbloquear",
+            text: "Descargas el PDF sin protección.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se puede desbloquear un PDF sin la contraseña?",
+            a: "No. pdff solo quita la protección de documentos cuya contraseña conoces.",
+          },
+          {
+            q: "¿También se quitan las restricciones de impresión?",
+            a: "Sí, el PDF obtenido ya no tiene ninguna restricción.",
+          },
+        ],
+      },
     },
     metadonnees: {
       name: "Metadatos",
@@ -637,6 +1023,38 @@ const es: Messages = {
         subject: { label: "Asunto" },
         keywords: { label: "Palabras clave (separadas por comas)" },
         clear: { label: "Borrar todos los metadatos existentes" },
+      },
+      guide: {
+        keywords: "editar metadatos pdf, cambiar título pdf, autor pdf, propiedades pdf, borrar metadatos pdf",
+        uses: [
+          "Dar un título real a un PDF (el que aparece en la pestaña del navegador).",
+          "Borrar el nombre del autor o del programa antes de publicar un documento.",
+          "Añadir palabras clave para encontrar fácilmente tus documentos.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "Uno o varios.",
+          },
+          {
+            title: "Rellena los campos",
+            text: "Título, autor, asunto, palabras clave, o marca la opción para borrarlos todos.",
+          },
+          {
+            title: "Haz clic en Metadatos",
+            text: "Descargas el PDF actualizado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Qué son los metadatos de un PDF?",
+            a: "Información oculta en el archivo: título, autor, programa usado, fechas. Puede revelar quién creó el documento.",
+          },
+          {
+            q: "¿Cambia el contenido de las páginas?",
+            a: "No, solo se modifica esa información.",
+          },
+        ],
       },
     },
     signer: {
@@ -686,6 +1104,38 @@ const es: Messages = {
           label: "Añadir la fecha de hoy debajo de la firma",
         },
       },
+      guide: {
+        keywords: "firmar pdf, firma pdf en línea, añadir firma a un pdf, firmar un documento gratis, firma manuscrita pdf",
+        uses: [
+          "Firmar un contrato de alquiler, de trabajo o una autorización sin imprimir ni escanear.",
+          "Añadir tu rúbrica en cada página de un contrato.",
+          "Firmar desde el móvil, con el dedo.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "El documento que hay que firmar.",
+          },
+          {
+            title: "Crea tu firma",
+            text: "Dibújala, escribe tu nombre o importa una imagen.",
+          },
+          {
+            title: "Elige la página y el lugar",
+            text: "Revisa la vista previa y haz clic en Firmar.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Tiene validez legal esta firma?",
+            a: "Es una firma electrónica simple, como una firma manuscrita escaneada: basta para la mayoría de los trámites habituales. Algunos actos exigen una firma electrónica cualificada, con certificado.",
+          },
+          {
+            q: "¿Se guarda mi firma?",
+            a: "No: solo sirve para tu documento y se elimina con él.",
+          },
+        ],
+      },
     },
     caviarder: {
       name: "Tachar",
@@ -713,13 +1163,45 @@ const es: Messages = {
           label: "Zonas a ocultar",
         },
       },
+      guide: {
+        keywords: "tachar pdf, anonimizar pdf, ocultar texto pdf, borrar datos sensibles pdf, censurar pdf",
+        uses: [
+          "Anonimizar un documento antes de publicarlo o compartirlo (nombres, direcciones, números).",
+          "Responder a una solicitud de acceso a la información quitando los datos protegidos.",
+          "Compartir un extracto bancario ocultando los números de cuenta.",
+        ],
+        steps: [
+          {
+            title: "Deja tu PDF",
+            text: "La vista previa muestra todas sus páginas.",
+          },
+          {
+            title: "Indica qué ocultar",
+            text: "Escribe palabras, marca tipos de información o dibuja zonas en las páginas.",
+          },
+          {
+            title: "Haz clic en Tachar",
+            text: "El contenido oculto se borra del archivo, no solo se tapa.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Por qué no dibujar simplemente un rectángulo negro?",
+            a: "Un rectángulo encima deja el texto en el archivo: se puede copiar o quitar el rectángulo. pdff borra de verdad el texto y las imágenes bajo la zona.",
+          },
+          {
+            q: "¿Importan las mayúsculas?",
+            a: "No: «García» también borra «GARCÍA» y «garcía».",
+          },
+        ],
+      },
     },
     ocr: {
-      name: "OCR",
-      tagline: "Hacer que un documento escaneado se pueda buscar y copiar.",
-      seoTitle: "OCR en línea gratis: PDF escaneado a PDF con búsqueda",
-      seoDescription: "Convierte un PDF escaneado o una foto de un documento en un PDF donde se puede buscar y copiar el texto, o en un archivo de texto. 16 idiomas, sin enviar el documento.",
-      intro: "Deja un escaneo (PDF o foto), elige el idioma y haz clic en OCR. La lectura se hace en tu dispositivo: tu documento no se envía. Solo se descarga una vez el modelo del idioma elegido (unos pocos MB).",
+      name: "Leer un escaneo",
+      tagline: "Hacer que el texto de un documento escaneado o fotografiado se pueda buscar y copiar.",
+      seoTitle: "OCR en línea gratis: PDF escaneado con texto buscable",
+      seoDescription: "Lee el texto de un PDF escaneado o de una foto (OCR) para buscarlo, copiarlo o escucharlo en voz alta. 16 idiomas, gratis, sin enviar el documento.",
+      intro: "Un documento escaneado o fotografiado es solo una imagen: no se puede buscar una palabra ni copiar una frase. Leer un escaneo reconoce cada letra (esto se llama OCR) y añade el texto real al documento sin cambiar su aspecto. La lectura se hace en tu dispositivo: tu documento no se envía. Solo se descarga una vez el modelo del idioma elegido (unos pocos MB).",
       options: {
         lang: {
           label: "Idioma del documento",
@@ -736,6 +1218,38 @@ const es: Messages = {
           },
         },
       },
+      guide: {
+        keywords: "ocr en línea, ocr gratis, pdf escaneado a texto, hacer un pdf buscable, reconocimiento de texto, imagen a texto",
+        uses: [
+          "Encontrar una palabra en un contrato escaneado largo con Ctrl + F.",
+          "Copiar el texto de una factura o una carta fotografiada.",
+          "Hacer accesibles a las personas ciegas archivos en papel digitalizados.",
+        ],
+        steps: [
+          {
+            title: "Deja tu escaneo",
+            text: "Un PDF escaneado o una foto de un documento.",
+          },
+          {
+            title: "Elige el idioma",
+            text: "El del texto del documento.",
+          },
+          {
+            title: "Haz clic en Leer un escaneo",
+            text: "Obtienes un PDF en el que se puede buscar y copiar el texto, o un archivo de texto.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Qué significa OCR?",
+            a: "Reconocimiento óptico de caracteres: el ordenador reconoce las letras de una imagen para convertirlas en texto real.",
+          },
+          {
+            q: "¿Se envía mi documento?",
+            a: "No: la lectura se hace por completo en tu dispositivo. Solo se descarga una vez el modelo de idioma.",
+          },
+        ],
+      },
     },
     remplir: {
       name: "Rellenar un formulario",
@@ -751,6 +1265,38 @@ const es: Messages = {
           label: "Bloquear las respuestas (el formulario ya no se podrá modificar)",
         },
       },
+      guide: {
+        keywords: "rellenar pdf, rellenar formulario pdf en línea, completar un formulario pdf, escribir en un pdf",
+        uses: [
+          "Completar un formulario administrativo (solicitud, inscripción, declaración) sin imprimirlo.",
+          "Rellenar un formulario desde el móvil.",
+          "Bloquear tus respuestas antes de enviar el documento.",
+        ],
+        steps: [
+          {
+            title: "Deja el formulario",
+            text: "pdff encuentra todos los campos que hay que rellenar.",
+          },
+          {
+            title: "Rellena los campos",
+            text: "La vista previa muestra tus respuestas en su sitio en la página.",
+          },
+          {
+            title: "Haz clic en Rellenar un formulario",
+            text: "Descargas el PDF completado.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Por qué pdff no encuentra ningún campo?",
+            a: "El PDF no es un formulario interactivo (suele ser un escaneo). Habrá que imprimirlo o pedir una versión interactiva al organismo.",
+          },
+          {
+            q: "¿Qué hace «Bloquear las respuestas»?",
+            a: "Las respuestas pasan a formar parte de la página y ya no se pueden modificar.",
+          },
+        ],
+      },
     },
     comparer: {
       name: "Comparar",
@@ -762,6 +1308,38 @@ const es: Messages = {
         ignoreCase: {
           label: "Ignorar mayúsculas y minúsculas",
         },
+      },
+      guide: {
+        keywords: "comparar dos pdf, diferencias entre dos pdf, comparar dos versiones de un documento, comparar contratos",
+        uses: [
+          "Comprobar qué cambió en un contrato o un alquiler antes de firmarlo.",
+          "Revisar las correcciones hechas a un informe o una tesis.",
+          "Comparar dos versiones de un reglamento o un texto oficial.",
+        ],
+        steps: [
+          {
+            title: "Deja la versión antigua",
+            text: "Y luego la nueva, en ese orden.",
+          },
+          {
+            title: "Lee las diferencias",
+            text: "En verde lo añadido, en rojo tachado lo eliminado.",
+          },
+          {
+            title: "Haz clic en Comparar",
+            text: "Descargas un informe para guardar o imprimir.",
+          },
+        ],
+        faq: [
+          {
+            q: "¿Se envían mis documentos?",
+            a: "No: la comparación se hace por completo en tu navegador.",
+          },
+          {
+            q: "¿Se pueden comparar documentos escaneados?",
+            a: "Sí, después de pasarlos por la herramienta Leer un escaneo, que extrae su texto.",
+          },
+        ],
       },
     },
   },
