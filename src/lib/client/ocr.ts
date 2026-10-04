@@ -97,7 +97,7 @@ export async function ocrFiles(
       }
       const base = baseName(source.name);
       if (merged) {
-        merged.setProducer("pdff");
+        merged.setProducer("pdffusion");
         out.push({ name: `${base}-ocr.pdf`, data: await merged.save({ useObjectStreams: true }) });
       } else {
         out.push({ name: `${base}.txt`, data: new TextEncoder().encode(texts.join("\n\n")) });

@@ -1,5 +1,5 @@
 /**
- * Langues de pdff. Module « pur » (client + serveur).
+ * Langues de pdffusion. Module « pur » (client + serveur).
  *
  * - VERIFIED : traductions écrites et relues, embarquées dans le site.
  * - Toutes les autres langues de WORLD_LANGUAGES : traduction automatique

@@ -1,7 +1,7 @@
-# Service Office de pdff
+# Service Office de pdffusion
 
 LibreOffice ne peut pas tourner sur Vercel. Ce petit service le fait tourner à côté
-et pdff l'appelle pour Word, Excel et PowerPoint. Deux hébergements possibles :
+et pdffusion l'appelle pour Word, Excel et PowerPoint. Deux hébergements possibles :
 
 - **Render** (utilisé en production) : gratuit, sans carte bancaire, 512 Mo de mémoire ;
 - **Google Cloud Run** : gratuit dans la limite de l'offre, mais demande une carte bancaire (pas prépayée).
@@ -21,7 +21,7 @@ Render endort un service gratuit après 15 minutes sans visite : la tâche GitHu
 - `server.ts` : serveur HTTP sans dépendance (Node.js 24 lit le TypeScript directement).
 - `Dockerfile` : LibreOffice sans interface + polices compatibles Microsoft Office.
 - Aucun document n'est gardé : chaque conversion travaille dans un dossier temporaire supprimé aussitôt.
-- Protégé par un jeton secret (`OFFICE_TOKEN`) : personne d'autre que pdff ne peut l'utiliser.
+- Protégé par un jeton secret (`OFFICE_TOKEN`) : personne d'autre que pdffusion ne peut l'utiliser.
 
 ## Déployer sur Google Cloud Run (avec carte bancaire)
 

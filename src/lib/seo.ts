@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { localePath, VERIFIED_LOCALES } from "@/i18n/locales";
 import { OG_SIZE, ogImagePath } from "./og";
 
-export const SITE_NAME = "pdff";
+export const SITE_NAME = "pdffusion";
 export const SOURCE_URL = "https://github.com/mikailoucedrictoure/pdff";
 /** Éditeur et développeur du site (pied de page, Conditions d'utilisation). */
 export const AUTHOR_NAME = "Mikailou Cedric Toure";
@@ -46,7 +46,7 @@ export function pageMetadata(opts: {
   path: string;
   prefix: string;
   locale: string;
-  /** Titre affiché tel quel (sans « | pdff »). */
+  /** Titre affiché tel quel (sans « | pdffusion »). */
   absoluteTitle?: boolean;
   keywords?: string;
   /** Image de partage : « accueil » ou identifiant d'outil. */

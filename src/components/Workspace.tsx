@@ -255,7 +255,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         const zip = new JSZip();
         for (const r of results) zip.file(r.name, r.data);
         const blob = await zip.generateAsync({ type: "blob" });
-        deliver(URL.createObjectURL(blob), "pdff-ocr.zip", blob.size, results.length, started);
+        deliver(URL.createObjectURL(blob), "pdffusion-ocr.zip", blob.size, results.length, started);
       } catch {
         setStatus({ kind: "error", message: w.errorConnection });
       }
@@ -276,7 +276,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
     const zip = new JSZip();
     items.forEach((it, i) => zip.file(names[i], it.file));
     const blob = await zip.generateAsync({ type: "blob" });
-    deliver(URL.createObjectURL(blob), `${cleanFileName(String(options.name ?? "")) || "pdff"}.zip`, blob.size, items.length, started);
+    deliver(URL.createObjectURL(blob), `${cleanFileName(String(options.name ?? "")) || "pdffusion"}.zip`, blob.size, items.length, started);
   }
 
   function run() {
@@ -368,7 +368,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         await deliverFromBlob(JSON.parse(await blob.text()) as BlobResult, started);
         return;
       }
-      const name = filenameFrom(xhr.getResponseHeader("Content-Disposition"), "pdff");
+      const name = filenameFrom(xhr.getResponseHeader("Content-Disposition"), "pdffusion");
       deliver(URL.createObjectURL(blob), name, blob.size, Number(xhr.getResponseHeader("X-Pdff-Count") ?? 1), started);
     };
     setStatus({ kind: "uploading", progress: 0 });
@@ -416,7 +416,7 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         return;
       }
       const blob = await res.blob();
-      const name = filenameFrom(res.headers.get("Content-Disposition"), "pdff");
+      const name = filenameFrom(res.headers.get("Content-Disposition"), "pdffusion");
       deliver(URL.createObjectURL(blob), name, blob.size, Number(res.headers.get("X-Pdff-Count") ?? 1), started);
     } catch {
       setStatus(controller.signal.aborted ? { kind: "idle" } : { kind: "error", message: w.errorConnection });

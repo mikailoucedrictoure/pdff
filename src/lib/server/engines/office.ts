@@ -92,12 +92,12 @@ async function convertRemote(file: FileData, target: string, filter: string, imp
     });
   } catch (err) {
     if (err instanceof Error && err.name === "TimeoutError") throw new UserError("officeTimeout");
-    console.error("[pdff] service Office injoignable :", err);
+    console.error("[pdffusion] service Office injoignable :", err);
     throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
   }
   if (res.status === 504) throw new UserError("officeTimeout");
   if (!res.ok) {
-    console.error(`[pdff] service Office : HTTP ${res.status}`, await res.text().catch(() => ""));
+    console.error(`[pdffusion] service Office : HTTP ${res.status}`, await res.text().catch(() => ""));
     throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
   }
   return { name: `${baseName(file.name)}.${target}`, data: new Uint8Array(await res.arrayBuffer()) };
@@ -217,7 +217,7 @@ export async function convertWithOffice(file: FileData, target: string, opts: Of
       const { output } = await run(bin, args);
       const produced = (await readdir(outDir)).find((f) => extOf(f) === target);
       if (!produced) {
-        console.error("[pdff] LibreOffice :", output);
+        console.error("[pdffusion] LibreOffice :", output);
         throw new UserError("officeFailed", { name: file.name, target: target.toUpperCase() });
       }
       const data = await readFile(path.join(outDir, produced));

@@ -56,7 +56,7 @@ function assertPageLimit(count: number) {
 }
 
 async function save(doc: PDFDocument): Promise<Uint8Array> {
-  doc.setProducer("pdff");
+  doc.setProducer("pdffusion");
   doc.setModificationDate(new Date());
   return doc.save({ useObjectStreams: true });
 }

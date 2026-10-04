@@ -60,9 +60,9 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <I18nProvider locale={locale} messages={toClientMessages(messages)} status={status} machineEnabled={machineEnabled} prefix={prefix}>
           <header className="sticky top-0 z-50 border-b border-white/10 bg-night/75 text-white backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
-              <Link href={href("/")} className="font-display flex items-center gap-2.5 text-xl font-bold tracking-tight">
+              <Link href={href("/")} className="font-display flex items-center gap-2.5 text-lg font-bold tracking-tight sm:text-xl">
                 <Logo />
-                pdff
+                pdffusion
               </Link>
               <nav className="flex items-center gap-1 text-sm font-medium">
                 <Link href={href("/outils/fusionner")} className="hidden rounded-full px-4 py-2 text-white/80 hover:bg-white/10 hover:text-white md:block">
@@ -83,7 +83,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
             {children}
           </main>
           <footer className="border-t border-line px-4 py-10 text-center text-sm text-muted">
-            <p className="font-display text-base font-semibold text-ink">pdff</p>
+            <p className="font-display text-base font-semibold text-ink">pdffusion</p>
             <p className="mt-1">{t.footer.text}</p>
             <nav aria-label={t.footer.legalNav} className="mt-5">
               <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">

@@ -45,7 +45,7 @@ export function ogImage({ title, subtitle, badge }: { title: string; subtitle: s
             <rect x="5" y="6" width="18" height="23" rx="4" fill="#7b6cff" />
             <path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
           </svg>
-          <span style={{ fontSize: 56, fontWeight: 800, letterSpacing: -2 }}>pdff</span>
+          <span style={{ fontSize: 56, fontWeight: 800, letterSpacing: -2 }}>pdffusion</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <span style={{ fontSize: title.length > 40 ? 64 : 80, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>{title}</span>

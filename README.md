@@ -1,11 +1,11 @@
-# pdff
+# pdffusion
 
 Fusionner, convertir et modifier tous vos documents (PDF, Word, Excel, PowerPoint, images, EPUB…) depuis une seule interface.
 Next.js 16 + TypeScript.
 
 Conçu et développé par [Mikailou Cedric Toure](https://www.linkedin.com/in/mika%C3%AFlou-cedric-toure) (Nouveau-Brunswick, Canada). Licence [MIT](LICENSE) : gratuit pour tous, y compris entreprises et administrations.
 
-- **Installer pdff sur vos propres serveurs** (administrations, entreprises, écoles) : [INSTALLATION.md](INSTALLATION.md) — une commande Docker, fonctionne sans Internet.
+- **Installer pdffusion sur vos propres serveurs** (administrations, entreprises, écoles) : [INSTALLATION.md](INSTALLATION.md) — une commande Docker, fonctionne sans Internet.
 - **Signaler une faille** : [SECURITY.md](SECURITY.md).
 - Bibliothèques chargées dans le navigateur à la demande : pdf.js (aperçus, Apache-2.0), tesseract.js (Lire un scan, Apache-2.0), heic-to / libheif (photos d'iPhone HEIC converties en JPG, LGPL-3.0, module séparé et non modifié).
 - Sur le site : Conditions d’utilisation (`/conditions`), Confidentialité, Sécurité et données (`/securite`), Accessibilité (`/accessibilite`, WCAG 2.2 AA).
@@ -23,7 +23,7 @@ Pour une utilisation quotidienne (plus rapide) : `npm run build` puis `npm start
 
 ### Activer Word, Excel et PowerPoint
 
-Les conversions bureautiques utilisent **LibreOffice** (gratuit). Sans lui, pdff fonctionne mais sans ces formats.
+Les conversions bureautiques utilisent **LibreOffice** (gratuit). Sans lui, pdffusion fonctionne mais sans ces formats.
 
 ```powershell
 winget install TheDocumentFoundation.LibreOffice
@@ -133,4 +133,4 @@ src/
 
 - Vercel limite le corps des requêtes à 4,5 Mo : il faudra envoyer les fichiers vers Vercel Blob (envoi direct depuis le navigateur) puis traiter depuis le Blob.
 - LibreOffice n'existe pas sur Vercel : les conversions bureautiques devront passer par un service séparé (conteneur Docker avec LibreOffice, par ex. sur Fly.io / Railway / Cloud Run). Le moteur `office.ts` est isolé pour faciliter ce remplacement.
-- Neon (Postgres) servira aux comptes, quotas et historique quand pdff deviendra un SaaS ; il n'est pas nécessaire pour l'usage actuel.
+- Neon (Postgres) servira aux comptes, quotas et historique quand pdffusion deviendra un SaaS ; il n'est pas nécessaire pour l'usage actuel.

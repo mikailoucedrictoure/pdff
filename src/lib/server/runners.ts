@@ -62,7 +62,7 @@ const runners: Record<string, Runner> = {
       const asPdf = await ensurePdf(file, engines);
       parts.push({ title: baseName(file.name), pdf: await pdf.loadPdf(asPdf) });
     }
-    const name = files.length === 1 ? `${baseName(files[0].name)}.pdf` : "pdff-fusion.pdf";
+    const name = files.length === 1 ? `${baseName(files[0].name)}.pdf` : "pdffusion-fusion.pdf";
     return [{ name, data: await pdf.merge(parts, o.bool("bookmarks")) }];
   },
 

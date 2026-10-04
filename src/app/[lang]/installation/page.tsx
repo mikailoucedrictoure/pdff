@@ -6,7 +6,7 @@ import { AUTHOR_NAME, AUTHOR_URL, pageMetadata, SOURCE_URL } from "@/lib/seo";
 /** Date de la dernière modification réelle de cette page. */
 const UPDATED = "2026-10-02";
 
-const COMMANDS = `mkdir pdff && cd pdff
+const COMMANDS = `mkdir pdffusion && cd pdffusion
 curl -O https://raw.githubusercontent.com/mikailoucedrictoure/pdff/main/docker-compose.yml
 docker compose up -d`;
 
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata({ title: t.legal.install.title, description: t.legal.install.description, path: "/installation", prefix, locale });
 }
 
-/** Installer pdff sur ses propres serveurs : la page à montrer aux administrations et aux entreprises. */
+/** Installer pdffusion sur ses propres serveurs : la page à montrer aux administrations et aux entreprises. */
 export default async function InstallationPage() {
   const { messages: t, locale } = await getI18n();
   return (

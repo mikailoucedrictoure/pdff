@@ -2,7 +2,7 @@ import type { Messages } from "./fr";
 
 const es: Messages = {
   meta: {
-    title: "pdff — Unir, convertir y editar PDF, Word, Excel gratis",
+    title: "pdffusion — Unir, convertir y editar PDF, Word, Excel gratis",
     description: "Herramienta online gratuita para unir, convertir, comprimir, dividir y proteger tus PDF, Word, Excel, PowerPoint e imágenes. Sin registro, archivos eliminados al instante.",
     keywords: "unir pdf, convertir pdf, pdf a word, word a pdf, jpg a pdf, pdf a jpg, comprimir pdf, dividir pdf, excel a pdf, herramientas pdf gratis",
   },
@@ -14,7 +14,7 @@ const es: Messages = {
     developedBy: "Diseñado y desarrollado por {name}",
   },
   home: {
-    title: "Todos tus documentos, en una sola herramienta.",
+    title: "Edita todos tus documentos en una sola herramienta.",
     subtitle: "PDF, Word, Excel, PowerPoint, imágenes: une, convierte y edita en segundos.",
     ctaMerge: "Unir archivos",
     ctaConvert: "Convertir un archivo",
@@ -51,7 +51,7 @@ const es: Messages = {
   },
   notice: {
     officeMissingTitle: "Formatos Word, Excel y PowerPoint desactivados.",
-    officeMissingText: "Instala LibreOffice (gratis) para activarlos y reinicia pdff. En Windows:",
+    officeMissingText: "Instala LibreOffice (gratis) para activarlos y reinicia pdffusion. En Windows:",
   },
   workspace: {
     dropTitle: "Suelta tus archivos aquí",
@@ -141,15 +141,15 @@ const es: Messages = {
     verified: "Traducción revisada",
     automatic: "Traducción automática",
     current: "Idioma actual",
-    translating: "Traduciendo pdff al {lang}…",
-    unavailable: "La traducción automática aún no está activada en este servidor: pdff se muestra en inglés.",
+    translating: "Traduciendo pdffusion al {lang}…",
+    unavailable: "La traducción automática aún no está activada en este servidor: pdffusion se muestra en inglés.",
     failed: "La traducción al {lang} ha fallado. Inténtalo más tarde.",
     noResult: "Ningún idioma coincide.",
     close: "Cerrar",
     auto: "Automático (idioma del navegador)",
   },
   seo: {
-    whyTitle: "¿Por qué pdff?",
+    whyTitle: "¿Por qué pdffusion?",
     why: [
       {
         title: "100 % gratis",
@@ -172,7 +172,7 @@ const es: Messages = {
     faqTitle: "Preguntas frecuentes",
     faq: [
       {
-        q: "¿pdff es realmente gratis?",
+        q: "¿pdffusion es realmente gratis?",
         a: "Sí. Todas las herramientas son gratuitas, sin marcas de agua ni funciones bloqueadas tras una suscripción. Nunca se pide una tarjeta bancaria.",
       },
       {
@@ -185,7 +185,7 @@ const es: Messages = {
       },
       {
         q: "¿Funciona en el móvil?",
-        a: "Sí. pdff funciona en el navegador de cualquier móvil, tableta u ordenador (Android, iPhone, Windows, Mac, Linux), sin instalar nada.",
+        a: "Sí. pdffusion funciona en el navegador de cualquier móvil, tableta u ordenador (Android, iPhone, Windows, Mac, Linux), sin instalar nada.",
       },
       {
         q: "¿Qué formatos se admiten?",
@@ -204,9 +204,9 @@ const es: Messages = {
   },
   privacy: {
     title: "Privacidad",
-    description: "Cómo trata pdff tus archivos: sin cuenta, sin documentos guardados, sin publicidad ni venta de datos.",
+    description: "Cómo trata pdffusion tus archivos: sin cuenta, sin documentos guardados, sin publicidad ni venta de datos.",
     updated: "Última actualización: {date}",
-    intro: "pdff está pensado para que tus documentos sigan siendo tuyos. Esto es, en pocas palabras, lo que ocurre cuando lo usas.",
+    intro: "pdffusion está pensado para que tus documentos sigan siendo tuyos. Esto es, en pocas palabras, lo que ocurre cuando lo usas.",
     sections: [
       {
         title: "Tus archivos",
@@ -214,7 +214,7 @@ const es: Messages = {
       },
       {
         title: "Sin cuenta ni datos personales",
-        text: "pdff no pide registro, correo electrónico ni tarjeta bancaria. Tus documentos no se leen, no se analizan, no se comparten ni se usan para entrenar inteligencia artificial.",
+        text: "pdffusion no pide registro, correo electrónico ni tarjeta bancaria. Tus documentos no se leen, no se analizan, no se comparten ni se usan para entrenar inteligencia artificial.",
       },
       {
         title: "Medición de audiencia",
@@ -237,32 +237,32 @@ const es: Messages = {
     accessibilityLink: "Accesibilidad",
     terms: {
       title: "Condiciones de uso",
-      description: "pdff es gratuito para todos, incluidas empresas y administraciones. Tus documentos siguen siendo tuyos: nada se analiza ni se conserva.",
-      intro: "Estas condiciones regulan el uso de pdff. Son breves a propósito y están escritas con palabras sencillas. Al usar el sitio, las aceptas.",
+      description: "pdffusion es gratuito para todos, incluidas empresas y administraciones. Tus documentos siguen siendo tuyos: nada se analiza ni se conserva.",
+      intro: "Estas condiciones regulan el uso de pdffusion. Son breves a propósito y están escritas con palabras sencillas. Al usar el sitio, las aceptas.",
       sections: [
         {
-          title: "Quién edita pdff",
-          text: "pdff ha sido diseñado, desarrollado y editado por Mikailou Cedric Toure, desarrollador establecido en Nuevo Brunswick (Canadá).",
+          title: "Quién edita pdffusion",
+          text: "pdffusion ha sido diseñado, desarrollado y editado por Mikailou Cedric Toure, desarrollador establecido en Nuevo Brunswick (Canadá).",
         },
         {
           title: "Una licencia de uso gratuita, para todos",
-          text: "pdff es gratuito, sin registro y sin límite de tiempo, para todo el mundo: particulares, estudiantes, docentes, empresas, asociaciones, administraciones y gobiernos, en Canadá y en cualquier otro país. Ningún uso está reservado a una oferta de pago, porque no existe. Los archivos que produces son totalmente tuyos: no llevan marca de agua ni mención de pdff.",
+          text: "pdffusion es gratuito, sin registro y sin límite de tiempo, para todo el mundo: particulares, estudiantes, docentes, empresas, asociaciones, administraciones y gobiernos, en Canadá y en cualquier otro país. Ningún uso está reservado a una oferta de pago, porque no existe. Los archivos que produces son totalmente tuyos: no llevan marca de agua ni mención de pdffusion.",
         },
         {
           title: "Todos tus documentos, incluso los confidenciales",
-          text: "Puedes procesar cualquier tipo de documento, incluso confidencial, porque pdff no lee, analiza, conserva ni comparte tus archivos: se procesan automáticamente y luego se eliminan. Sigues siendo su propietario y eres responsable de contar con los derechos necesarios para procesarlos.",
+          text: "Puedes procesar cualquier tipo de documento, incluso confidencial, porque pdffusion no lee, analiza, conserva ni comparte tus archivos: se procesan automáticamente y luego se eliminan. Sigues siendo su propietario y eres responsable de contar con los derechos necesarios para procesarlos.",
         },
         {
           title: "Código fuente e instalación en tus propios servidores",
-          text: "El código de pdff se publica bajo la licencia MIT. Puedes consultarlo, auditarlo, instalarlo en tus propios servidores (incluso en una red cerrada, sin acceso a Internet), modificarlo y redistribuirlo gratuitamente, siempre que conserves el aviso de derechos de autor y el texto de la licencia.",
+          text: "El código de pdffusion se publica bajo la licencia MIT. Puedes consultarlo, auditarlo, instalarlo en tus propios servidores (incluso en una red cerrada, sin acceso a Internet), modificarlo y redistribuirlo gratuitamente, siempre que conserves el aviso de derechos de autor y el texto de la licencia.",
         },
         {
           title: "Uso aceptable",
-          text: "Está prohibido usar pdff para actividades ilegales, intentar perturbar el servicio (envíos automatizados masivos, intentos de intrusión) o eludir sus límites técnicos. Los límites de tamaño y de número de archivos protegen el servicio para todos.",
+          text: "Está prohibido usar pdffusion para actividades ilegales, intentar perturbar el servicio (envíos automatizados masivos, intentos de intrusión) o eludir sus límites técnicos. Los límites de tamaño y de número de archivos protegen el servicio para todos.",
         },
         {
           title: "Disponibilidad",
-          text: "pdff se ofrece gratuitamente. Puede cambiar, interrumpirse por mantenimiento o dejar de funcionar. Conserva siempre tus documentos originales: pdff no guarda ninguna copia.",
+          text: "pdffusion se ofrece gratuitamente. Puede cambiar, interrumpirse por mantenimiento o dejar de funcionar. Conserva siempre tus documentos originales: pdffusion no guarda ninguna copia.",
         },
         {
           title: "Garantía y responsabilidad",
@@ -270,7 +270,7 @@ const es: Messages = {
         },
         {
           title: "Propiedad intelectual",
-          text: "El nombre pdff, su logotipo y los textos del sitio pertenecen al editor; el código está bajo licencia MIT, como se indica arriba. Las marcas citadas (PDF, Word, Excel, PowerPoint…) pertenecen a sus respectivos propietarios.",
+          text: "El nombre pdffusion, su logotipo y los textos del sitio pertenecen al editor; el código está bajo licencia MIT, como se indica arriba. Las marcas citadas (PDF, Word, Excel, PowerPoint…) pertenecen a sus respectivos propietarios.",
         },
         {
           title: "Ley aplicable",
@@ -288,7 +288,7 @@ const es: Messages = {
     },
     security: {
       title: "Seguridad y datos",
-      description: "Qué pasa con tus archivos en pdff: procesamiento automático, sin análisis, eliminación inmediata, cifrado, alojamiento en Europa e instalación posible en tus servidores.",
+      description: "Qué pasa con tus archivos en pdffusion: procesamiento automático, sin análisis, eliminación inmediata, cifrado, alojamiento en Europa e instalación posible en tus servidores.",
       intro: "Qué pasa con tus archivos, dónde se procesan y cómo se protegen: explicado de forma sencilla, tanto para particulares como para departamentos de informática.",
       sections: [
         {
@@ -297,7 +297,7 @@ const es: Messages = {
         },
         {
           title: "Ningún análisis",
-          text: "Nadie lee tus documentos. No se indexan, ni se analizan, ni se comparten, ni se usan para entrenar inteligencia artificial. pdff no tiene cuentas, ni publicidad, ni perfiles de usuario.",
+          text: "Nadie lee tus documentos. No se indexan, ni se analizan, ni se comparten, ni se usan para entrenar inteligencia artificial. pdffusion no tiene cuentas, ni publicidad, ni perfiles de usuario.",
         },
         {
           title: "Cifrado",
@@ -313,11 +313,11 @@ const es: Messages = {
         },
         {
           title: "Privacidad y leyes aplicables",
-          text: "pdff se edita en Nuevo Brunswick y cumple la Ley de Protección de Información Personal y Documentos Electrónicos (PIPEDA) de Canadá. No recoge ningún dato personal de sus usuarios: ni cuenta, ni correo electrónico, ni cookie de seguimiento. Está diseñado según los mismos principios que el RGPD europeo y la Ley 25 de Quebec: minimización de datos, ninguna reutilización, eliminación tras el procesamiento.",
+          text: "pdffusion se edita en Nuevo Brunswick y cumple la Ley de Protección de Información Personal y Documentos Electrónicos (PIPEDA) de Canadá. No recoge ningún dato personal de sus usuarios: ni cuenta, ni correo electrónico, ni cookie de seguimiento. Está diseñado según los mismos principios que el RGPD europeo y la Ley 25 de Quebec: minimización de datos, ninguna reutilización, eliminación tras el procesamiento.",
         },
         {
           title: "Para organizaciones con normas estrictas",
-          text: "Si tus normas prohíben enviar documentos a un servicio externo, instala pdff en tus propios servidores. El software completo es gratuito, de código abierto y funciona sin conexión a Internet: ningún archivo sale de tu red. La guía de instalación está en la página del proyecto.",
+          text: "Si tus normas prohíben enviar documentos a un servicio externo, instala pdffusion en tus propios servidores. El software completo es gratuito, de código abierto y funciona sin conexión a Internet: ningún archivo sale de tu red. La guía de instalación está en la página del proyecto.",
         },
         {
           title: "Transparencia",
@@ -331,16 +331,16 @@ const es: Messages = {
     },
     accessibility: {
       title: "Accesibilidad",
-      description: "Declaración de accesibilidad de pdff: objetivo WCAG 2.2 nivel AA, medidas aplicadas, limitaciones conocidas y cómo informar de un obstáculo.",
-      intro: "Todo el mundo debe poder usar pdff, incluidas las personas ciegas o con baja visión, sordas o con pérdida auditiva, o con una discapacidad motriz o cognitiva.",
+      description: "Declaración de accesibilidad de pdffusion: objetivo WCAG 2.2 nivel AA, medidas aplicadas, limitaciones conocidas y cómo informar de un obstáculo.",
+      intro: "Todo el mundo debe poder usar pdffusion, incluidas las personas ciegas o con baja visión, sordas o con pérdida auditiva, o con una discapacidad motriz o cognitiva.",
       sections: [
         {
           title: "Norma de referencia",
-          text: "pdff aspira a cumplir las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.2, nivel AA, la norma internacional del W3C. Este nivel cubre los requisitos de la Norma de accesibilidad web del Gobierno de Canadá, la norma europea EN 301 549 y la sección 508 de Estados Unidos, que remiten a las WCAG 2.0 o 2.1 de nivel AA.",
+          text: "pdffusion aspira a cumplir las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.2, nivel AA, la norma internacional del W3C. Este nivel cubre los requisitos de la Norma de accesibilidad web del Gobierno de Canadá, la norma europea EN 301 549 y la sección 508 de Estados Unidos, que remiten a las WCAG 2.0 o 2.1 de nivel AA.",
         },
         {
           title: "Estado de conformidad",
-          text: "pdff es parcialmente conforme con las WCAG 2.2 nivel AA: las limitaciones conocidas se indican más abajo. Esta declaración se basa en una evaluación interna realizada el 2 de octubre de 2026, con herramientas automáticas (axe, Lighthouse) y comprobaciones manuales (teclado, contraste, zoom, anuncios). Todavía no se ha realizado ninguna auditoría independiente.",
+          text: "pdffusion es parcialmente conforme con las WCAG 2.2 nivel AA: las limitaciones conocidas se indican más abajo. Esta declaración se basa en una evaluación interna realizada el 2 de octubre de 2026, con herramientas automáticas (axe, Lighthouse) y comprobaciones manuales (teclado, contraste, zoom, anuncios). Todavía no se ha realizado ninguna auditoría independiente.",
         },
         {
           title: "Medidas aplicadas",
@@ -348,7 +348,7 @@ const es: Messages = {
         },
         {
           title: "Limitaciones conocidas",
-          text: "Sin ese ajuste, las animaciones decorativas (fondo, anillo, desfile de formatos) funcionan sin parar; el desfile se detiene al pasar el ratón y con el teclado. El anillo animado de la página de inicio se maneja con el ratón o con el dedo; es decorativo y la lista de formatos que muestra también está disponible como texto en la página. Los idiomas traducidos automáticamente pueden contener imprecisiones. Por último, la accesibilidad de un documento producido depende del original: pdff no añade etiquetas de accesibilidad a un PDF que no las tiene.",
+          text: "Sin ese ajuste, las animaciones decorativas (fondo, anillo, desfile de formatos) funcionan sin parar; el desfile se detiene al pasar el ratón y con el teclado. El anillo animado de la página de inicio se maneja con el ratón o con el dedo; es decorativo y la lista de formatos que muestra también está disponible como texto en la página. Los idiomas traducidos automáticamente pueden contener imprecisiones. Por último, la accesibilidad de un documento producido depende del original: pdffusion no añade etiquetas de accesibilidad a un PDF que no las tiene.",
         },
         {
           title: "Informar de un obstáculo",
@@ -358,9 +358,9 @@ const es: Messages = {
     },
     installLink: "Instalar en sus servidores",
     install: {
-      title: "pdff para organizaciones",
-      description: "Instale pdff en los servidores de su administración o empresa: gratis, de código abierto y sus documentos nunca salen de su red.",
-      intro: "Administraciones, empresas, hospitales, escuelas: instale pdff en sus propias instalaciones en minutos y mantenga el control total de sus documentos.",
+      title: "pdffusion para organizaciones",
+      description: "Instale pdffusion en los servidores de su administración o empresa: gratis, de código abierto y sus documentos nunca salen de su red.",
+      intro: "Administraciones, empresas, hospitales, escuelas: instale pdffusion en sus propias instalaciones en minutos y mantenga el control total de sus documentos.",
       sections: [
         {
           title: "Sus documentos no salen de su red",
@@ -368,11 +368,11 @@ const es: Messages = {
         },
         {
           title: "Todo incluido",
-          text: "Todas las herramientas de pdff, más de 40 formatos, LibreOffice para Word, Excel y PowerPoint, y los 160 idiomas de la interfaz, en un solo contenedor.",
+          text: "Todas las herramientas de pdffusion, más de 40 formatos, LibreOffice para Word, Excel y PowerPoint, y los 160 idiomas de la interfaz, en un solo contenedor.",
         },
         {
           title: "Gratis y de código abierto",
-          text: "pdff se publica bajo la licencia MIT: instalación, uso y modificación gratuitos, sin límite de usuarios. Sus equipos de seguridad pueden auditar todo el código.",
+          text: "pdffusion se publica bajo la licencia MIT: instalación, uso y modificación gratuitos, sin límite de usuarios. Sus equipos de seguridad pueden auditar todo el código.",
         },
         {
           title: "Instalación en 3 comandos",
@@ -395,7 +395,7 @@ const es: Messages = {
       tagline: "Junta varios archivos (PDF, Word, imágenes…) en un solo PDF, en el orden que elijas.",
       seoTitle: "Unir PDF online gratis (Word, imágenes, PDF)",
       seoDescription: "Combina PDF, Word, Excel, PowerPoint e imágenes en un solo PDF, en el orden que quieras. Gratis, sin registro ni marca de agua, archivos eliminados al instante.",
-      intro: "Reúne todos tus papeles en un solo archivo: pdff acepta PDF, pero también documentos Word, hojas de Excel, presentaciones y fotos, y los une en un PDF limpio con un marcador por archivo.",
+      intro: "Reúne todos tus papeles en un solo archivo: pdffusion acepta PDF, pero también documentos Word, hojas de Excel, presentaciones y fotos, y los une en un PDF limpio con un marcador por archivo.",
       options: { bookmarks: { label: "Añadir un marcador por archivo" } },
       guide: {
         keywords: "unir pdf, combinar pdf, juntar pdf, fusionar pdf, unir word y pdf, unir varios pdf en uno",
@@ -421,7 +421,7 @@ const es: Messages = {
         faq: [
           {
             q: "¿Se pueden unir archivos Word y fotos con PDF?",
-            a: "Sí. pdff convierte cada archivo a PDF automáticamente antes de unirlos, en el orden elegido.",
+            a: "Sí. pdffusion convierte cada archivo a PDF automáticamente antes de unirlos, en el orden elegido.",
           },
           {
             q: "¿Cuántos archivos se pueden unir?",
@@ -435,7 +435,7 @@ const es: Messages = {
       tagline: "Convierte cualquier documento o imagen a otro formato.",
       seoTitle: "Convertir PDF a Word, Word a PDF, JPG a PDF — gratis",
       seoDescription: "Conversor gratuito: PDF ↔ Word, Excel, PowerPoint, JPG, PNG, EPUB y más de 40 formatos. Online, sin registro y en alta calidad.",
-      intro: "Un solo conversor para todos tus formatos: Word a PDF, PDF a Word, JPG a PDF, PDF a JPG, Excel a PDF, PowerPoint a PDF, PNG a JPG, EPUB a PDF… Suelta tus archivos y pdff solo te propone los formatos posibles.",
+      intro: "Un solo conversor para todos tus formatos: Word a PDF, PDF a Word, JPG a PDF, PDF a JPG, Excel a PDF, PowerPoint a PDF, PNG a JPG, EPUB a PDF… Suelta tus archivos y pdffusion solo te propone los formatos posibles.",
       options: {
         target: { label: "Convertir a" },
         dpi: { label: "Resolución de las imágenes (DPI)" },
@@ -455,7 +455,7 @@ const es: Messages = {
           },
           {
             title: "Elige el formato",
-            text: "pdff solo propone las conversiones posibles para tus archivos.",
+            text: "pdffusion solo propone las conversiones posibles para tus archivos.",
           },
           {
             title: "Haz clic en Convertir",
@@ -465,7 +465,7 @@ const es: Messages = {
         faq: [
           {
             q: "¿La conversión de PDF a Word mantiene el diseño?",
-            a: "Lo mantiene lo mejor posible, pero un PDF complejo (columnas, tablas anidadas) puede necesitar retoques: pdff te avisa cuando es el caso.",
+            a: "Lo mantiene lo mejor posible, pero un PDF complejo (columnas, tablas anidadas) puede necesitar retoques: pdffusion te avisa cuando es el caso.",
           },
           {
             q: "¿Qué formatos se pueden convertir?",
@@ -584,7 +584,7 @@ const es: Messages = {
       tagline: "Cambia el orden de las páginas, duplica, invierte.",
       seoTitle: "Ordenar las páginas de un PDF online — gratis",
       seoDescription: "Cambia el orden de las páginas de un PDF, duplica algunas o invierte todo el documento. Gratis, online, sin registro.",
-      intro: "¿Páginas escaneadas en desorden? Indica el nuevo orden (por ejemplo 3, 1, 2, 4-fin) o invierte el documento entero: pdff hace el resto.",
+      intro: "¿Páginas escaneadas en desorden? Indica el nuevo orden (por ejemplo 3, 1, 2, 4-fin) o invierte el documento entero: pdffusion hace el resto.",
       options: {
         order: { label: "Nuevo orden", placeholder: "3, 1, 2, 4-fin", help: "Las páginas no indicadas se eliminan." },
         reverse: { label: "Invertir todo el documento (ignora el orden anterior)" },
@@ -627,7 +627,7 @@ const es: Messages = {
       tagline: "Cambiar el nombre de uno o varios archivos, sin enviar nada.",
       seoTitle: "Renombrar archivos en línea — gratis y sin envíos",
       seoDescription: "Renombra uno o varios archivos (PDF, Word, imágenes…) de una vez, con numeración automática. Todo ocurre en tu navegador: no se envía nada.",
-      intro: "Deja tus archivos, escribe el nuevo nombre y haz clic en Renombrar. Para varios archivos, pdff añade un número: Factura-1, Factura-2… Tus archivos nunca salen de tu dispositivo.",
+      intro: "Deja tus archivos, escribe el nuevo nombre y haz clic en Renombrar. Para varios archivos, pdffusion añade un número: Factura-1, Factura-2… Tus archivos nunca salen de tu dispositivo.",
       options: {
         name: {
           label: "Nuevo nombre",
@@ -913,7 +913,7 @@ const es: Messages = {
           },
           {
             title: "Haz clic en Comprimir",
-            text: "pdff muestra la reducción, por ejemplo «8 MB → 2 MB».",
+            text: "pdffusion muestra la reducción, por ejemplo «8 MB → 2 MB».",
           },
         ],
         faq: [
@@ -923,7 +923,7 @@ const es: Messages = {
           },
           {
             q: "¿Por qué mi PDF no se reduce?",
-            a: "Seguramente ya estaba optimizado; pdff te lo indica.",
+            a: "Seguramente ya estaba optimizado; pdffusion te lo indica.",
           },
         ],
       },
@@ -967,7 +967,7 @@ const es: Messages = {
             a: "Sí: AES-256, el nivel que usan bancos y gobiernos. Sin la contraseña, el contenido es ilegible.",
           },
           {
-            q: "¿pdff guarda mi contraseña?",
+            q: "¿pdffusion guarda mi contraseña?",
             a: "No, nunca se guarda. Si la olvidas, nadie podrá abrir el archivo.",
           },
         ],
@@ -978,7 +978,7 @@ const es: Messages = {
       tagline: "Quita la contraseña de un PDF cuya contraseña conoces.",
       seoTitle: "Desbloquear un PDF — quitar la contraseña gratis",
       seoDescription: "Quita la contraseña de un PDF cuya contraseña conoces, para abrirlo, imprimirlo o unirlo libremente. Gratis.",
-      intro: "¿Conoces la contraseña pero escribirla cada vez es un fastidio? Quítala de una vez por todas. pdff nunca se salta una contraseña que no conoces.",
+      intro: "¿Conoces la contraseña pero escribirla cada vez es un fastidio? Quítala de una vez por todas. pdffusion nunca se salta una contraseña que no conoces.",
       options: { password: { label: "Contraseña actual", help: "Déjalo vacío si el PDF solo tiene contraseña de permisos." } },
       guide: {
         keywords: "desbloquear pdf, quitar contraseña pdf, eliminar protección pdf",
@@ -1004,7 +1004,7 @@ const es: Messages = {
         faq: [
           {
             q: "¿Se puede desbloquear un PDF sin la contraseña?",
-            a: "No. pdff solo quita la protección de documentos cuya contraseña conoces.",
+            a: "No. pdffusion solo quita la protección de documentos cuya contraseña conoces.",
           },
           {
             q: "¿También se quitan las restricciones de impresión?",
@@ -1144,7 +1144,7 @@ const es: Messages = {
       tagline: "Borrar para siempre información sensible de un PDF.",
       seoTitle: "Tachar un PDF: ocultar información de forma definitiva",
       seoDescription: "Elimina de verdad nombres, direcciones, números y zonas de un PDF: el contenido oculto se borra del archivo, no solo se tapa. Gratis, sin registro.",
-      intro: "Escribe las palabras que deben desaparecer, marca la información a detectar (correos, teléfonos…) o dibuja rectángulos en las páginas. pdff borra de verdad el contenido oculto: no se puede recuperar copiando el texto ni quitando el recuadro negro.",
+      intro: "Escribe las palabras que deben desaparecer, marca la información a detectar (correos, teléfonos…) o dibuja rectángulos en las páginas. pdffusion borra de verdad el contenido oculto: no se puede recuperar copiando el texto ni quitando el recuadro negro.",
       options: {
         terms: {
           label: "Palabras a eliminar",
@@ -1189,7 +1189,7 @@ const es: Messages = {
         faq: [
           {
             q: "¿Por qué no dibujar simplemente un rectángulo negro?",
-            a: "Un rectángulo encima deja el texto en el archivo: se puede copiar o quitar el rectángulo. pdff borra de verdad el texto y las imágenes bajo la zona.",
+            a: "Un rectángulo encima deja el texto en el archivo: se puede copiar o quitar el rectángulo. pdffusion borra de verdad el texto y las imágenes bajo la zona.",
           },
           {
             q: "¿Importan las mayúsculas?",
@@ -1258,7 +1258,7 @@ const es: Messages = {
       tagline: "Completar un formulario PDF directamente en el navegador.",
       seoTitle: "Rellenar un formulario PDF en línea gratis",
       seoDescription: "Completa los campos de un formulario PDF (texto, casillas, listas) sin programas y descárgalo relleno, bloqueado si quieres. Gratis, sin registro.",
-      intro: "Deja un formulario PDF: pdff encuentra todos los campos y te los muestra como un formulario sencillo. Rellénalo, revisa la vista previa y haz clic en Rellenar un formulario para descargar el PDF completado.",
+      intro: "Deja un formulario PDF: pdffusion encuentra todos los campos y te los muestra como un formulario sencillo. Rellénalo, revisa la vista previa y haz clic en Rellenar un formulario para descargar el PDF completado.",
       options: {
         values: {
           label: "Respuestas",
@@ -1277,7 +1277,7 @@ const es: Messages = {
         steps: [
           {
             title: "Deja el formulario",
-            text: "pdff encuentra todos los campos que hay que rellenar.",
+            text: "pdffusion encuentra todos los campos que hay que rellenar.",
           },
           {
             title: "Rellena los campos",
@@ -1290,7 +1290,7 @@ const es: Messages = {
         ],
         faq: [
           {
-            q: "¿Por qué pdff no encuentra ningún campo?",
+            q: "¿Por qué pdffusion no encuentra ningún campo?",
             a: "El PDF no es un formulario interactivo (suele ser un escaneo). Habrá que imprimirlo o pedir una versión interactiva al organismo.",
           },
           {
@@ -1349,7 +1349,7 @@ const es: Messages = {
       tagline: "Sacar las fotos e ilustraciones de un PDF.",
       seoTitle: "Extraer imágenes de un PDF en línea gratis",
       seoDescription: "Saca todas las fotos, ilustraciones y logotipos de un PDF en PNG o JPG, sin duplicados. Gratis, sin registro, archivos eliminados al momento.",
-      intro: "Deja un PDF: pdff encuentra todas las imágenes que contiene y te las da una a una, en PNG o JPG, en un archivo ZIP. Se descartan las imágenes decorativas pequeñas y los duplicados.",
+      intro: "Deja un PDF: pdffusion encuentra todas las imágenes que contiene y te las da una a una, en PNG o JPG, en un archivo ZIP. Se descartan las imágenes decorativas pequeñas y los duplicados.",
       options: {
         format: {
           label: "Formato de las imágenes",
@@ -1511,7 +1511,7 @@ const es: Messages = {
     imageFormat: "Formato de imagen no compatible: {format}",
     imageConvert: "No se puede convertir «{name}»: imagen ilegible o dañada.",
     imageUnreadable: "«{name}» no es una imagen legible.",
-    officeMissing: "Esta conversión necesita LibreOffice (Word, Excel, PowerPoint…). Instálalo y reinicia pdff.",
+    officeMissing: "Esta conversión necesita LibreOffice (Word, Excel, PowerPoint…). Instálalo y reinicia pdffusion.",
     officeTarget: "La conversión a {target} no es compatible.",
     officeTimeout: "La conversión tardó demasiado y se detuvo.",
     officeFailed: "LibreOffice no pudo convertir «{name}» a {target}.",

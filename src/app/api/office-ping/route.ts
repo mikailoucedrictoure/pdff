@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const res = await fetch(`${base}/health`, { cache: "no-store", signal: AbortSignal.timeout(280_000) });
     return Response.json({ office: res.ok ? "prêt" : `HTTP ${res.status}`, ms: Date.now() - started });
   } catch (err) {
-    console.error("[pdff] réveil du service Office :", err);
+    console.error("[pdffusion] réveil du service Office :", err);
     return Response.json({ office: "injoignable", ms: Date.now() - started }, { status: 502 });
   }
 }

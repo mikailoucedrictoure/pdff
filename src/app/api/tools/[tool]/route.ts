@@ -103,7 +103,7 @@ async function handle(toolId: ToolId, incoming: Incoming[], options: OptionValue
   try {
     files = await readFiles(incoming);
   } catch (err) {
-    console.error("[pdff] lecture des fichiers :", err);
+    console.error("[pdffusion] lecture des fichiers :", err);
     return fail("badRequest");
   }
 
@@ -119,7 +119,7 @@ async function handle(toolId: ToolId, incoming: Incoming[], options: OptionValue
       const zip = new JSZip();
       for (const r of results) zip.file(r.name, r.data);
       const archive = await zip.generateAsync({ type: "uint8array", compression: "DEFLATE", compressionOptions: { level: 6 } });
-      output = { name: `pdff-${toolId}.zip`, data: archive };
+      output = { name: `pdffusion-${toolId}.zip`, data: archive };
     }
 
     // Résultat trop gros pour une réponse Vercel : le navigateur le récupère dans Blob
@@ -139,7 +139,7 @@ async function handle(toolId: ToolId, incoming: Incoming[], options: OptionValue
     return new Response(output.data as BodyInit, { headers });
   } catch (err) {
     if (err instanceof UserError) return fail(err.key, 422, err.params, err.file);
-    console.error(`[pdff] ${toolId}:`, err);
+    console.error(`[pdffusion] ${toolId}:`, err);
     return fail("unexpected", 500);
   }
 }

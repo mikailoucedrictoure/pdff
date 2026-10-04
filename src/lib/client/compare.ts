@@ -76,6 +76,6 @@ footer{margin-top:2rem;color:#625e86;font-size:.85rem}
 <p class="meta"><strong>${escape(t.summary)}</strong> · ${escape(t.pages)}</p>
 <p class="meta">${escape(t.legend)}</p>
 <div class="box">${body}</div>
-<footer>pdff — ${escape(new Date().toISOString().slice(0, 10))}</footer>
+<footer>pdffusion — ${escape(new Date().toISOString().slice(0, 10))}</footer>
 </body></html>`;
 }

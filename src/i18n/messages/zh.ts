@@ -2,7 +2,7 @@ import type { Messages } from "./fr";
 
 const zh: Messages = {
   meta: {
-    title: "pdff — 免费合并、转换和编辑 PDF、Word、Excel",
+    title: "pdffusion — 免费合并、转换和编辑 PDF、Word、Excel",
     description: "免费在线工具，可合并、转换、压缩、拆分和加密 PDF、Word、Excel、PowerPoint 及图片文件。无需注册，文件处理后立即删除。",
     keywords: "合并pdf, pdf转换, pdf转word, word转pdf, jpg转pdf, pdf转jpg, 压缩pdf, 拆分pdf, excel转pdf, 免费pdf工具",
   },
@@ -14,7 +14,7 @@ const zh: Messages = {
     developedBy: "由 {name} 设计开发",
   },
   home: {
-    title: "所有文档，一个工具搞定。",
+    title: "在一个工具中编辑您的所有文档。",
     subtitle: "PDF、Word、Excel、PowerPoint、图片：几秒内完成合并、转换和编辑。",
     ctaMerge: "合并文件",
     ctaConvert: "转换文件",
@@ -51,7 +51,7 @@ const zh: Messages = {
   },
   notice: {
     officeMissingTitle: "Word、Excel 和 PowerPoint 格式已停用。",
-    officeMissingText: "安装 LibreOffice（免费）即可启用，然后重启 pdff。Windows 上：",
+    officeMissingText: "安装 LibreOffice（免费）即可启用，然后重启 pdffusion。Windows 上：",
   },
   workspace: {
     dropTitle: "把文件拖到这里",
@@ -141,15 +141,15 @@ const zh: Messages = {
     verified: "人工审校翻译",
     automatic: "自动翻译",
     current: "当前语言",
-    translating: "正在将 pdff 翻译为{lang}…",
-    unavailable: "此服务器尚未启用自动翻译：pdff 以英文显示。",
+    translating: "正在将 pdffusion 翻译为{lang}…",
+    unavailable: "此服务器尚未启用自动翻译：pdffusion 以英文显示。",
     failed: "翻译为{lang}失败，请稍后再试。",
     noResult: "没有匹配的语言。",
     close: "关闭",
     auto: "自动（浏览器语言）",
   },
   seo: {
-    whyTitle: "为什么选择 pdff？",
+    whyTitle: "为什么选择 pdffusion？",
     why: [
       { title: "完全免费", text: "无需订阅，无需银行卡，不会在文档上添加水印。" },
       { title: "无需注册", text: "不用创建账户：打开页面，放入文件，即可完成。" },
@@ -159,12 +159,12 @@ const zh: Messages = {
     howTitle: "如何使用？",
     faqTitle: "常见问题",
     faq: [
-      { q: "pdff 真的免费吗？", a: "是的。所有工具都免费，没有水印，也没有需要订阅才能解锁的功能。我们从不要求银行卡。" },
+      { q: "pdffusion 真的免费吗？", a: "是的。所有工具都免费，没有水印，也没有需要订阅才能解锁的功能。我们从不要求银行卡。" },
       { q: "需要创建账户吗？", a: "不需要。无需注册，无需邮箱，直接使用即可。" },
       { q: "我的文档会被保存吗？", a: "不会。您的文件只用于您请求的操作，完成后即被删除。没有人会查看，也不会与任何人共享。" },
       {
         q: "手机上能用吗？",
-        a: "可以。pdff 可在任何手机、平板或电脑（Android、iPhone、Windows、Mac、Linux）的浏览器中运行，无需安装任何软件。",
+        a: "可以。pdffusion 可在任何手机、平板或电脑（Android、iPhone、Windows、Mac、Linux）的浏览器中运行，无需安装任何软件。",
       },
       {
         q: "支持哪些格式？",
@@ -180,15 +180,15 @@ const zh: Messages = {
   },
   privacy: {
     title: "隐私",
-    description: "pdff 如何处理您的文件：无需账户，不保留任何文档，没有广告，也不出售数据。",
+    description: "pdffusion 如何处理您的文件：无需账户，不保留任何文档，没有广告，也不出售数据。",
     updated: "最后更新：{date}",
-    intro: "pdff 的设计原则是：您的文档始终属于您。下面用简单的话说明您使用时会发生什么。",
+    intro: "pdffusion 的设计原则是：您的文档始终属于您。下面用简单的话说明您使用时会发生什么。",
     sections: [
       {
         title: "您的文件",
         text: "文件通过加密连接（HTTPS）上传，自动处理，结果生成后立即删除。大文件会以随机名称暂存在临时存储中，处理结束后即被清除；自动清理程序最迟在 24 小时内删除任何残留文件。",
       },
-      { title: "无需账户，不收集个人数据", text: "pdff 不要求注册、邮箱或银行卡。您的文档不会被查看、分析、共享，也不会用于训练人工智能。" },
+      { title: "无需账户，不收集个人数据", text: "pdffusion 不要求注册、邮箱或银行卡。您的文档不会被查看、分析、共享，也不会用于训练人工智能。" },
       {
         title: "访问统计",
         text: "我们以匿名且不使用 Cookie 的方式统计访问量（Vercel Web Analytics），以了解哪些工具有用。没有广告，也没有跨站跟踪。",
@@ -207,32 +207,32 @@ const zh: Messages = {
     accessibilityLink: "无障碍",
     terms: {
       title: "使用条款",
-      description: "pdff 对所有人免费，包括企业和政府机构。您的文档始终属于您：不分析、不保存。",
-      intro: "本条款规定 pdff 的使用规则。条款刻意简短，用平实的语言写成。使用本网站即表示您接受本条款。",
+      description: "pdffusion 对所有人免费，包括企业和政府机构。您的文档始终属于您：不分析、不保存。",
+      intro: "本条款规定 pdffusion 的使用规则。条款刻意简短，用平实的语言写成。使用本网站即表示您接受本条款。",
       sections: [
         {
-          title: "pdff 的发布者",
-          text: "pdff 由 Mikailou Cedric Toure 设计、开发和发布，他是一名常驻加拿大新不伦瑞克省的开发者。",
+          title: "pdffusion 的发布者",
+          text: "pdffusion 由 Mikailou Cedric Toure 设计、开发和发布，他是一名常驻加拿大新不伦瑞克省的开发者。",
         },
         {
           title: "人人可用的免费使用许可",
-          text: "pdff 免费、无需注册、没有期限，面向所有人：个人、学生、教师、企业、协会、公共机构和政府，无论在加拿大还是其他任何国家。没有任何用途仅限付费方案，因为根本没有付费方案。您生成的文件完全归您所有：不带水印，也不带任何 pdff 标识。",
+          text: "pdffusion 免费、无需注册、没有期限，面向所有人：个人、学生、教师、企业、协会、公共机构和政府，无论在加拿大还是其他任何国家。没有任何用途仅限付费方案，因为根本没有付费方案。您生成的文件完全归您所有：不带水印，也不带任何 pdffusion 标识。",
         },
         {
           title: "所有文档，包括机密文档",
-          text: "您可以处理任何类型的文档，包括机密文档，因为 pdff 不会读取、分析、保存或分享您的文件：文件会被自动处理，随后删除。您仍是文件的所有者，并负责确保拥有处理这些文件所需的权利。",
+          text: "您可以处理任何类型的文档，包括机密文档，因为 pdffusion 不会读取、分析、保存或分享您的文件：文件会被自动处理，随后删除。您仍是文件的所有者，并负责确保拥有处理这些文件所需的权利。",
         },
         {
           title: "源代码与在自有服务器上安装",
-          text: "pdff 的代码以 MIT 许可证发布。您可以免费查看、审计代码，将其安装在自己的服务器上（包括无法连接互联网的封闭网络），修改并再分发，只需保留版权声明和许可证文本。",
+          text: "pdffusion 的代码以 MIT 许可证发布。您可以免费查看、审计代码，将其安装在自己的服务器上（包括无法连接互联网的封闭网络），修改并再分发，只需保留版权声明和许可证文本。",
         },
         {
           title: "可接受的使用",
-          text: "禁止将 pdff 用于违法活动、试图干扰服务（大规模自动上传、入侵尝试）或绕过其技术限制。文件大小和数量的限制是为了保护所有人的使用。",
+          text: "禁止将 pdffusion 用于违法活动、试图干扰服务（大规模自动上传、入侵尝试）或绕过其技术限制。文件大小和数量的限制是为了保护所有人的使用。",
         },
         {
           title: "可用性",
-          text: "pdff 免费提供。服务可能变更、因维护而中断或停止运营。请始终保留原始文档：pdff 不保留任何副本。",
+          text: "pdffusion 免费提供。服务可能变更、因维护而中断或停止运营。请始终保留原始文档：pdffusion 不保留任何副本。",
         },
         {
           title: "担保与责任",
@@ -240,7 +240,7 @@ const zh: Messages = {
         },
         {
           title: "知识产权",
-          text: "pdff 名称、标志和网站文字归发布者所有；代码如上所述采用 MIT 许可证。文中提及的商标（PDF、Word、Excel、PowerPoint 等）归各自所有者所有。",
+          text: "pdffusion 名称、标志和网站文字归发布者所有；代码如上所述采用 MIT 许可证。文中提及的商标（PDF、Word、Excel、PowerPoint 等）归各自所有者所有。",
         },
         {
           title: "适用法律",
@@ -258,7 +258,7 @@ const zh: Messages = {
     },
     security: {
       title: "安全与数据",
-      description: "您的文件在 pdff 上的处理方式：自动处理、不做分析、立即删除、加密传输、欧洲托管，并可安装在您自己的服务器上。",
+      description: "您的文件在 pdffusion 上的处理方式：自动处理、不做分析、立即删除、加密传输、欧洲托管，并可安装在您自己的服务器上。",
       intro: "您的文件会怎样、在哪里处理、如何受到保护：用简单的话说明，个人用户和 IT 部门都能看懂。",
       sections: [
         {
@@ -267,7 +267,7 @@ const zh: Messages = {
         },
         {
           title: "不做任何分析",
-          text: "没有人会阅读您的文档。文档不会被索引、分析、分享，也不会用于训练人工智能。pdff 没有账户、没有广告，也没有用户画像。",
+          text: "没有人会阅读您的文档。文档不会被索引、分析、分享，也不会用于训练人工智能。pdffusion 没有账户、没有广告，也没有用户画像。",
         },
         {
           title: "加密",
@@ -283,11 +283,11 @@ const zh: Messages = {
         },
         {
           title: "隐私与适用法律",
-          text: "pdff 在新不伦瑞克省发布，遵守加拿大《个人信息保护和电子文件法》（PIPEDA）。它不收集任何用户个人信息：没有账户、没有电子邮件地址、没有跟踪 Cookie。其设计遵循与欧盟《通用数据保护条例》（GDPR）和魁北克省第 25 号法律相同的原则：数据最小化、不再利用、处理后删除。",
+          text: "pdffusion 在新不伦瑞克省发布，遵守加拿大《个人信息保护和电子文件法》（PIPEDA）。它不收集任何用户个人信息：没有账户、没有电子邮件地址、没有跟踪 Cookie。其设计遵循与欧盟《通用数据保护条例》（GDPR）和魁北克省第 25 号法律相同的原则：数据最小化、不再利用、处理后删除。",
         },
         {
           title: "适用于有严格规定的机构",
-          text: "如果贵机构的规定禁止将文档发送给外部服务，可以将 pdff 安装在自己的服务器上。完整软件免费、开源，无需连接互联网即可运行：任何文件都不会离开您的网络。安装指南见项目页面。",
+          text: "如果贵机构的规定禁止将文档发送给外部服务，可以将 pdffusion 安装在自己的服务器上。完整软件免费、开源，无需连接互联网即可运行：任何文件都不会离开您的网络。安装指南见项目页面。",
         },
         {
           title: "透明",
@@ -301,16 +301,16 @@ const zh: Messages = {
     },
     accessibility: {
       title: "无障碍",
-      description: "pdff 无障碍声明：目标为 WCAG 2.2 AA 级、已采取的措施、已知局限以及如何报告障碍。",
-      intro: "每个人都应能使用 pdff，包括视障或低视力人士、聋人或听障人士，以及有肢体或认知障碍的人士。",
+      description: "pdffusion 无障碍声明：目标为 WCAG 2.2 AA 级、已采取的措施、已知局限以及如何报告障碍。",
+      intro: "每个人都应能使用 pdffusion，包括视障或低视力人士、聋人或听障人士，以及有肢体或认知障碍的人士。",
       sections: [
         {
           title: "目标标准",
-          text: "pdff 的目标是符合 W3C 国际标准《Web 内容无障碍指南》（WCAG）2.2 AA 级。该级别涵盖加拿大政府《网站无障碍标准》、欧洲标准 EN 301 549 和美国第 508 条的要求，这些标准均引用 WCAG 2.0 或 2.1 AA 级。",
+          text: "pdffusion 的目标是符合 W3C 国际标准《Web 内容无障碍指南》（WCAG）2.2 AA 级。该级别涵盖加拿大政府《网站无障碍标准》、欧洲标准 EN 301 549 和美国第 508 条的要求，这些标准均引用 WCAG 2.0 或 2.1 AA 级。",
         },
         {
           title: "符合状态",
-          text: "pdff 部分符合 WCAG 2.2 AA 级，已知局限列于下文。本声明基于 2026 年 10 月 2 日进行的内部评估，使用了自动化工具（axe、Lighthouse）和人工检查（键盘、对比度、缩放、读屏播报）。目前尚未进行独立审计。",
+          text: "pdffusion 部分符合 WCAG 2.2 AA 级，已知局限列于下文。本声明基于 2026 年 10 月 2 日进行的内部评估，使用了自动化工具（axe、Lighthouse）和人工检查（键盘、对比度、缩放、读屏播报）。目前尚未进行独立审计。",
         },
         {
           title: "已采取的措施",
@@ -318,7 +318,7 @@ const zh: Messages = {
         },
         {
           title: "已知局限",
-          text: "若未开启该设置，装饰性动画（背景、圆环、格式滚动条）会持续播放；鼠标悬停或键盘聚焦时滚动条会暂停。首页的动画圆环需用鼠标或手指操作；它是装饰性的，其展示的格式列表在页面上也以文字形式提供。机器翻译的语言可能存在不准确之处。此外，生成文档的无障碍程度取决于原始文档：pdff 不会为没有无障碍标签的 PDF 添加标签。",
+          text: "若未开启该设置，装饰性动画（背景、圆环、格式滚动条）会持续播放；鼠标悬停或键盘聚焦时滚动条会暂停。首页的动画圆环需用鼠标或手指操作；它是装饰性的，其展示的格式列表在页面上也以文字形式提供。机器翻译的语言可能存在不准确之处。此外，生成文档的无障碍程度取决于原始文档：pdffusion 不会为没有无障碍标签的 PDF 添加标签。",
         },
         {
           title: "报告障碍",
@@ -328,9 +328,9 @@ const zh: Messages = {
     },
     installLink: "安装到您的服务器",
     install: {
-      title: "面向机构的 pdff",
-      description: "将 pdff 安装在贵机构或公司的服务器上：免费、开源，文档永远不会离开您的网络。",
-      intro: "政府机构、企业、医院、学校：几分钟即可在内部安装 pdff，完全掌控您的文档。",
+      title: "面向机构的 pdffusion",
+      description: "将 pdffusion 安装在贵机构或公司的服务器上：免费、开源，文档永远不会离开您的网络。",
+      intro: "政府机构、企业、医院、学校：几分钟即可在内部安装 pdffusion，完全掌控您的文档。",
       sections: [
         {
           title: "文档不离开您的网络",
@@ -338,11 +338,11 @@ const zh: Messages = {
         },
         {
           title: "全部包含",
-          text: "pdff 的全部工具、40 多种格式、用于 Word、Excel 和 PowerPoint 的 LibreOffice，以及 160 种界面语言，都在一个容器里。",
+          text: "pdffusion 的全部工具、40 多种格式、用于 Word、Excel 和 PowerPoint 的 LibreOffice，以及 160 种界面语言，都在一个容器里。",
         },
         {
           title: "免费开源",
-          text: "pdff 以 MIT 许可证发布：免费安装、使用和修改，不限用户数量。您的安全团队可以审计全部代码。",
+          text: "pdffusion 以 MIT 许可证发布：免费安装、使用和修改，不限用户数量。您的安全团队可以审计全部代码。",
         },
         {
           title: "3 条命令完成安装",
@@ -365,7 +365,7 @@ const zh: Messages = {
       tagline: "按您选择的顺序，把多个文件（PDF、Word、图片……）合并成一个 PDF。",
       seoTitle: "免费在线合并 PDF（Word、图片、PDF）",
       seoDescription: "按您想要的顺序，将 PDF、Word、Excel、PowerPoint 和图片合并为一个 PDF。免费、无需注册、无水印，文件立即删除。",
-      intro: "把所有材料放进一个文件：pdff 不仅支持 PDF，还支持 Word 文档、Excel 表格、演示文稿和照片，并将它们合并成一个整洁的 PDF，每个文件都有一个书签。",
+      intro: "把所有材料放进一个文件：pdffusion 不仅支持 PDF，还支持 Word 文档、Excel 表格、演示文稿和照片，并将它们合并成一个整洁的 PDF，每个文件都有一个书签。",
       options: { bookmarks: { label: "为每个文件添加书签" } },
       guide: {
         keywords: "合并pdf, pdf合并, 多个pdf合成一个, 合并word和pdf, 在线合并pdf",
@@ -391,7 +391,7 @@ const zh: Messages = {
         faq: [
           {
             q: "可以把 Word 文件和照片与 PDF 合并吗？",
-            a: "可以。pdff 会先自动把每个文件转换为 PDF，再按您选择的顺序合并。",
+            a: "可以。pdffusion 会先自动把每个文件转换为 PDF，再按您选择的顺序合并。",
           },
           {
             q: "可以合并多少个文件？",
@@ -405,7 +405,7 @@ const zh: Messages = {
       tagline: "把任意文档或图片转换为其他格式。",
       seoTitle: "PDF 转 Word、Word 转 PDF、JPG 转 PDF — 免费",
       seoDescription: "免费转换器：PDF ↔ Word、Excel、PowerPoint、JPG、PNG、EPUB 等 40 多种格式。在线使用，无需注册，高质量输出。",
-      intro: "一个转换器搞定所有格式：Word 转 PDF、PDF 转 Word、JPG 转 PDF、PDF 转 JPG、Excel 转 PDF、PowerPoint 转 PDF、PNG 转 JPG、EPUB 转 PDF……放入文件后，pdff 只会显示可以转换的格式。",
+      intro: "一个转换器搞定所有格式：Word 转 PDF、PDF 转 Word、JPG 转 PDF、PDF 转 JPG、Excel 转 PDF、PowerPoint 转 PDF、PNG 转 JPG、EPUB 转 PDF……放入文件后，pdffusion 只会显示可以转换的格式。",
       options: {
         target: { label: "转换为" },
         dpi: { label: "图片分辨率（DPI）" },
@@ -425,7 +425,7 @@ const zh: Messages = {
           },
           {
             title: "选择格式",
-            text: "pdff 只显示您的文件可以转换的格式。",
+            text: "pdffusion 只显示您的文件可以转换的格式。",
           },
           {
             title: "点击“转换”",
@@ -435,7 +435,7 @@ const zh: Messages = {
         faq: [
           {
             q: "PDF 转 Word 能保留排版吗？",
-            a: "会尽量保留，但复杂的 PDF（多栏、嵌套表格）可能需要少量调整，pdff 会提醒您。",
+            a: "会尽量保留，但复杂的 PDF（多栏、嵌套表格）可能需要少量调整，pdffusion 会提醒您。",
           },
           {
             q: "可以转换哪些格式？",
@@ -554,7 +554,7 @@ const zh: Messages = {
       tagline: "更改页面顺序、复制、倒序。",
       seoTitle: "在线重新排列 PDF 页面 — 免费",
       seoDescription: "调整 PDF 页面顺序、复制部分页面或倒序整个文档。免费、在线、无需注册。",
-      intro: "扫描的页面顺序乱了？输入新的顺序（例如 3, 1, 2, 4-end）或将整个文档倒序，其余交给 pdff。",
+      intro: "扫描的页面顺序乱了？输入新的顺序（例如 3, 1, 2, 4-end）或将整个文档倒序，其余交给 pdffusion。",
       options: {
         order: { label: "新顺序", placeholder: "3, 1, 2, 4-end", help: "未列出的页面将被删除。" },
         reverse: { label: "整个文档倒序（忽略上面的顺序）" },
@@ -597,7 +597,7 @@ const zh: Messages = {
       tagline: "修改一个或多个文件的名称，无需上传。",
       seoTitle: "在线重命名文件 — 免费且无需上传",
       seoDescription: "一次重命名一个或多个文件（PDF、Word、图片等），自动编号。全部在浏览器中完成：不会上传任何内容。",
-      intro: "放入文件，输入新名称，然后点击“重命名”。如果有多个文件，pdff 会加上编号：Invoice-1、Invoice-2…… 您的文件始终不会离开您的设备。",
+      intro: "放入文件，输入新名称，然后点击“重命名”。如果有多个文件，pdffusion 会加上编号：Invoice-1、Invoice-2…… 您的文件始终不会离开您的设备。",
       options: {
         name: {
           label: "新名称",
@@ -883,7 +883,7 @@ const zh: Messages = {
           },
           {
             title: "点击“压缩”",
-            text: "pdff 会显示减小的幅度，例如“8 MB → 2 MB”。",
+            text: "pdffusion 会显示减小的幅度，例如“8 MB → 2 MB”。",
           },
         ],
         faq: [
@@ -893,7 +893,7 @@ const zh: Messages = {
           },
           {
             q: "为什么我的 PDF 没有变小？",
-            a: "它很可能已经优化过了，pdff 会告诉您。",
+            a: "它很可能已经优化过了，pdffusion 会告诉您。",
           },
         ],
       },
@@ -937,7 +937,7 @@ const zh: Messages = {
             a: "安全：AES-256，是银行和政府使用的级别。没有密码就无法读取内容。",
           },
           {
-            q: "pdff 会保存我的密码吗？",
+            q: "pdffusion 会保存我的密码吗？",
             a: "不会，密码从不保存。如果忘记，任何人都无法打开文件。",
           },
         ],
@@ -948,7 +948,7 @@ const zh: Messages = {
       tagline: "移除您已知密码的 PDF 的密码。",
       seoTitle: "解锁 PDF — 免费移除密码",
       seoDescription: "移除您已知密码的 PDF 的密码，方便自由打开、打印或合并。免费。",
-      intro: "您知道密码，但每次打开都要输入很麻烦？一次性移除它。pdff 绝不会破解您不知道的密码。",
+      intro: "您知道密码，但每次打开都要输入很麻烦？一次性移除它。pdffusion 绝不会破解您不知道的密码。",
       options: { password: { label: "当前密码", help: "如果 PDF 只有权限密码，请留空。" } },
       guide: {
         keywords: "pdf解密, 去除pdf密码, 解除pdf保护",
@@ -974,7 +974,7 @@ const zh: Messages = {
         faq: [
           {
             q: "不知道密码能解锁 PDF 吗？",
-            a: "不能。pdff 只为您知道密码的文档去除保护。",
+            a: "不能。pdffusion 只为您知道密码的文档去除保护。",
           },
           {
             q: "打印限制也会去除吗？",
@@ -1114,7 +1114,7 @@ const zh: Messages = {
       tagline: "从 PDF 中彻底删除敏感信息。",
       seoTitle: "PDF 涂黑：永久遮盖敏感信息",
       seoDescription: "真正删除 PDF 中的姓名、地址、号码和区域：被遮盖的内容会从文件中删除，而不只是被盖住。免费、无需注册。",
-      intro: "输入要删除的文字，勾选要自动识别的信息（邮箱、电话等），或在页面上画出矩形。pdff 会真正删除被遮盖的内容：无论复制文字还是移除黑框都无法恢复。",
+      intro: "输入要删除的文字，勾选要自动识别的信息（邮箱、电话等），或在页面上画出矩形。pdffusion 会真正删除被遮盖的内容：无论复制文字还是移除黑框都无法恢复。",
       options: {
         terms: {
           label: "要删除的文字",
@@ -1159,7 +1159,7 @@ const zh: Messages = {
         faq: [
           {
             q: "为什么不直接画一个黑框？",
-            a: "黑框只是盖在上面，文字仍在文件里，可以复制或移除黑框。pdff 会真正删除区域下的文字和图片。",
+            a: "黑框只是盖在上面，文字仍在文件里，可以复制或移除黑框。pdffusion 会真正删除区域下的文字和图片。",
           },
           {
             q: "区分大小写吗？",
@@ -1228,7 +1228,7 @@ const zh: Messages = {
       tagline: "直接在浏览器中填写 PDF 表单。",
       seoTitle: "免费在线填写 PDF 表单",
       seoDescription: "无需任何软件即可填写 PDF 表单的字段（文本、复选框、列表），然后下载填好的文件，可选择锁定。免费、无需注册。",
-      intro: "放入 PDF 表单：pdff 会找到所有字段，并以简单表单的形式显示。填写后查看预览，然后点击“填写表单”下载完成的 PDF。",
+      intro: "放入 PDF 表单：pdffusion 会找到所有字段，并以简单表单的形式显示。填写后查看预览，然后点击“填写表单”下载完成的 PDF。",
       options: {
         values: {
           label: "答案",
@@ -1247,7 +1247,7 @@ const zh: Messages = {
         steps: [
           {
             title: "放入表单",
-            text: "pdff 会找到所有需要填写的字段。",
+            text: "pdffusion 会找到所有需要填写的字段。",
           },
           {
             title: "填写字段",
@@ -1260,7 +1260,7 @@ const zh: Messages = {
         ],
         faq: [
           {
-            q: "为什么 pdff 找不到任何字段？",
+            q: "为什么 pdffusion 找不到任何字段？",
             a: "这个 PDF 不是交互式表单（通常是扫描件）。需要打印出来，或向相关机构索取交互式版本。",
           },
           {
@@ -1319,7 +1319,7 @@ const zh: Messages = {
       tagline: "取出 PDF 中的照片和插图。",
       seoTitle: "免费在线提取 PDF 中的图片",
       seoDescription: "把 PDF 中的所有照片、插图和标志提取为 PNG 或 JPG，自动去重。免费、无需注册，文件立即删除。",
-      intro: "放入 PDF：pdff 会找到其中的所有图片，以 PNG 或 JPG 格式逐张提供，打包成 ZIP。小的装饰图和重复图片会被略过。",
+      intro: "放入 PDF：pdffusion 会找到其中的所有图片，以 PNG 或 JPG 格式逐张提供，打包成 ZIP。小的装饰图和重复图片会被略过。",
       options: {
         format: {
           label: "图片格式",
@@ -1481,7 +1481,7 @@ const zh: Messages = {
     imageFormat: "不支持的图片格式：{format}",
     imageConvert: "无法转换“{name}”：图片无法读取或已损坏。",
     imageUnreadable: "“{name}”不是可读取的图片。",
-    officeMissing: "此转换需要 LibreOffice（Word、Excel、PowerPoint……）。请安装后重启 pdff。",
+    officeMissing: "此转换需要 LibreOffice（Word、Excel、PowerPoint……）。请安装后重启 pdffusion。",
     officeTarget: "不支持转换为 {target}。",
     officeTimeout: "转换耗时过长，已中止。",
     officeFailed: "LibreOffice 无法将“{name}”转换为 {target}。",

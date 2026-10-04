@@ -1,4 +1,4 @@
-# pdff sur votre propre serveur : docker compose up -d
+# pdffusion sur votre propre serveur : docker compose up -d
 # puis ouvrir http://ADRESSE-DU-SERVEUR:8080 (voir INSTALLATION.md)
 services:
   pdff:

@@ -403,7 +403,7 @@ export function FormatOrbit() {
         <button
           ref={coreRef}
           type="button"
-          aria-label={`pdff : ${t.orbitCore}`}
+          aria-label={`pdffusion : ${t.orbitCore}`}
           className="orbit-core-btn absolute top-1/2 left-1/2 z-[1000]"
         >
           <CoreSheet />
@@ -427,7 +427,7 @@ export function FormatOrbit() {
   );
 }
 
-/** La feuille centrale : le document final produit par pdff. */
+/** La feuille centrale : le document final produit par pdffusion. */
 function CoreSheet() {
   return (
     <svg viewBox="0 0 120 150" className="pointer-events-none w-full drop-shadow-[0_0_40px_rgba(109,92,255,0.85)]">
@@ -444,8 +444,8 @@ function CoreSheet() {
       <path d="M14 4h66l36 36v96a10 10 0 0 1-10 10H14A10 10 0 0 1 4 136V14A10 10 0 0 1 14 4z" fill="url(#core-bg)" />
       <path d="M80 4v26a10 10 0 0 0 10 10h26z" fill="#fff" opacity="0.35" />
       <path d="M14 4h66l36 36v96a10 10 0 0 1-10 10H14A10 10 0 0 1 4 136V14A10 10 0 0 1 14 4z" fill="url(#core-shine)" />
-      <text x="60" y="98" textAnchor="middle" fontSize="34" fontWeight="800" fill="#fff" fontFamily="var(--font-display), system-ui, sans-serif">
-        pdff
+      <text x="60" y="94" textAnchor="middle" fontSize="19" fontWeight="800" fill="#fff" fontFamily="var(--font-display), system-ui, sans-serif">
+        pdffusion
       </text>
       <rect x="28" y="112" width="64" height="5" rx="2.5" fill="#fff" opacity="0.5" />
       <rect x="38" y="123" width="44" height="5" rx="2.5" fill="#fff" opacity="0.3" />

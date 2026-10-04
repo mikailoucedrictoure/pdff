@@ -54,11 +54,11 @@ const locales = (requested.length ? requested : [...WORLD_LANGUAGES].sort((a, b)
 function instructions(locale) {
   const name = languageName(locale, "en");
   return [
-    `You are a professional software localizer. Translate the user interface strings of "pdff", a free web app to merge, convert and edit documents (PDF, Word, Excel…), from English into ${name} (language code "${locale}").`,
+    `You are a professional software localizer. Translate the user interface strings of "pdffusion", a free web app to merge, convert and edit documents (PDF, Word, Excel…), from English into ${name} (language code "${locale}").`,
     "Rules:",
     "- Return ONLY a JSON object with exactly the same keys as the input, each value being the translated string.",
     "- Keep every {placeholder} exactly as written (same braces, same name).",
-    "- Never translate: pdff, PDF, Word, Excel, PowerPoint, LibreOffice, OpenDocument, EPUB, JPG, PNG, WebP, AVIF, TIFF, GIF, SVG, DPI, AES-256, ZIP, Windows, Android, iPhone, Mac, Linux, Vercel, Render, GitHub, HTTPS, and file extensions in parentheses.",
+    "- Never translate: pdffusion, PDF, Word, Excel, PowerPoint, LibreOffice, OpenDocument, EPUB, JPG, PNG, WebP, AVIF, TIFF, GIF, SVG, DPI, AES-256, ZIP, Windows, Android, iPhone, Mac, Linux, Vercel, Render, GitHub, HTTPS, and file extensions in parentheses.",
     "- Keep symbols such as →, ↔, ✓, …, %, ° and numbers. In page range examples (like \"1-3, 8-end\"), keep the English word \"end\".",
     direction(locale) === "rtl" ? "- This is a right-to-left language: replace the arrow ← with →." : "",
     "- Use the natural, short, friendly wording a native speaker expects in a modern app, in the everyday script of the language.",

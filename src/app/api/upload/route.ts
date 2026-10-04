@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     });
     return Response.json(result);
   } catch (err) {
-    console.error("[pdff] upload :", err);
+    console.error("[pdffusion] upload :", err);
     return Response.json({ error: "refused" }, { status: 400 });
   }
 }

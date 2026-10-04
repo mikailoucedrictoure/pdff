@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     await translateInterface(locale);
     return Response.json({ status: "ready" });
   } catch (err) {
-    console.error(`[pdff] traduction ${locale} :`, err);
+    console.error(`[pdffusion] traduction ${locale} :`, err);
     return Response.json({ status: "failed" }, { status: 502 });
   }
 }

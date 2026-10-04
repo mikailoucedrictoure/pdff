@@ -1,10 +1,10 @@
-# Installer pdff sur vos propres serveurs
+# Installer pdffusion sur vos propres serveurs
 
-*[English below](#install-pdff-on-your-own-servers)*
+*[English below](#install-pdffusion-on-your-own-servers)*
 
-pdff est gratuit et open source (licence MIT). Les administrations, entreprises, écoles et
+pdffusion est gratuit et open source (licence MIT). Les administrations, entreprises, écoles et
 universités peuvent l'installer dans leur propre réseau : **aucun document ne quitte alors
-vos serveurs**, et pdff fonctionne même sans accès à Internet.
+vos serveurs**, et pdffusion fonctionne même sans accès à Internet.
 
 L'installation tient dans un seul conteneur : le site, tous les outils PDF et images, et
 LibreOffice pour Word, Excel et PowerPoint.
@@ -26,7 +26,7 @@ LibreOffice pour Word, Excel et PowerPoint.
 ## Installation en 3 commandes
 
 ```bash
-mkdir pdff && cd pdff
+mkdir pdffusion && cd pdffusion
 curl -O https://raw.githubusercontent.com/mikailoucedrictoure/pdff/main/docker-compose.yml
 docker compose up -d
 ```
@@ -71,7 +71,7 @@ Le site écoute sur le port 3000 du conteneur ; changez `8080` dans `ports` pour
 
 ## HTTPS et nom de domaine interne
 
-Placez pdff derrière votre proxy inverse habituel (Nginx, Apache, Traefik, Caddy, IIS…), qui gère
+Placez pdffusion derrière votre proxy inverse habituel (Nginx, Apache, Traefik, Caddy, IIS…), qui gère
 le certificat. Exemple Nginx :
 
 ```nginx
@@ -122,10 +122,10 @@ en conservant la mention de droit d'auteur. Conçu et développé par
 
 ---
 
-# Install pdff on your own servers
+# Install pdffusion on your own servers
 
-pdff is free and open source (MIT license). Governments, businesses, schools and universities
-can run it inside their own network: **no document ever leaves your servers**, and pdff works
+pdffusion is free and open source (MIT license). Governments, businesses, schools and universities
+can run it inside their own network: **no document ever leaves your servers**, and pdffusion works
 even with no Internet access.
 
 Everything ships in a single container: the website, all PDF and image tools, and LibreOffice
@@ -141,7 +141,7 @@ no external storage, and hides itself from search engines. OCR runs in the brows
 ## Install in 3 commands
 
 ```bash
-mkdir pdff && cd pdff
+mkdir pdffusion && cd pdffusion
 curl -O https://raw.githubusercontent.com/mikailoucedrictoure/pdff/main/docker-compose.yml
 docker compose up -d
 ```
@@ -161,7 +161,7 @@ Pin a version in production (for example `ghcr.io/mikailoucedrictoure/pdff:1.0`)
 Settings (`environment` in `docker-compose.yml`): `PDFF_MAX_PAGES` (10000),
 `PDFF_MAX_FILES` (500), `PDFF_MAX_UPLOAD_MB` (2048).
 
-Put pdff behind your usual reverse proxy for HTTPS (see the Nginx example above:
+Put pdffusion behind your usual reverse proxy for HTTPS (see the Nginx example above:
 raise `client_max_body_size` and `proxy_read_timeout`).
 
 To build the image yourself (code audit, isolated network):

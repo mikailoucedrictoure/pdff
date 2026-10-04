@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
-/** Permet d'« installer » pdff sur l'écran d'accueil d'un téléphone. */
+/** Permet d'« installer » pdffusion sur l'écran d'accueil d'un téléphone. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "pdff",
-    short_name: "pdff",
+    name: "pdffusion",
+    short_name: "pdffusion",
     description: "Merge, convert and edit PDF, Word, Excel, PowerPoint and images. Free, no sign-up.",
     start_url: "/",
     display: "standalone",

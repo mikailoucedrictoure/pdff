@@ -1,5 +1,5 @@
 /**
- * Catalogue des formats connus par pdff.
+ * Catalogue des formats connus par pdffusion.
  * Ajouter un format = ajouter une entrée ici, puis une arête dans `graph.ts`.
  * Module "pur" : utilisable côté client et côté serveur.
  */

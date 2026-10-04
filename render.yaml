@@ -1,4 +1,4 @@
-# Service Office de pdff sur Render (offre gratuite, sans carte bancaire).
+# Service Office de pdffusion sur Render (offre gratuite, sans carte bancaire).
 # Render → New → Blueprint → ce dépôt : le service est créé à partir de ce fichier.
 services:
   - type: web
@@ -14,6 +14,6 @@ services:
       paths:
         - services/office/**
     envVars:
-      # Secret partagé avec pdff (PDFF_OFFICE_TOKEN dans Vercel) : demandé à la création
+      # Secret partagé avec pdffusion (PDFF_OFFICE_TOKEN dans Vercel) : demandé à la création
       - key: OFFICE_TOKEN
         sync: false

@@ -49,7 +49,7 @@ export async function fetchInputs(refs: BlobFileRef[]): Promise<FileData[]> {
 
 export async function deleteBlobs(urls: string[]): Promise<void> {
   const own = urls.filter((u) => isOwnTempBlob(u));
-  if (own.length) await del(own).catch((err) => console.error("[pdff] suppression Blob :", err));
+  if (own.length) await del(own).catch((err) => console.error("[pdffusion] suppression Blob :", err));
 }
 
 /** Dépose un résultat sous un nom aléatoire (le vrai nom reste côté navigateur). */

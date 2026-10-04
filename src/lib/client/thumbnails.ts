@@ -67,7 +67,7 @@ export async function fileThumbnails(file: Blob, name: string, opts: { max?: num
   return { pages: 0, images: [], none: true };
 }
 
-/** Contenu d'une archive ZIP produite par pdff : nom, poids et vignette de chaque fichier. */
+/** Contenu d'une archive ZIP produite par pdffusion : nom, poids et vignette de chaque fichier. */
 export async function zipEntries(zip: Blob, max = 12): Promise<{ total: number; entries: { name: string; size: number; thumbs: Thumbs }[] }> {
   const { default: JSZip } = await import("jszip");
   const archive = await JSZip.loadAsync(await zip.arrayBuffer());
