@@ -12,7 +12,7 @@ import { getI18n } from "@/i18n/server";
 import { SHOWCASE_EXTENSIONS } from "@/lib/core/formats";
 import { TOOL_CATEGORIES, TOOLS } from "@/lib/core/tools";
 import { getCapabilities } from "@/lib/server/capabilities";
-import { jsonLd, pageMetadata, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
+import { CONTACT_EMAIL, jsonLd, pageMetadata, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages: t, prefix, locale } = await getI18n();
@@ -30,7 +30,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={jsonLd({
           "@context": "https://schema.org",
           "@graph": [
-            { "@type": "Organization", "@id": `${url}/#organization`, url, name: SITE_NAME, logo: `${url}/apple-icon`, sameAs: [SOURCE_URL] },
+            { "@type": "Organization", "@id": `${url}/#organization`, url, name: SITE_NAME, logo: `${url}/apple-icon`, email: CONTACT_EMAIL, sameAs: [SOURCE_URL] },
             { "@type": "WebSite", "@id": `${url}/#website`, url, name: SITE_NAME, description: t.meta.description, inLanguage: locale, publisher: { "@id": `${url}/#organization` } },
             {
               "@type": "WebApplication",

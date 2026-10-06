@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { fmt } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
-import { pageMetadata, SOURCE_URL } from "@/lib/seo";
+import { CONTACT_EMAIL, pageMetadata, SOURCE_URL } from "@/lib/seo";
 
 /** Date de la dernière modification réelle de cette page. */
-const UPDATED = "2026-09-30";
+const UPDATED = "2026-10-05";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages: t, prefix, locale } = await getI18n();
@@ -31,6 +31,10 @@ export default async function PrivacyPage() {
                   {" "}
                   <a href={SOURCE_URL} className="font-medium text-brand-fg underline underline-offset-4" rel="noopener">
                     github.com/mikailoucedrictoure/pdff
+                  </a>
+                  {" · "}
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium text-brand-fg underline underline-offset-4">
+                    {CONTACT_EMAIL}
                   </a>
                 </>
               )}

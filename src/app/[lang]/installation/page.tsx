@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExternalLink, LegalArticle } from "@/components/LegalArticle";
+import { ContactLink, ExternalLink, LegalArticle } from "@/components/LegalArticle";
 import { getI18n } from "@/i18n/server";
 import { AUTHOR_NAME, AUTHOR_URL, pageMetadata, SOURCE_URL } from "@/lib/seo";
 
@@ -34,7 +34,12 @@ export default async function InstallationPage() {
       extras={{
         2: <ExternalLink href={`${SOURCE_URL}/blob/main/LICENSE`}>MIT License</ExternalLink>,
         4: <ExternalLink href={`${SOURCE_URL}/blob/main/INSTALLATION.md`}>INSTALLATION.md</ExternalLink>,
-        5: <ExternalLink href={AUTHOR_URL}>{`${AUTHOR_NAME} (LinkedIn)`}</ExternalLink>,
+        5: (
+          <>
+            <ExternalLink href={AUTHOR_URL}>{`${AUTHOR_NAME} (LinkedIn)`}</ExternalLink>
+            <ContactLink />
+          </>
+        ),
       }}
     />
   );

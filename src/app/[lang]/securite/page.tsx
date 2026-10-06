@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { ExternalLink, LegalArticle } from "@/components/LegalArticle";
+import { ContactLink, ExternalLink, LegalArticle } from "@/components/LegalArticle";
 import { getI18n } from "@/i18n/server";
 import { pageMetadata, SECURITY_URL, SOURCE_URL } from "@/lib/seo";
 
 /** Date de la dernière modification réelle de cette page. */
-const UPDATED = "2026-10-02";
+const UPDATED = "2026-10-05";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages: t, prefix, locale } = await getI18n();
@@ -23,7 +23,12 @@ export default async function SecurityPage() {
       extras={{
         [n - 3]: <ExternalLink href={`${SOURCE_URL}/blob/main/INSTALLATION.md`}>INSTALLATION.md</ExternalLink>,
         [n - 2]: <ExternalLink href={SOURCE_URL}>github.com/mikailoucedrictoure/pdff</ExternalLink>,
-        [n - 1]: <ExternalLink href={SECURITY_URL}>{SECURITY_URL.replace("https://", "")}</ExternalLink>,
+        [n - 1]: (
+          <>
+            <ExternalLink href={SECURITY_URL}>{SECURITY_URL.replace("https://", "")}</ExternalLink>
+            <ContactLink />
+          </>
+        ),
       }}
     />
   );

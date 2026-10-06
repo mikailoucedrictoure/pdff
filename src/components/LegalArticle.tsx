@@ -1,4 +1,5 @@
 import { fmt } from "@/i18n/locales";
+import { CONTACT_EMAIL } from "@/lib/seo";
 
 export interface LegalText {
   title: string;
@@ -12,6 +13,16 @@ export function ExternalLink({ href, children }: { href: string; children: React
     <a href={href} className="font-medium break-words text-brand-fg underline underline-offset-4" rel="noopener">
       {children}
     </a>
+  );
+}
+
+/** Adresse de contact, à la suite d'un lien : « lien · contact@… ». */
+export function ContactLink() {
+  return (
+    <>
+      {" · "}
+      <ExternalLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</ExternalLink>
+    </>
   );
 }
 

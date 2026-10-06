@@ -10,7 +10,7 @@ import { toClientMessages } from "@/i18n/client-messages";
 import { direction, localePath } from "@/i18n/locales";
 import { getI18n } from "@/i18n/server";
 import { SUPPORTED_LOCALES } from "@/i18n/supported";
-import { AUTHOR_NAME, AUTHOR_URL, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
+import { AUTHOR_NAME, AUTHOR_URL, CONTACT_EMAIL, SITE_NAME, siteUrl, SOURCE_URL } from "@/lib/seo";
 import "../globals.css";
 
 /** Chaque page est fabriquée à l'avance dans chaque langue, puis servie depuis le CDN. */
@@ -103,6 +103,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
                 <li>
                   <a href={SOURCE_URL} className="underline-offset-4 hover:text-ink hover:underline" rel="noopener">
                     {t.seo.sourceLink}
+                  </a>
+                </li>
+                <li>
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="underline-offset-4 hover:text-ink hover:underline">
+                    {CONTACT_EMAIL}
                   </a>
                 </li>
               </ul>

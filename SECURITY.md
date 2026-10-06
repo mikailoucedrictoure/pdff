@@ -5,6 +5,7 @@
 Merci de **ne pas** ouvrir de ticket public pour une faille de sécurité.
 Signalez-la de façon confidentielle depuis l'onglet **Security → Report a vulnerability**
 de ce dépôt : https://github.com/mikailoucedrictoure/pdff/security
+ou par courriel à contact@pdffusion.app.
 
 Indiquez si possible : la page ou l'adresse concernée, les étapes pour reproduire, l'impact
 estimé. Nous accusons réception dans les meilleurs délais, nous vous tenons informé de la
@@ -21,6 +22,7 @@ reçoit les correctifs de sécurité. Mettez à jour régulièrement les install
 Please do **not** open a public issue for a security flaw. Report it privately from the
 **Security → Report a vulnerability** tab of this repository:
 https://github.com/mikailoucedrictoure/pdff/security
+or by email at contact@pdffusion.app.
 
 Include if possible the affected page or URL, steps to reproduce and the estimated impact.
 Only the latest version receives security fixes.

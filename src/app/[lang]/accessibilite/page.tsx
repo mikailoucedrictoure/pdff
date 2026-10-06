@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExternalLink, LegalArticle } from "@/components/LegalArticle";
+import { ContactLink, ExternalLink, LegalArticle } from "@/components/LegalArticle";
 import { getI18n } from "@/i18n/server";
 import { pageMetadata, SOURCE_URL } from "@/lib/seo";
 
@@ -22,7 +22,12 @@ export default async function AccessibilityPage() {
       locale={locale}
       extras={{
         0: <ExternalLink href="https://www.w3.org/TR/WCAG22/">www.w3.org/TR/WCAG22</ExternalLink>,
-        [last]: <ExternalLink href={`${SOURCE_URL}/issues`}>github.com/mikailoucedrictoure/pdff/issues</ExternalLink>,
+        [last]: (
+          <>
+            <ExternalLink href={`${SOURCE_URL}/issues`}>github.com/mikailoucedrictoure/pdff/issues</ExternalLink>
+            <ContactLink />
+          </>
+        ),
       }}
     />
   );

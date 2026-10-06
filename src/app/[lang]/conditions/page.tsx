@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { ExternalLink, LegalArticle } from "@/components/LegalArticle";
+import { ContactLink, ExternalLink, LegalArticle } from "@/components/LegalArticle";
 import { getI18n } from "@/i18n/server";
 import { AUTHOR_URL, pageMetadata, SOURCE_URL } from "@/lib/seo";
 
 /** Date de la dernière modification réelle de cette page. */
-const UPDATED = "2026-10-02";
+const UPDATED = "2026-10-05";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { messages: t, prefix, locale } = await getI18n();
@@ -23,7 +23,12 @@ export default async function TermsPage() {
       extras={{
         0: <ExternalLink href={AUTHOR_URL}>LinkedIn</ExternalLink>,
         3: <ExternalLink href={`${SOURCE_URL}/blob/main/LICENSE`}>MIT License</ExternalLink>,
-        [last]: <ExternalLink href={SOURCE_URL}>github.com/mikailoucedrictoure/pdff</ExternalLink>,
+        [last]: (
+          <>
+            <ExternalLink href={SOURCE_URL}>github.com/mikailoucedrictoure/pdff</ExternalLink>
+            <ContactLink />
+          </>
+        ),
       }}
     />
   );
