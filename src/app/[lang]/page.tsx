@@ -30,7 +30,8 @@ export default async function Home() {
         dangerouslySetInnerHTML={jsonLd({
           "@context": "https://schema.org",
           "@graph": [
-            { "@type": "WebSite", "@id": `${url}/#website`, url, name: SITE_NAME, description: t.meta.description, inLanguage: locale },
+            { "@type": "Organization", "@id": `${url}/#organization`, url, name: SITE_NAME, logo: `${url}/apple-icon`, sameAs: [SOURCE_URL] },
+            { "@type": "WebSite", "@id": `${url}/#website`, url, name: SITE_NAME, description: t.meta.description, inLanguage: locale, publisher: { "@id": `${url}/#organization` } },
             {
               "@type": "WebApplication",
               name: SITE_NAME,
