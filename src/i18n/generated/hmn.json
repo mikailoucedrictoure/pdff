@@ -1,6 +1,6 @@
 {
  "language": "hmn",
- "model": "gemini-3.5-flash",
+ "model": "gemini-3.5-flash-lite",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Hla mus rau cov ntsiab lus",
   "footer.legalNav": "Txog ntawm lub vev xaib no",
   "footer.developedBy": "Tsim los ntawm {name}",
-  "home.title": "Tag nrho koj cov ntaub ntawv, nyob hauv ib qho twj xwb.",
+  "home.title": "Kho koj cov ntaub ntawv tag nrho hauv ib lub cuab yeej xwb.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, duab: koom, hloov thiab kho hauv vib nas this.",
   "home.ctaMerge": "Koom cov ntaub ntawv",
   "home.ctaConvert": "Hloov ib daim ntawv",

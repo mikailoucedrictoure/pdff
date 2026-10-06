@@ -1,6 +1,6 @@
 {
  "language": "ki",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Ĩtũka harĩa ũndũ ũrĩ",
   "footer.legalNav": "Ũhoro wĩgiĩ kĩhumo gĩkĩ",
   "footer.developedBy": "Yakĩtwo na ĩthondeirwo ni {name}",
-  "home.title": "Dosi ciaku ciothe, kĩndũ-inĩ kĩmwe.",
+  "home.title": "Thondeka mabuku maku mothe na kĩndũ kĩmwe.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, mbica: thomeania, gũgarura na ũgarũre thĩinĩ wa sekunde.",
   "home.ctaMerge": "Thomeania dosi",
   "home.ctaConvert": "Garura dosi",

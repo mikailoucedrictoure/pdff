@@ -1,6 +1,6 @@
 {
  "language": "sc",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Passa a su contenutu",
   "footer.legalNav": "Informativas e cuntattu",
   "footer.developedBy": "Progettu e realizadu da {name}",
-  "home.title": "Totu sos documentos tuos, in un'aina sola.",
+  "home.title": "Modìfica totu sos documentos tuos cun un'aina sola.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, immàgines: unire, cunvertire e modificare in segundos.",
   "home.ctaMerge": "Unire archìvios",
   "home.ctaConvert": "Cunvertire un'archìviu",

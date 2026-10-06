@@ -1,6 +1,6 @@
 {
  "language": "os",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Контентмæ фæрæбырсун",
   "footer.legalNav": "Ацы сайты тыххæй",
   "footer.developedBy": "Саразæг æмæ араууагъта {name}",
-  "home.title": "Дæ æппæт документтæ, иу фæрæзы.",
+  "home.title": "Иу инструментæй кус дæ иууылдæр документтимæ.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, къамтæ: скæн, конвертир æмæ цалцæг кæн секундты.",
   "home.ctaMerge": "Файлты скæнын",
   "home.ctaConvert": "Файлы конвертаци",

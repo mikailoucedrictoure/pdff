@@ -1,6 +1,6 @@
 {
  "language": "sa",
- "model": "gemini-3.6-flash",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "विषयं प्रति गच्छतु",
   "footer.legalNav": "अस्य स्थलस्य विषये",
   "footer.developedBy": "{name} इत्यनेन निर्मितं संकलितं च",
-  "home.title": "भवतां सर्वाणि प्रपत्रাণि, एकस्मिन् साधने।",
+  "home.title": "एकस्मिन् एव उपकरणे सर्वाणि पत्राणि सम्पादयन्तु।",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, चित्राणि: सेकण्ड्-मध्ये संयोजयन्तु, रूपान्तरयन्तु, सम्पादयत च।",
   "home.ctaMerge": "सञ्चिकाः संयोजयन्तु",
   "home.ctaConvert": "सञ्चिकां रूपान्तरयन्तु",

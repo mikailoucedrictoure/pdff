@@ -1,6 +1,6 @@
 {
  "language": "snk",
- "model": "gemini-3.5-flash",
+ "model": "gemini-3.5-flash-lite",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Kɔ mɛnɛ na",
   "footer.legalNav": "Sɛbɛn nin kan",
   "footer.developedBy": "Maana {name} ka sɔrɔ",
-  "home.title": "I dosiyeeji bee, gari kelen ra.",
+  "home.title": "I siriɲɛ kɔni fariye mɛnɛn mɛn.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, images: kaata, yeeli, ani lennu waati ndama ra.",
   "home.ctaMerge": "Dosiyeeji kaata",
   "home.ctaConvert": "Dosiyee yeeli",

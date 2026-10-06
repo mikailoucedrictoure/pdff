@@ -1,6 +1,6 @@
 {
  "language": "qu",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Kaqninkunaman riy",
   "footer.legalNav": "Kay sitiumanta",
   "footer.developedBy": "{name} rurasqan",
-  "home.title": "Tukuy qallawuykikuna, huklla llikachapi.",
+  "home.title": "Tukuy qillqasqaykikunata huk yanapakuyllawan allichay.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, rikchakuna: huñuy, tikray chaytaq pacha ratullapi llamk'apay.",
   "home.ctaMerge": "Qallawukunata huñuy",
   "home.ctaConvert": "Huk qallawuta tikray",

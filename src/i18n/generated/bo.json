@@ -1,6 +1,6 @@
 {
  "language": "bo",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.5-flash",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "ནਰווོ་བར་སྤོ།",
   "footer.legalNav": "དྲ་ཚིགས་འདིའི་སྐོར།",
   "footer.developedBy": "{name} ཡིས་བཟོས་ཤིང་བཀོད་སྒྲིག་བྱས།",
-  "home.title": "ཁྱེད་ཀྱི་ཡིག་ཆ་ཚང་མ། ཡོ་ཆས་གཅིག་གི་ནང་དུ།",
+  "home.title": "ཁྱེད་ཀྱི་ཡིག་ཆ་མཐའ་དག་ལག་ཆ་གཅིག་གི་ནང་དུ་བཟོ་བཅོས་རྒྱག་པ།",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, པར་རིས། སྐར་མ་ཁ་ཤས་ནང་ཟླ་སྒྲིལ། བསྒྱུར། བཟོ་བཅོས་བྱེད་ཐུབ།",
   "home.ctaMerge": "ཡིག་ཆ་ཟླ་སྒྲིལ་བྱེད།",
   "home.ctaConvert": "ཡིག་ཆ་ཞིག་བསྒྱུར།",

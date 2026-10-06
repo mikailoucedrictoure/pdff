@@ -1,6 +1,6 @@
 {
  "language": "nd",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Yela uye kokuqukethwe",
   "footer.legalNav": "Mayelana lendawo yezinto lezi",
   "footer.developedBy": "Idizayinwe futhi yakhiwa ngu-{name}",
-  "home.title": "Wonke amaphepha akho, ethuluzini linye.",
+  "home.title": "Lungisa wonke amadokhumenti akho ngethuluzi elilodwa.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, izithombe: hlanganisa, guqulela njalo ulungise ngemizuzwana.",
   "home.ctaMerge": "Hlanganisa amafayili",
   "home.ctaConvert": "Guqulela ifayili",

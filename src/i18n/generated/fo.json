@@ -1,6 +1,6 @@
 {
  "language": "fo",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Far til innihald",
   "footer.legalNav": "Um hesa síðu",
   "footer.developedBy": "Hannað og ment av {name}",
-  "home.title": "Øll skjøl tínar í eina tóli.",
+  "home.title": "Broyt øll tíni skjøl í einum amboði.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, myndir: goyp ihop, broyta og rætta í sekundum.",
   "home.ctaMerge": "Goyp skrár ihop",
   "home.ctaConvert": "Broyta skrá",

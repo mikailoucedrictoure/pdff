@@ -1,6 +1,6 @@
 {
  "language": "sm",
- "model": "gemini-3.5-flash",
+ "model": "gemini-3.5-flash-lite",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Soso i le mataupu",
   "footer.legalNav": "E uiga i lenei upega tafaʻilagi",
   "footer.developedBy": "Fuafuaina ma fausia e {name}",
-  "home.title": "Au pepa uma, i totonu o se meafaigaluega e tasi.",
+  "home.title": "Fa'atonutonu au pepa uma i se meafaigaluega e tasi.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, ata: tuufa'atasi, liliu ma fa'atonutisi i sekone.",
   "home.ctaMerge": "Tuufa'atasi faila",
   "home.ctaConvert": "Liliu se faila",

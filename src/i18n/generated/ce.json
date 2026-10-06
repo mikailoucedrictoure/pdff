@@ -1,6 +1,6 @@
 {
  "language": "ce",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.5-flash",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Чуь кӀезигчу хӀуманга",
   "footer.legalNav": "ХӀара сайтах лаьцна",
   "footer.developedBy": "Кхоьллинарг {name}",
-  "home.title": "Хьан дерриг документаш, цхьан гIирсан чохь.",
+  "home.title": "Шун дерриге документаш цхьана гӀирсаца нисде.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, суьрташ: секундашкахь цхьанатоха, конвертаци ян а, нисйо а.",
   "home.ctaMerge": "Файлш цхьанатоха",
   "home.ctaConvert": "Файл конвертаци ян",

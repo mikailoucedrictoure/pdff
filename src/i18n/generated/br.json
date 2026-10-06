@@ -1,6 +1,6 @@
 {
  "language": "br",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.5-flash",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Montañ d'an endalc'h",
   "footer.legalNav": "Diwar-benn al lec'h-mañ",
   "footer.developedBy": "Diorroet ha savet gant {name}",
-  "home.title": "An holl deulioù anezho, en un ostill hepken.",
+  "home.title": "Aozañ ho holl zeulioù gant ur benveg hepken.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, skeudennoù: kendeziñ, treuzgait ha kemmañ eilennoù e-barzh.",
   "home.ctaMerge": "Kendeziñ restroù",
   "home.ctaConvert": "Treuzgait ur restr",

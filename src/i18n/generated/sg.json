@@ -1,6 +1,6 @@
 {
  "language": "sg",
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3-flash-preview",
  "hashes": {
   "meta.title": "12keyir",
   "meta.description": "1gafzo4",
@@ -13,7 +13,7 @@
   "footer.skip": "1jele5i",
   "footer.legalNav": "popbel",
   "footer.developedBy": "1nnkgax",
-  "home.title": "e3lk1a",
+  "home.title": "1n0celi",
   "home.subtitle": "1oi2mw1",
   "home.ctaMerge": "4jj6k0",
   "home.ctaConvert": "6uedhz",
@@ -871,7 +871,7 @@
   "footer.skip": "Gwe na nduru",
   "footer.legalNav": "Na ndo ti ndo so",
   "footer.developedBy": "Projet na {name}",
-  "home.title": "Gbä ambëtï ti mo, na yâ ti mbeni ye oko.",
+  "home.title": "Lêkë ambeti ti mo kue na gbe ti mbeni kpengba gbakuru oko.",
   "home.subtitle": "PDF, Word, Excel, PowerPoint, foto: sangan, gba na sara nzoni na yâ ti ngbä ti sioni.",
   "home.ctaMerge": "Sangan afoto",
   "home.ctaConvert": "Gba mbeni foto",
