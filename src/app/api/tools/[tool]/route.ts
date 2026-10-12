@@ -27,7 +27,9 @@ function contentDisposition(name: string) {
 
 function uniqueNames(files: FileData[]): FileData[] {
   const seen = new Map<string, number>();
-  return files.map((f) => {
+  // Un nom reçu avec un chemin (« ../dossier/fichier.pdf ») est ramené au seul nom du fichier
+  return files.map((file) => {
+    const f = { ...file, name: file.name.split(/[/\\]/).pop()?.slice(-200) || "fichier" };
     const count = seen.get(f.name) ?? 0;
     seen.set(f.name, count + 1);
     if (!count) return f;

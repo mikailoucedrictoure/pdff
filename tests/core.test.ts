@@ -8,9 +8,14 @@ const NO_OFFICE = new Set<EngineId>(ALL_ENGINES.filter((e) => !e.startsWith("off
 const engines = (from: string, to: string, set = ALL) => findPath(from, to, set)?.map((s) => `${s.engine}:${s.to}`);
 
 describe("graphe de conversion", () => {
-  it("PDF → Word passe par l'import PDF de LibreOffice, jamais par du texte brut", () => {
-    expect(engines("pdf", "docx")).toEqual(["office-pdf-import:docx"]);
-    expect(engines("pdf", "doc")).toEqual(["office-pdf-import:docx", "office:doc"]);
+  it("PDF → Word : document reconstruit, jamais l'import PDF de LibreOffice ni du texte brut", () => {
+    expect(engines("pdf", "docx")).toEqual(["pdf-docx:docx"]);
+    expect(engines("pdf", "doc")).toEqual(["pdf-docx:docx", "office:doc"]);
+    expect(engines("pdf", "odt")).toEqual(["pdf-docx:docx", "office:odt"]);
+    expect(engines("pdf", "rtf")).toEqual(["pdf-docx:docx", "office:rtf"]);
+  });
+  it("PDF → Word reste disponible sans LibreOffice", () => {
+    expect(engines("pdf", "docx", NO_OFFICE)).toEqual(["pdf-docx:docx"]);
   });
   it("trouve les conversions en plusieurs étapes", () => {
     expect(engines("docx", "png")).toEqual(["office:pdf", "mupdf-render:png"]);
@@ -80,8 +85,8 @@ describe("chemins de conversion depuis un PDF", () => {
     expect(findPath("pdf", "txt", all)?.map((s) => s.engine)).toEqual(["mupdf-text"]);
     expect(findPath("pdf", "html", all)?.map((s) => s.engine)).toEqual(["mupdf-text"]);
     // Word : jamais en passant par du texte brut
-    expect(findPath("pdf", "docx", all)?.map((s) => s.engine)).toEqual(["office-pdf-import"]);
-    expect(findPath("pdf", "doc", all)?.map((s) => s.engine)).toEqual(["office-pdf-import", "office"]);
+    expect(findPath("pdf", "docx", all)?.map((s) => s.engine)).toEqual(["pdf-docx"]);
+    expect(findPath("pdf", "doc", all)?.map((s) => s.engine)).toEqual(["pdf-docx", "office"]);
   });
 });
 

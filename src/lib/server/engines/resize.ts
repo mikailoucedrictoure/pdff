@@ -9,6 +9,8 @@ import { type FileData, UserError } from "../types";
 
 /** Taille maximale d'un côté de l'image produite (protège la mémoire du serveur). */
 const MAX_SIDE = 20000;
+/** Nombre maximal de points de l'image produite : au-delà, le serveur mettrait trop de temps et de mémoire. */
+const MAX_PIXELS = 64_000_000;
 
 export interface ResizeOptions {
   mode: "resize" | "crop";
@@ -41,8 +43,14 @@ export async function resizeImage(file: FileData, o: ResizeOptions): Promise<Fil
   if (o.mode === "crop") {
     image = image.extract(centeredCrop(w, h, o.ratio));
   } else if (o.scale === "custom") {
-    const width = Math.min(MAX_SIDE, Math.max(1, Math.round(o.width) || w));
-    const height = o.height > 0 ? Math.min(MAX_SIDE, Math.round(o.height)) : undefined;
+    let width = Math.min(MAX_SIDE, Math.max(1, Math.round(o.width) || w));
+    let height = o.height > 0 ? Math.min(MAX_SIDE, Math.round(o.height)) : undefined;
+    // Agrandissement démesuré : ramené à la taille maximale, en gardant les proportions demandées
+    const shrink = Math.sqrt(MAX_PIXELS / (width * (height ?? Math.round((width * h) / w))));
+    if (shrink < 1) {
+      width = Math.max(1, Math.floor(width * shrink));
+      height = height ? Math.max(1, Math.floor(height * shrink)) : undefined;
+    }
     image = image.resize({ width, height, fit: height ? "fill" : "inside" });
   } else {
     const s = Math.min(1, Math.max(0.01, (Number(o.scale) || 50) / 100));
@@ -58,5 +66,9 @@ export async function resizeImage(file: FileData, o: ResizeOptions): Promise<Fil
     : target === "gif" ? image.gif()
     : image.png();
   const suffix = o.mode === "crop" ? "-recadre" : "-redimensionne";
-  return { name: `${baseName(file.name)}${suffix}.${target}`, data: new Uint8Array(await formatted.toBuffer()) };
+  try {
+    return { name: `${baseName(file.name)}${suffix}.${target}`, data: new Uint8Array(await formatted.toBuffer()) };
+  } catch {
+    throw new UserError("imageConvert", { name: file.name });
+  }
 }

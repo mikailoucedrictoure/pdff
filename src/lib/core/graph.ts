@@ -17,7 +17,8 @@ export type EngineId =
   | "mupdf-render" // PDF → images (une par page)
   | "mupdf-text" // PDF → TXT / HTML
   | "office" // LibreOffice : Word, Excel, PowerPoint, OpenDocument…
-  | "office-pdf-import"; // PDF → Word / PowerPoint (LibreOffice, fidélité variable)
+  | "pdf-docx" // PDF → Word : document reconstruit (vrais paragraphes, tableaux, images)
+  | "office-pdf-import"; // PDF → PowerPoint (LibreOffice, fidélité variable)
 
 export interface Edge {
   engine: EngineId;
@@ -40,9 +41,8 @@ export const EDGES: Edge[] = [
   { engine: "images-to-pdf", from: [...RASTER_IN, "bmp"], to: ["pdf"], cost: 1 },
   { engine: "mupdf-to-pdf", from: ["epub", "xps", "cbz", "fb2", "mobi", "bmp"], to: ["pdf"], cost: 1 },
   { engine: "mupdf-render", from: ["pdf"], to: ["png", "jpg"], cost: 1 },
-  // Coût choisi avec soin : plus cher que l'import PDF de LibreOffice (3), pour ne jamais servir
-  // d'étape intermédiaire (PDF → TXT → DOCX/DOC perd la mise en page), mais moins cher que le détour
-  // PDF → ODT → TXT (3 + 1), qui produit un fichier vide car LibreOffice importe le PDF en dessin.
+  // Coût choisi avec soin : plus cher que PDF → Word (3), pour ne jamais servir d'étape intermédiaire
+  // (PDF → TXT → ODT perdrait la mise en page), mais moins cher que le détour PDF → Word → TXT (3 + 1).
   { engine: "mupdf-text", from: ["pdf"], to: ["txt", "html"], cost: 3.5 },
   // Secours sans LibreOffice : MuPDF sait mettre en page du texte brut et du HTML.
   { engine: "mupdf-to-pdf", from: ["txt", "md", "csv", "html"], to: ["pdf"], cost: 4 },
@@ -50,7 +50,10 @@ export const EDGES: Edge[] = [
   { engine: "office", from: ["md"], to: ["pdf", "docx", "odt"], cost: 1 },
   { engine: "office", from: SHEET, to: ["pdf", "xlsx", "xls", "ods", "csv", "html"], cost: 1 },
   { engine: "office", from: SLIDES, to: ["pdf", "pptx", "ppt", "odp"], cost: 1 },
-  { engine: "office-pdf-import", from: ["pdf"], to: ["docx", "odt", "rtf"], cost: 3, approximate: true },
+  // Les autres formats de traitement de texte (ODT, RTF, DOC) partent de ce Word : PDF → DOCX → ODT.
+  // L'import PDF de LibreOffice n'est pas utilisé pour eux : il pose chaque ligne dans une zone de texte
+  // flottante, que Word empile les unes sur les autres.
+  { engine: "pdf-docx", from: ["pdf"], to: ["docx"], cost: 3, approximate: true },
   { engine: "office-pdf-import", from: ["pdf"], to: ["pptx", "odp"], cost: 3, approximate: true },
 ];
 
@@ -123,5 +126,6 @@ export const ALL_ENGINES: EngineId[] = [
   "mupdf-render",
   "mupdf-text",
   "office",
+  "pdf-docx",
   "office-pdf-import",
 ];

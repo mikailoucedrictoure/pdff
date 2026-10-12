@@ -3,10 +3,11 @@
  * et appelle le moteur adapté à chaque étape.
  */
 import { ALL_ENGINES, type EngineId, findPath, type Step } from "@/lib/core/graph";
-import { canonicalExt, extOf, FORMATS } from "@/lib/core/formats";
+import { canonicalExt, extOf } from "@/lib/core/formats";
 import { type FileData, UserError } from "./types";
 import { convertImage, imagesToPdf } from "./engines/image";
 import { extractText, renderPages, toPdf as mupdfToPdf } from "./engines/mupdf";
+import { pdfToDocx } from "./engines/docx";
 import { convertWithOffice, officeAvailable } from "./engines/office";
 
 export async function availableEngines(): Promise<Set<EngineId>> {
@@ -33,10 +34,10 @@ async function runStep(file: FileData, step: Step, s: ConvertSettings): Promise<
       return [await extractText(file, step.to as "txt" | "html")];
     case "office":
       return [await convertWithOffice(file, step.to)];
-    case "office-pdf-import": {
-      const importFilter = FORMATS[step.to]?.category === "presentation" ? "impress_pdf_import" : "writer_pdf_import";
-      return [await convertWithOffice(file, step.to, { importFilter })];
-    }
+    case "pdf-docx":
+      return [await pdfToDocx(file)];
+    case "office-pdf-import":
+      return [await convertWithOffice(file, step.to, { importFilter: "impress_pdf_import" })];
   }
 }
 

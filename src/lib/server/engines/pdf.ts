@@ -33,15 +33,21 @@ import { decrypt, rewritePdf } from "./mupdf";
  * les PDF chiffrés sans mot de passe d'ouverture sont déchiffrés.
  */
 export async function loadPdf(file: FileData): Promise<PDFDocument> {
+  // Un PDF tronqué peut s'ouvrir sans erreur puis faire échouer chaque outil : on vérifie tout de suite
+  // que la liste des pages est lisible, sinon on passe par la réparation.
+  const usable = (doc: PDFDocument) => {
+    doc.getPageCount();
+    return doc;
+  };
   try {
     const doc = await PDFDocument.load(file.data, { updateMetadata: false });
-    if (!doc.isEncrypted) return doc;
-    return await PDFDocument.load(await decrypt(file), { updateMetadata: false });
+    if (!doc.isEncrypted) return usable(doc);
+    return usable(await PDFDocument.load(await decrypt(file), { updateMetadata: false }));
   } catch (err) {
     if (err instanceof UserError) throw err;
     try {
       const repaired = await rewritePdf(file, "encrypt=none,garbage=1");
-      return await PDFDocument.load(repaired, { updateMetadata: false });
+      return usable(await PDFDocument.load(repaired, { updateMetadata: false }));
     } catch (err2) {
       if (err2 instanceof UserError) throw err2;
       throw new UserError("damagedPdf", { name: file.name });
@@ -120,8 +126,10 @@ function addOutline(doc: PDFDocument, items: { title: string; page: PDFRef }[]) 
 // ---------------------------------------------------------------- Pages
 
 export async function rotate(doc: PDFDocument, pages: Set<number>, angle: number): Promise<Uint8Array> {
+  // Un PDF n'accepte que des quarts de tour
+  if (!Number.isInteger(angle / 90)) throw new UserError("badOptions");
   doc.getPages().forEach((page, i) => {
-    if (pages.has(i)) page.setRotation(degrees((page.getRotation().angle + angle) % 360));
+    if (pages.has(i)) page.setRotation(degrees((((page.getRotation().angle + angle) % 360) + 360) % 360));
   });
   return save(doc);
 }
@@ -388,8 +396,9 @@ async function recompressImages(doc: PDFDocument, level: Exclude<CompressionLeve
 
 export async function compress(file: FileData, level: CompressionLevel): Promise<Uint8Array> {
   let data = file.data;
+  // Ouverture d'abord : un fichier illisible est refusé avec un message clair, jamais rendu tel quel
+  const doc = await loadPdf(file);
   if (level !== "lossless") {
-    const doc = await loadPdf(file);
     await recompressImages(doc, level);
     data = await doc.save({ useObjectStreams: true });
   }
@@ -421,7 +430,13 @@ export interface SignatureOptions {
 /** Appose une signature (image) sur les pages choisies, à l'endroit choisi, même si la page est pivotée. */
 export async function placeSignature(doc: PDFDocument, o: SignatureOptions): Promise<Uint8Array> {
   const isPng = o.image[0] === 0x89 && o.image[1] === 0x50;
-  const image = isPng ? await doc.embedPng(o.image) : await doc.embedJpg(o.image);
+  let image: Awaited<ReturnType<PDFDocument["embedPng"]>>;
+  try {
+    image = isPng ? await doc.embedPng(o.image) : await doc.embedJpg(o.image);
+  } catch {
+    // Image de signature illisible : même message que si elle manquait
+    throw new UserError("signatureMissing");
+  }
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const caption = o.caption ? winAnsiSafe(o.caption, font) : "";
   doc.getPages().forEach((page, i) => {

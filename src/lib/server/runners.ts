@@ -151,7 +151,8 @@ const runners: Record<string, Runner> = {
     const out: FileData[] = [];
     for (const file of files) {
       requirePdf(file);
-      const data = await pdf.compress(file, (o.str("level") || "recommended") as pdf.CompressionLevel);
+      const level = o.str("level");
+      const data = await pdf.compress(file, level === "lossless" || level === "strong" ? level : "recommended");
       out.push({ name: pdf.pdfName(file, "-compresse"), data });
     }
     return out;
@@ -312,12 +313,23 @@ function parseAreas(raw: string): RedactOptions["areas"] {
   }
 }
 
+/** Un résultat de 0 octet (texte d'un PDF sans texte…) n'est jamais remis : mieux vaut un message qu'un fichier vide. */
+function notEmpty(toolId: string, out: FileData[]): FileData[] {
+  if (toolId !== "renommer" && out.some((f) => !f.data.byteLength)) throw new UserError("noOutput");
+  return out;
+}
+
 export async function runTool(toolId: string, files: FileData[], values: OptionValues): Promise<FileData[]> {
   const runner = runners[toolId];
   if (!runner) throw new UserError("unknownTool");
+  // Fichier vide (envoi interrompu, fichier de 0 octet) : refusé tout de suite, avec un message clair
+  if (toolId !== "renommer") {
+    const empty = files.find((f) => !f.data.byteLength);
+    if (empty) throw new UserError("unreadable", { name: empty.name });
+  }
   try {
     const options = new Options(values);
-    const out = await runner(files, options);
+    const out = notEmpty(toolId, await runner(files, options));
     // Format du résultat choisi par l'utilisateur (PDF par défaut)
     const output = canonicalExt(options.str("output").toLowerCase());
     const hasOutput = getTool(toolId)?.options.some((opt) => opt.type === "output");
@@ -328,7 +340,7 @@ export async function runTool(toolId: string, files: FileData[], values: OptionV
       if (canonicalExt(extOf(file.name)) !== "pdf") converted.push(file);
       else converted.push(...(await convertFile(file, output, { dpi: 150, quality: 90 }, engines)));
     }
-    return converted;
+    return notEmpty(toolId, converted);
   } catch (err) {
     if (err instanceof PageSelectionError) throw new UserError(err.key, err.params);
     throw err;

@@ -19,13 +19,13 @@ function pad(n: number, total: number): string {
   return String(n).padStart(String(total).length, "0");
 }
 
-function assertPageLimit(count: number) {
+export function assertPageLimit(count: number) {
   if (count > limits.maxPages) {
     throw new UserError("pageLimitDocument", { count, max: limits.maxPages });
   }
 }
 
-async function open(file: FileData, password?: string) {
+export async function open(file: FileData, password?: string) {
   const m = await mupdf();
   let doc: MuPDF.Document;
   try {
@@ -121,6 +121,8 @@ export async function rewritePdf(file: FileData, options: string, password?: str
   const { doc } = await open(file, password);
   const pdf = doc.asPDF();
   if (!pdf) throw new UserError("notPdf", { name: file.name });
+  // Fichier trop abîmé pour qu'il en reste une seule page : rien à réécrire
+  if (pdf.countPages() < 1) throw new UserError("damagedPdf", { name: file.name });
   const out = new Uint8Array(pdf.saveToBuffer(options).asUint8Array());
   doc.destroy();
   return out;
