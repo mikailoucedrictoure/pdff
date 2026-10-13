@@ -152,7 +152,8 @@ describe("signer et caviarder", () => {
   it("caviarder : une zone tracée efface tout ce qu'elle couvre", async () => {
     const [out] = await runTool("caviarder", [await makePdf("doc.pdf", ["Secret"])], { areas: JSON.stringify([{ page: 0, x: 0, y: 0, w: 1, h: 1 }]) });
     const { extractText } = await import("@/lib/server/engines/mupdf");
-    expect(new TextDecoder().decode((await extractText(out, "txt")).data)).not.toContain("Secret");
+    // Il ne reste plus aucun texte dans le fichier
+    await expect(extractText(out, "txt")).rejects.toMatchObject({ key: "noText" });
   });
 
   it("caviarder : message clair si rien n'est trouvé ou demandé", async () => {

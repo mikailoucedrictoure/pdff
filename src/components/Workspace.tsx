@@ -100,7 +100,7 @@ const newId = () => `f${++uid}-${Date.now()}`;
 
 export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities }) {
   const tool = getTool(toolId)!;
-  const { messages: m, locale } = useI18n();
+  const { messages: m, locale, href } = useI18n();
   const w = m.workspace;
   const toolText = m.tools[tool.id];
   const optionTexts = toolText.options as Record<string, OptionText>;
@@ -129,6 +129,8 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   /** Poids des fichiers envoyés, pour afficher le gain d'une compression. */
   const inputSizeRef = useRef(0);
   const abortRef = useRef<AbortController | null>(null);
+  /** PDF déposés qui sont des scans (aucun texte) : true, false, ou absent tant que le fichier n'est pas examiné. */
+  const [scans, setScans] = useState<Record<string, boolean>>({});
 
   const acceptedExts = useMemo((): string[] | null => {
     if (tool.accepts === "all") return null;
@@ -205,6 +207,29 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
   const approximate =
     (!!target && exts.some((e) => findPath(e, target, engines)?.some((s) => s.approximate))) ||
     (output !== "pdf" && !!findPath("pdf", output, engines)?.some((s) => s.approximate));
+
+  // Certaines opérations ont besoin du texte du PDF : un scan doit d'abord passer par « Lire un scan »
+  const needsText =
+    tool.id === "caviarder" || (tool.id === "convertir" && TEXT_TARGETS.includes(target)) || (tool.options.some((o) => o.type === "output") && TEXT_TARGETS.includes(output));
+  useEffect(() => {
+    if (!needsText) return;
+    const pending = items.filter((i) => scans[i.id] === undefined && canonicalExt(extOf(i.file.name)) === "pdf").slice(0, 3);
+    if (!pending.length) return;
+    let cancelled = false;
+    void (async () => {
+      const { pdfIsScan } = await import("@/lib/client/pdf-content");
+      for (const item of pending) {
+        // Fichier illisible ou protégé : pas de conseil, le traitement donnera son propre message
+        const scan = await pdfIsScan(item.file).catch(() => false);
+        if (cancelled) return;
+        setScans((prev) => ({ ...prev, [item.id]: scan }));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [items, needsText, scans]);
+  const scanned = needsText ? items.filter((i) => scans[i.id]) : [];
 
   function visible(opt: ToolOption): boolean {
     if (!opt.showIf) return true;
@@ -707,7 +732,15 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
           <p className="mt-4 text-sm text-muted">{w.noSettings}</p>
         )}
 
-        {approximate && <p className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">{w.approximate}</p>}
+        {scanned.length > 0 && (
+          <p role="status" className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">
+            {fmt(w.scanHint, { files: scanned.map((i) => i.file.name).join(", ") })}{" "}
+            <a href={href("/outils/ocr")} className="font-semibold underline">
+              {w.scanHintLink}
+            </a>
+          </p>
+        )}
+        {approximate && !scanned.length && <p className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">{w.approximate}</p>}
 
         <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="mt-6 hidden lg:flex" />
 
@@ -1020,6 +1053,9 @@ function OptionField({
       );
   }
 }
+
+/** Formats de sortie qui n'ont de sens qu'avec le texte du PDF. */
+const TEXT_TARGETS = ["docx", "doc", "odt", "rtf", "txt", "html", "pptx", "ppt", "odp"];
 
 const SWATCH: Record<string, string> = { gray: "#808080", red: "#cc1a1a", blue: "#1a40bf", black: "#000000" };
 

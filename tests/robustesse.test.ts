@@ -86,10 +86,18 @@ describe("réglages inattendus", () => {
     expect(meta.width).toBe(meta.height);
   }, 120_000);
 
-  it("PDF sans texte → texte : un message, pas un fichier vide", async () => {
+  it("PDF sans texte → texte : le message conseille de passer d'abord par « Lire un scan »", async () => {
     const doc = await PDFDocument.create();
     doc.addPage([300, 300]);
-    await expect(runTool("convertir", [{ name: "blanc.pdf", data: await doc.save() }], { target: "txt" })).rejects.toMatchObject({ key: "noOutput" });
+    await expect(runTool("convertir", [{ name: "blanc.pdf", data: await doc.save() }], { target: "txt" })).rejects.toMatchObject({ key: "noText" });
+    const { VERIFIED_MESSAGES } = await import("@/i18n/messages");
+    for (const [lang, messages] of Object.entries(VERIFIED_MESSAGES)) {
+      // Chaque langue nomme l'outil comme il s'appelle dans son menu
+      expect(messages.errors.noText, lang).toContain(messages.tools.ocr.name);
+      expect(messages.workspace.scanHint, lang).toContain(messages.tools.ocr.name);
+      expect(messages.errors.redactNone, lang).toContain(messages.tools.ocr.name);
+      expect(messages.workspace.compareNoText, lang).toContain(messages.tools.ocr.name);
+    }
   });
 
   it("sélections de pages maladroites : message clair", async () => {

@@ -113,6 +113,27 @@ export async function readFormFields(file: Blob): Promise<FormField[]> {
   }
 }
 
+/**
+ * Un PDF « scanné » : ses premières pages ne contiennent (presque) aucun texte, seulement des images.
+ * Sert à conseiller l'outil « Lire un scan » avant une conversion en Word, un caviardage par mots…
+ */
+export async function pdfIsScan(file: Blob): Promise<boolean> {
+  const { task, doc } = await openPdf(file);
+  try {
+    let letters = 0;
+    const pages = Math.min(doc.numPages, 5);
+    for (let i = 1; i <= pages && letters < 20; i++) {
+      const page = await doc.getPage(i);
+      const content = await page.getTextContent();
+      for (const item of content.items) if ("str" in item) letters += item.str.trim().length;
+      page.cleanup();
+    }
+    return letters < 20;
+  } finally {
+    void task.destroy();
+  }
+}
+
 /** Texte de chaque page d'un PDF. */
 export async function readPagesText(file: Blob): Promise<string[]> {
   const { task, doc } = await openPdf(file);

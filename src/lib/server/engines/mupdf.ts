@@ -91,6 +91,8 @@ export async function extractText(file: FileData, format: "txt" | "html"): Promi
     page.destroy();
   }
   doc.destroy();
+  // PDF sans aucun texte (scan) : plutôt qu'un fichier vide, on indique la marche à suivre
+  if (format === "txt" && !parts.join("").trim()) throw new UserError("noText", { name: file.name });
   const title = baseName(file.name).replace(/[<>&]/g, "");
   const body =
     format === "txt"
