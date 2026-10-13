@@ -71,6 +71,18 @@ describe.skipIf(!available)(`formats Office (${remote ? "service distant" : "Lib
     expect(strings).toContain("Zoé");
   }, 300_000);
 
+  it("nombres écrits selon la région du visiteur : « 15,5 » en français, « 15.5 » aux États-Unis", async () => {
+    const { withLocale } = await import("@/lib/server/context");
+    const { extractText } = await import("@/lib/server/engines/mupdf");
+    const [xlsx] = await runTool("convertir", [{ name: "notes.csv", data: new TextEncoder().encode("Nom;Note\nZoe;15,5\n") }], { target: "xlsx" });
+    const textOf = async (locale: string) => {
+      const [pdf] = await withLocale(locale, () => runTool("convertir", [xlsx], { target: "pdf" }));
+      return new TextDecoder().decode((await extractText(pdf, "txt")).data);
+    };
+    expect(await textOf("fr-CA")).toContain("15,5");
+    expect(await textOf("en-US")).toContain("15.5");
+  }, 300_000);
+
   it("tableur CSV → Excel", async () => {
     const [xlsx] = await runTool("convertir", [csv("budget.csv")], { target: "xlsx" });
     expect(xlsx.name).toBe("budget.xlsx");
