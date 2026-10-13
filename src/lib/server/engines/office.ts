@@ -16,7 +16,7 @@ import { pathToFileURL } from "node:url";
 import { baseName, canonicalExt, extOf, FORMATS } from "@/lib/core/formats";
 import { requestLocale } from "../context";
 import { type FileData, UserError } from "../types";
-import { normalizeCsv } from "./csv";
+import { csvToSpreadsheet } from "./csv";
 
 const TIMEOUT_MS = 5 * 60 * 1000;
 
@@ -209,8 +209,9 @@ export interface OfficeConvertOptions {
 
 export async function convertWithOffice(input: FileData, target: string, opts: OfficeConvertOptions = {}): Promise<FileData> {
   const sourceExt = canonicalExt(extOf(input.name));
-  // CSV : remis d'abord dans la forme que LibreOffice lit sans se tromper (séparateur, accents, nombres)
-  const file = sourceExt === "csv" ? { name: input.name, data: normalizeCsv(input.data) } : input;
+  // CSV : confié à LibreOffice sous la forme d'un tableur déjà rangé en colonnes (séparateur, accents et nombres
+  // reconnus par nous), car il ne devine pas de la même façon d'une version et d'un serveur à l'autre.
+  const file = sourceExt === "csv" ? { name: `${baseName(input.name)}.fods`, data: csvToSpreadsheet(input.data, baseName(input.name)) } : input;
   const filter = target === "pdf" ? pdfFilter(sourceExt) : EXPORT_FILTERS[target];
   if (!filter) throw new UserError("officeTarget", { target: target.toUpperCase() });
   if (REMOTE_URL) return convertRemote(file, target, filter, opts.importFilter);
@@ -220,9 +221,7 @@ export async function convertWithOffice(input: FileData, target: string, opts: O
     throw new UserError("officeMissing");
   }
 
-  // Sur un poste réglé en français, LibreOffice attend des virgules décimales : on lui précise que le CSV
-  // remis au propre est écrit « à l'anglaise » (virgules entre les champs, point décimal, UTF-8).
-  const importFilter = opts.importFilter ?? (sourceExt === "csv" ? "Text - txt - csv (StarCalc):44,34,76,1,,1033,false,true" : undefined);
+  const importFilter = opts.importFilter;
   const locale = documentLocale();
   return serialize(async () => {
     const work = await mkdtemp(path.join(tmpdir(), "pdff-"));
