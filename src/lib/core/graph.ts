@@ -18,7 +18,7 @@ export type EngineId =
   | "mupdf-text" // PDF → TXT / HTML
   | "office" // LibreOffice : Word, Excel, PowerPoint, OpenDocument…
   | "pdf-docx" // PDF → Word : document reconstruit (vrais paragraphes, tableaux, images)
-  | "office-pdf-import"; // PDF → PowerPoint (LibreOffice, fidélité variable)
+  | "pdf-pptx"; // PDF → PowerPoint : une diapositive par page, reconstruite de la même façon
 
 export interface Edge {
   engine: EngineId;
@@ -54,7 +54,8 @@ export const EDGES: Edge[] = [
   // L'import PDF de LibreOffice n'est pas utilisé pour eux : il pose chaque ligne dans une zone de texte
   // flottante, que Word empile les unes sur les autres.
   { engine: "pdf-docx", from: ["pdf"], to: ["docx"], cost: 3, approximate: true },
-  { engine: "office-pdf-import", from: ["pdf"], to: ["pptx", "odp"], cost: 3, approximate: true },
+  // ODP et PPT partent de ce PowerPoint : PDF → PPTX → ODP.
+  { engine: "pdf-pptx", from: ["pdf"], to: ["pptx"], cost: 3, approximate: true },
 ];
 
 export interface Step {
@@ -127,5 +128,5 @@ export const ALL_ENGINES: EngineId[] = [
   "mupdf-text",
   "office",
   "pdf-docx",
-  "office-pdf-import",
+  "pdf-pptx",
 ];

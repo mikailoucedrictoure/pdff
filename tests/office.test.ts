@@ -53,11 +53,22 @@ describe.skipIf(!available)(`formats Office (${remote ? "service distant" : "Lib
     expect(await pageCount(pdf)).toBe(2);
   }, 300_000);
 
-  it("PDF → Word (import PDF)", async () => {
+  it("Word → PDF → Word", async () => {
     const [pdf] = await runTool("convertir", [await docx("x.docx", "Aller-retour")], { target: "pdf" });
     const [back] = await runTool("convertir", [pdf], { target: "docx" });
     expect(back.name).toBe("x.docx");
     expect(Buffer.from(back.data.subarray(0, 2)).toString()).toBe("PK");
+  }, 300_000);
+
+  it("CSV à points-virgules et accents (Excel en français) → Excel : vraies colonnes, vrais nombres", async () => {
+    const [xlsx] = await runTool("convertir", [{ name: "notes.csv", data: new TextEncoder().encode("Élève;Note\nZoé;15,5\nNoël;12\n") }], { target: "xlsx" });
+    const zip = await JSZip.loadAsync(xlsx.data);
+    const sheet = await zip.file("xl/worksheets/sheet1.xml")!.async("string");
+    const strings = await zip.file("xl/sharedStrings.xml")!.async("string");
+    expect(sheet).toContain(`r="B3"`);
+    expect(sheet).toContain("<v>15.5</v>");
+    expect(strings).toContain("Élève");
+    expect(strings).toContain("Zoé");
   }, 300_000);
 
   it("tableur CSV → Excel", async () => {

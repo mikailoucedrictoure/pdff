@@ -8,6 +8,7 @@
  *   X-Target         extension de sortie (pdf, docx…)
  *   X-Filter         filtre d'export LibreOffice (encodé URI)
  *   X-Import-Filter  filtre d'import (facultatif)
+ *   X-Locale         région du visiteur, ex. fr-CA (facultatif) : écriture des nombres et des dates
  * GET /health      → "ok"
  *
  * Aucun fichier n'est conservé : dossier de travail supprimé après chaque conversion.
@@ -15,7 +16,8 @@
  */
 import { spawn } from "node:child_process";
 import { timingSafeEqual } from "node:crypto";
-import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -34,6 +36,7 @@ if (!TOKEN) {
 
 const SAFE_EXT = /^[a-z0-9]{1,8}$/;
 const SAFE_IMPORT = /^[A-Za-z0-9_]{1,64}$/;
+const SAFE_LOCALE = /^[a-z]{2,3}(-[A-Z]{2})?$/;
 const FORBIDDEN = /[<>:"/\\|?*\x00-\x1f]/g;
 
 function authorized(req: IncomingMessage): boolean {
@@ -86,7 +89,34 @@ function soffice(args: string[]): Promise<{ timedOut: boolean; output: string }>
   });
 }
 
-const PROFILE = pathToFileURL(path.join(tmpdir(), "pdff-lo-profile")).href;
+const PROFILE_DIR = path.join(tmpdir(), "pdff-lo-profile");
+
+/**
+ * Profil LibreOffice réglé sur la région du visiteur : « 1 250,50 » et « 12/10/2026 » en français,
+ * « 1,250.50 » et « 10/12/2026 » aux États-Unis. Copie du profil préparé à la construction (démarrage rapide),
+ * avec le réglage de région en plus. En cas de souci, on garde le profil ordinaire.
+ */
+async function profileFor(locale: string): Promise<string> {
+  if (!locale) return pathToFileURL(PROFILE_DIR).href;
+  const dir = `${PROFILE_DIR}-${locale}`;
+  try {
+    if (!existsSync(path.join(dir, "user", "registrymodifications.xcu"))) {
+      if (existsSync(PROFILE_DIR)) await cp(PROFILE_DIR, dir, { recursive: true });
+      await mkdir(path.join(dir, "user"), { recursive: true });
+      const file = path.join(dir, "user", "registrymodifications.xcu");
+      const item = `<item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooSetupSystemLocale" oor:op="fuse"><value>${locale}</value></prop></item>`;
+      const current = existsSync(file) ? await readFile(file, "utf8") : "";
+      const merged = current.includes("</oor:items>")
+        ? current.replace("</oor:items>", `${item}</oor:items>`)
+        : `<?xml version="1.0" encoding="UTF-8"?><oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${item}</oor:items>`;
+      await writeFile(file, merged);
+    }
+    return pathToFileURL(dir).href;
+  } catch (err) {
+    console.error(`profil ${locale} indisponible :`, err);
+    return pathToFileURL(PROFILE_DIR).href;
+  }
+}
 
 async function convert(req: IncomingMessage, res: ServerResponse) {
   if (!authorized(req)) return send(res, 401, "unauthorized");
@@ -95,6 +125,8 @@ async function convert(req: IncomingMessage, res: ServerResponse) {
   const filter = decodeURIComponent(String(req.headers["x-filter"] ?? ""));
   const importFilter = req.headers["x-import-filter"] ? String(req.headers["x-import-filter"]) : "";
   const filename = decodeURIComponent(String(req.headers["x-filename"] ?? "document"));
+  const given = String(req.headers["x-locale"] ?? "");
+  const locale = SAFE_LOCALE.test(given) ? given : "";
   if (!SAFE_EXT.test(target) || !filter || filter.length > 500 || (importFilter && !SAFE_IMPORT.test(importFilter))) {
     return send(res, 400, "bad request");
   }
@@ -123,7 +155,7 @@ async function convert(req: IncomingMessage, res: ServerResponse) {
         "--nolockcheck",
         "--nodefault",
         "--nofirststartwizard",
-        `-env:UserInstallation=${PROFILE}`,
+        `-env:UserInstallation=${await profileFor(locale)}`,
         ...(importFilter ? [`--infilter=${importFilter}`] : []),
         "--convert-to",
         filter,

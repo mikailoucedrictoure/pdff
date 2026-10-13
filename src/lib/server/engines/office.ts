@@ -14,7 +14,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { baseName, canonicalExt, extOf, FORMATS } from "@/lib/core/formats";
+import { requestLocale } from "../context";
 import { type FileData, UserError } from "../types";
+import { normalizeCsv } from "./csv";
 
 const TIMEOUT_MS = 5 * 60 * 1000;
 
@@ -81,6 +83,8 @@ async function convertRemote(file: FileData, target: string, filter: string, imp
     "X-Filter": encodeURIComponent(filter),
   };
   if (importFilter) headers["X-Import-Filter"] = importFilter;
+  const locale = documentLocale();
+  if (locale) headers["X-Locale"] = locale;
 
   let res: Response;
   try {
@@ -142,6 +146,32 @@ function pdfFilter(sourceExt: string): string {
   return `pdf:${filter}:${JSON.stringify(options)}`;
 }
 
+/** Région du visiteur, vérifiée (elle sert de nom de dossier et de réglage) : « fr-CA », « en-US »… */
+function documentLocale(): string | null {
+  const locale = requestLocale();
+  return locale && /^[a-z]{2,3}(-[A-Z]{2})?$/.test(locale) ? locale : null;
+}
+
+/**
+ * Profil LibreOffice réglé sur une région : nombres et dates s'écrivent comme le visiteur les attend
+ * (« 1 250,50 » et « 12/10/2026 » en français, « 1,250.50 » et « 10/12/2026 » aux États-Unis).
+ */
+async function profileFor(locale: string | null): Promise<string> {
+  const dir = path.join(tmpdir(), locale ? `pdff-libreoffice-profile-${locale}` : "pdff-libreoffice-profile");
+  if (locale && !existsSync(path.join(dir, "user", "registrymodifications.xcu"))) {
+    await mkdir(path.join(dir, "user"), { recursive: true });
+    await writeFile(path.join(dir, "user", "registrymodifications.xcu"), localeSettings(locale));
+  }
+  return pathToFileURL(dir).href;
+}
+
+export function localeSettings(locale: string): string {
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?><oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">` +
+    `<item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooSetupSystemLocale" oor:op="fuse"><value>${locale}</value></prop></item></oor:items>`
+  );
+}
+
 // LibreOffice ne supporte pas bien les conversions parallèles sur un même profil :
 // on les exécute une par une.
 let queue: Promise<unknown> = Promise.resolve();
@@ -177,8 +207,10 @@ export interface OfficeConvertOptions {
   importFilter?: string;
 }
 
-export async function convertWithOffice(file: FileData, target: string, opts: OfficeConvertOptions = {}): Promise<FileData> {
-  const sourceExt = canonicalExt(extOf(file.name));
+export async function convertWithOffice(input: FileData, target: string, opts: OfficeConvertOptions = {}): Promise<FileData> {
+  const sourceExt = canonicalExt(extOf(input.name));
+  // CSV : remis d'abord dans la forme que LibreOffice lit sans se tromper (séparateur, accents, nombres)
+  const file = sourceExt === "csv" ? { name: input.name, data: normalizeCsv(input.data) } : input;
   const filter = target === "pdf" ? pdfFilter(sourceExt) : EXPORT_FILTERS[target];
   if (!filter) throw new UserError("officeTarget", { target: target.toUpperCase() });
   if (REMOTE_URL) return convertRemote(file, target, filter, opts.importFilter);
@@ -188,6 +220,10 @@ export async function convertWithOffice(file: FileData, target: string, opts: Of
     throw new UserError("officeMissing");
   }
 
+  // Sur un poste réglé en français, LibreOffice attend des virgules décimales : on lui précise que le CSV
+  // remis au propre est écrit « à l'anglaise » (virgules entre les champs, point décimal, UTF-8).
+  const importFilter = opts.importFilter ?? (sourceExt === "csv" ? "Text - txt - csv (StarCalc):44,34,76,1,,1033,false,true" : undefined);
+  const locale = documentLocale();
   return serialize(async () => {
     const work = await mkdtemp(path.join(tmpdir(), "pdff-"));
     try {
@@ -199,7 +235,7 @@ export async function convertWithOffice(file: FileData, target: string, opts: Of
       await Promise.all([mkdir(inDir), mkdir(outDir)]);
       await writeFile(inputPath, file.data);
 
-      const profile = pathToFileURL(path.join(tmpdir(), "pdff-libreoffice-profile")).href;
+      const profile = await profileFor(locale);
       const args = [
         "--headless",
         "--norestore",
@@ -207,7 +243,7 @@ export async function convertWithOffice(file: FileData, target: string, opts: Of
         "--nodefault",
         "--nofirststartwizard",
         `-env:UserInstallation=${profile}`,
-        ...(opts.importFilter ? [`--infilter=${opts.importFilter}`] : []),
+        ...(importFilter ? [`--infilter=${importFilter}`] : []),
         "--convert-to",
         filter,
         "--outdir",

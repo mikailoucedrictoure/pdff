@@ -8,11 +8,12 @@ import { type FileData, UserError } from "./types";
 import { convertImage, imagesToPdf } from "./engines/image";
 import { extractText, renderPages, toPdf as mupdfToPdf } from "./engines/mupdf";
 import { pdfToDocx } from "./engines/docx";
+import { pdfToPptx } from "./engines/pptx";
 import { convertWithOffice, officeAvailable } from "./engines/office";
 
 export async function availableEngines(): Promise<Set<EngineId>> {
   const hasOffice = await officeAvailable();
-  return new Set(ALL_ENGINES.filter((e) => hasOffice || (e !== "office" && e !== "office-pdf-import")));
+  return new Set(ALL_ENGINES.filter((e) => hasOffice || e !== "office"));
 }
 
 export interface ConvertSettings {
@@ -36,8 +37,8 @@ async function runStep(file: FileData, step: Step, s: ConvertSettings): Promise<
       return [await convertWithOffice(file, step.to)];
     case "pdf-docx":
       return [await pdfToDocx(file)];
-    case "office-pdf-import":
-      return [await convertWithOffice(file, step.to, { importFilter: "impress_pdf_import" })];
+    case "pdf-pptx":
+      return [await pdfToPptx(file)];
   }
 }
 

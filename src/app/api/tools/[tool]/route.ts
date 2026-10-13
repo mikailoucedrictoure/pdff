@@ -5,6 +5,7 @@ import type { ErrorKey } from "@/i18n/messages/fr";
 import { mimeOf, extOf } from "@/lib/core/formats";
 import { getTool, type OptionValues, type ToolId } from "@/lib/core/tools";
 import { BLOB_INPUT_PREFIX, type BlobFileRef, type BlobResult, DIRECT_TRANSFER_BYTES } from "@/lib/core/transfer";
+import { localeFromAcceptLanguage, withLocale } from "@/lib/server/context";
 import { runTool } from "@/lib/server/runners";
 import { blobEnabled, deleteBlobs, fetchInputs, isOwnTempBlob, storeResult } from "@/lib/server/storage";
 import { type FileData, UserError } from "@/lib/server/types";
@@ -87,7 +88,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ too
     const maxFiles = Math.min(tool.maxFiles ?? Infinity, limits.maxFiles);
     if (incoming.length > maxFiles) return fail("tooManyFiles", 400, { max: maxFiles });
     if (!options || typeof options !== "object") return fail("badOptions");
-    return await handle(tool.id, incoming, options as OptionValues, fail);
+    // Région du visiteur (annoncée par son navigateur) : elle décide de l'écriture des nombres et des dates
+    const region = localeFromAcceptLanguage(request.headers.get("accept-language"), url.searchParams.get("lang") ?? "");
+    return await withLocale(region, () => handle(tool.id, incoming, options as OptionValues, fail));
   } finally {
     // Les fichiers déposés ne servent qu'une fois
     if (blobInputs.length) await deleteBlobs(blobInputs);

@@ -864,7 +864,9 @@ function tabbedParagraph(row: Row, frame: Frame, ctx: Ctx, bg: string): Paragrap
   });
   const line = row.size * 1.2;
   const top = row.base - line * 0.8;
-  const shade = shadeAt(ctx, { x0: row.x0, y0: top + 1, x1: row.x1, y1: row.base });
+  // Fond de la ligne : un aplat sous toute la ligne, ou le même aplat sous chacun de ses morceaux (cases d'un en-tête)
+  const under = row.segs.map((seg) => shadeAt(ctx, seg, 0.6));
+  const shade = shadeAt(ctx, { x0: row.x0, y0: top + 1, x1: row.x1, y1: row.base }) || (under[0] && under.every((u) => u === under[0]) ? under[0] : "");
   return {
     kind: "p", top, bottom: row.base + line * 0.2, runs: runsOf(chars, row.size, row.base, ctx, shade || bg), align: "left",
     left: row.x0 - frame.x0, right: 0, first: 0, line, tabs, shade: shade === bg ? "" : shade, rtl: isRtl(textOf(chars)), lines: 1,
@@ -1054,7 +1056,7 @@ function buildTable(spec: TableSpec, frame: Frame, ctx: Ctx, bg: string): Table 
       const box: Box = { x0: xs[g.c0], y0: ys[r], x1: xs[g.c1 + 1], y1: ys[r + 1] };
       // Fond de la cellule : l'aplat sous son texte (les cellules d'un tableau sans traits n'ont pas de bords exacts)
       const inner = { x0: box.x0 + 1, y0: box.y0 + 1, x1: box.x1 - 1, y1: box.y1 - 1 };
-      const shade = shadeAt(ctx, inner, 0.7) || (g.items.length ? shadeAt(ctx, union(g.items), 0.9) : "");
+      const shade = shadeAt(ctx, inner, 0.7) || (g.items.length ? shadeAt(ctx, union(g.items), 0.6) : "");
       const tx0 = box.x0 + pad;
       const tx1 = box.x1 - pad;
       let last = r;
@@ -1180,7 +1182,7 @@ function implicitTable(entries: { y: number; row?: Row; item?: Item }[], start: 
       end = i;
       continue;
     }
-    if (!row || row.base - lastBase > Math.max(row.size, first.size) * 3.2) break;
+    if (!row || row.base - lastBase > Math.max(row.size, first.size) * 4.5) break;
     const current = tableRows[tableRows.length - 1];
     if (row.segs.length > 1) tableRows.push([row]);
     else {
@@ -1188,7 +1190,7 @@ function implicitTable(entries: { y: number; row?: Row; item?: Item }[], start: 
       // et qu'une autre ligne du tableau vient ensuite
       const continues = current[0].segs.some((s) => Math.abs(s.x0 - row.x0) <= 2) && row.base - lastBase <= row.size * 1.6;
       const next = entries.slice(i + 1).find((e) => e.row);
-      if (!continues || !next?.row || next.row.segs.length < 2 || next.row.base - row.base > row.size * 3.2) break;
+      if (!continues || !next?.row || next.row.segs.length < 2 || next.row.base - row.base > row.size * 4.5) break;
       current.push(row);
     }
     lastBase = row.base;

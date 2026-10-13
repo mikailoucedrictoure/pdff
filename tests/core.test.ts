@@ -14,8 +14,21 @@ describe("graphe de conversion", () => {
     expect(engines("pdf", "odt")).toEqual(["pdf-docx:docx", "office:odt"]);
     expect(engines("pdf", "rtf")).toEqual(["pdf-docx:docx", "office:rtf"]);
   });
-  it("PDF → Word reste disponible sans LibreOffice", () => {
+  it("PDF → Word et PowerPoint restent disponibles sans LibreOffice", () => {
     expect(engines("pdf", "docx", NO_OFFICE)).toEqual(["pdf-docx:docx"]);
+    expect(engines("pdf", "pptx", NO_OFFICE)).toEqual(["pdf-pptx:pptx"]);
+  });
+  it("PDF → PowerPoint : diapositives reconstruites ; ODP part de ce PowerPoint", () => {
+    expect(engines("pdf", "pptx")).toEqual(["pdf-pptx:pptx"]);
+    expect(engines("pdf", "odp")).toEqual(["pdf-pptx:pptx", "office:odp"]);
+  });
+  it("région du visiteur : lue dans ce qu'annonce son navigateur", async () => {
+    const { localeFromAcceptLanguage } = await import("@/lib/server/context");
+    expect(localeFromAcceptLanguage("fr-CA,fr;q=0.9,en;q=0.8", "fr")).toBe("fr-CA");
+    expect(localeFromAcceptLanguage("fr", "en")).toBe("fr-FR");
+    expect(localeFromAcceptLanguage(null, "es")).toBe("es-ES");
+    expect(localeFromAcceptLanguage("*", "")).toBe("en-US");
+    expect(localeFromAcceptLanguage("../../etc", "")).toBe("en-US");
   });
   it("trouve les conversions en plusieurs étapes", () => {
     expect(engines("docx", "png")).toEqual(["office:pdf", "mupdf-render:png"]);

@@ -1048,7 +1048,9 @@ function LanguageSelect({ label, choices, value, onChange }: { label: string; ch
         className="w-full rounded-xl border border-line bg-bg px-3.5 py-2.5 text-base transition focus:border-brand focus:ring-4 focus:ring-brand/25 sm:text-sm"
       >
         {choices.map((c) => (
-          <option key={c} value={c}>
+          // Le serveur et le navigateur ne nomment pas toujours une langue de la même façon (« chinois simplifié »,
+          // « chinois (simplifié) ») : la différence est acceptée, sans erreur d'affichage.
+          <option key={c} value={c} suppressHydrationWarning>
             {names(c)}
           </option>
         ))}
