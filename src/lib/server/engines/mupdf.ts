@@ -43,6 +43,16 @@ export async function open(file: FileData, password?: string) {
   return { m, doc };
 }
 
+/** Vérifie qu'un PDF s'ouvre et contient au moins une page ; sinon, message clair. */
+export async function assertReadablePdf(file: FileData): Promise<void> {
+  const { doc } = await open(file);
+  try {
+    if (doc.countPages() < 1) throw new UserError("damagedPdf", { name: file.name });
+  } finally {
+    doc.destroy();
+  }
+}
+
 /** PDF → une image par page. */
 export async function renderPages(
   file: FileData,

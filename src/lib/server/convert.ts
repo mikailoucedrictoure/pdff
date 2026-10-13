@@ -6,7 +6,7 @@ import { ALL_ENGINES, type EngineId, findPath, type Step } from "@/lib/core/grap
 import { canonicalExt, extOf } from "@/lib/core/formats";
 import { type FileData, UserError } from "./types";
 import { convertImage, imagesToPdf } from "./engines/image";
-import { extractText, renderPages, toPdf as mupdfToPdf } from "./engines/mupdf";
+import { assertReadablePdf, extractText, renderPages, toPdf as mupdfToPdf } from "./engines/mupdf";
 import { pdfToDocx } from "./engines/docx";
 import { pdfToPptx } from "./engines/pptx";
 import { convertWithOffice, officeAvailable } from "./engines/office";
@@ -56,7 +56,11 @@ export async function convertFile(
     const key = (await officeAvailable()) ? "conversionImpossible" : "conversionImpossibleOffice";
     throw new UserError(key, { from: from.toUpperCase() || "?", to: to.toUpperCase() });
   }
-  if (!path.length) return [file];
+  if (!path.length) {
+    // Même format demandé : le fichier est rendu tel quel, à condition qu'il soit lisible
+    if (from === "pdf") await assertReadablePdf(file);
+    return [file];
+  }
 
   let files = [file];
   for (const step of path) {

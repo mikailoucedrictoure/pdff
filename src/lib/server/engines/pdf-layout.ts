@@ -179,6 +179,8 @@ interface RawPage {
   strokes: Stroke[];
   /** Dessins vectoriels (logos, graphiques) : rendus en image. */
   drawings: Box[];
+  /** Dégradés et fonds qui couvrent toute la page. */
+  backdrops: Box[];
   links: (Box & { uri: string })[];
 }
 
@@ -264,7 +266,7 @@ function readPage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage): RawPage {
   const width = bx1 - bx0;
   const height = by1 - by0;
   const pageBox: Box = { x0: 0, y0: 0, x1: width, y1: height };
-  const raw: RawPage = { width, height, segs: [], turned: [], images: [], fills: [], strokes: [], drawings: [], links: [] };
+  const raw: RawPage = { width, height, segs: [], turned: [], images: [], fills: [], strokes: [], drawings: [], backdrops: [], links: [] };
 
   // ---- Tracés : aplats de couleur, traits, dessins, et texte invisible (couche OCR des scans)
   const clips: Box[] = [pageBox];
@@ -418,8 +420,13 @@ function readPage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage): RawPage {
         },
       });
     },
-    fillShade() {
-      if (!hidden && area(clip()) < area(pageBox) * 0.98) addDrawing(clip());
+    fillShade(shade) {
+      // La bibliothèque programme la libération de cet objet sans en avoir pris de référence : libéré deux fois,
+      // il corromprait sa mémoire et ferait planter une conversion suivante, au hasard. On annule cette libération.
+      (shade.constructor as unknown as { _finalizer?: FinalizationRegistry<number> })._finalizer?.unregister(shade);
+      if (hidden) return;
+      if (area(clip()) < area(pageBox) * 0.98) addDrawing(clip());
+      else raw.backdrops.push(pageBox);
     },
     fillImageMask(_image, ctm) {
       if (hidden) return;
@@ -597,6 +604,18 @@ interface Row extends Box {
 interface Ctx {
   fills: Fill[];
   page: Box;
+  /** Page posée sur une image de fond : le texte garde sa couleur telle quelle, sans fond ajouté. */
+  onBackground?: boolean;
+  /** Aplats déjà rendus par un fond de cellule ou de colonne. Les autres sont gardés en image, derrière le texte. */
+  used: Set<Fill>;
+}
+
+/** Marque comme rendus les aplats qui tiennent dans une zone (fond de cellule, de colonne) ou qui la couvrent. */
+function consume(ctx: Ctx, box: Box) {
+  for (const f of ctx.fills) {
+    const shared = area(inter(f, box));
+    if (shared >= area(f) * 0.8 || shared >= area(box) * 0.7) ctx.used.add(f);
+  }
 }
 
 /** Couleur de fond sous une zone : le dernier aplat dessiné qui la couvre. */
@@ -674,7 +693,7 @@ function runsOf(chars: Ch[], lineSize: number, lineBase: number, ctx: Ctx, bg: s
     const small = ch.size <= lineSize * 0.9 && ch.c !== "\t";
     const script = small && ch.y < lineBase - lineSize * 0.15 ? 1 : small && ch.y > lineBase + lineSize * 0.08 ? -1 : 0;
     let highlight = "";
-    if (!bg && luminance(ch.color) > 0.82) {
+    if (!bg && !ctx.onBackground && luminance(ch.color) > 0.82) {
       // Texte clair sans fond repéré autour de lui : on reprend le fond exact sous le caractère, sinon un gris lisible
       highlight = shadeAt(ctx, { x0: ch.x0, y0: ch.y - ch.size * 0.6, x1: ch.x1, y1: ch.y }, 0.6) || "595959";
       if (luminance(highlight) > 0.7) highlight = "595959";
@@ -829,7 +848,9 @@ function makeParagraph(lines: Row[], frame: Frame, ctx: Ctx, bg: string, edge: n
       else runs.push(run);
     }
   }
-  const paragraph: Paragraph = { kind: "p", top, bottom, runs, align, left: 0, right: 0, first: 0, line, tabs: [], shade: shade === bg ? "" : shade, rtl, lines: n };
+  // Le fond coloré d'un paragraphe (encadré, bandeau) n'est pas écrit comme trame : ses bords seraient faux.
+  // Il est gardé tel quel, en image derrière le texte (voir `analysePage`).
+  const paragraph: Paragraph = { kind: "p", top, bottom, runs, align, left: 0, right: 0, first: 0, line, tabs: [], shade: "", rtl, lines: n };
 
   // Largeur laissée au texte : celle du paragraphe d'origine s'il va à la ligne, sinon toute la largeur du cadre
   const rightEdge = n > 1 && frame.tx1 - x1 > 3 ? x1 : frame.tx1;
@@ -869,7 +890,7 @@ function tabbedParagraph(row: Row, frame: Frame, ctx: Ctx, bg: string): Paragrap
   const shade = shadeAt(ctx, { x0: row.x0, y0: top + 1, x1: row.x1, y1: row.base }) || (under[0] && under.every((u) => u === under[0]) ? under[0] : "");
   return {
     kind: "p", top, bottom: row.base + line * 0.2, runs: runsOf(chars, row.size, row.base, ctx, shade || bg), align: "left",
-    left: row.x0 - frame.x0, right: shade && shade !== bg ? Math.max(0, frame.x1 - row.x1 - 3) : 0, first: 0, line, tabs, shade: shade === bg ? "" : shade, rtl: isRtl(textOf(chars)), lines: 1,
+    left: row.x0 - frame.x0, right: 0, first: 0, line, tabs, shade: "", rtl: isRtl(textOf(chars)), lines: 1,
   };
 }
 
@@ -1057,6 +1078,7 @@ function buildTable(spec: TableSpec, frame: Frame, ctx: Ctx, bg: string): Table 
       // Fond de la cellule : l'aplat sous son texte (les cellules d'un tableau sans traits n'ont pas de bords exacts)
       const inner = { x0: box.x0 + 1, y0: box.y0 + 1, x1: box.x1 - 1, y1: box.y1 - 1 };
       const shade = shadeAt(ctx, inner, 0.7) || (g.items.length ? shadeAt(ctx, union(g.items), 0.6) : "");
+      if (shade) consume(ctx, box);
       const tx0 = box.x0 + pad;
       const tx1 = box.x1 - pad;
       let last = r;
@@ -1335,6 +1357,9 @@ function layoutRegion(items: Item[], frame: Frame, ctx: Ctx, bg: string, depth: 
     // Fond de couleur d'une colonne (bandeau d'un CV) : la colonne prend les bords et la hauteur de ce fond
     const fills = extents.map((e) => fillAt(ctx, e)).map((f) => (f && area(f) < area(ctx.page) * 0.98 ? f : null));
     const shades = fills.map((f) => (f && f.color !== bg ? f.color : ""));
+    fills.forEach((f, k) => {
+      if (shades[k]) ctx.used.add(f!);
+    });
     let middle = (part.strip[0] + part.strip[1]) / 2;
     if (shades[0] && fills[0]!.x1 >= extents[0].x1 && fills[0]!.x1 <= extents[1].x0) middle = fills[0]!.x1;
     else if (shades[1] && fills[1]!.x0 <= extents[1].x0 && fills[1]!.x0 >= extents[0].x1) middle = fills[1]!.x0;
@@ -1382,6 +1407,36 @@ function isColumns(left: Item[], right: Item[]): boolean {
 
 const strokeBox = (s: Stroke): Box => (s.horizontal ? { x0: s.a, x1: s.b, y0: s.pos, y1: s.pos } : { x0: s.pos, x1: s.pos, y0: s.a, y1: s.b });
 
+/**
+ * Page « graphique » : une grande part de sa surface est couverte de fonds de couleur, de dégradés, de dessins
+ * ou d'images, et la plupart de son texte est posé dessus. On ne peut pas la refaire en paragraphes sur fond blanc
+ * sans la défigurer.
+ */
+function isDesigned(raw: RawPage, page: Box): boolean {
+  const COLS = 30;
+  const ROWS = 42;
+  const grid = new Uint8Array(COLS * ROWS);
+  const cw = (page.x1 - page.x0) / COLS;
+  const ch = (page.y1 - page.y0) / ROWS;
+  const mark = (b: Box) => {
+    for (let r = Math.max(0, Math.floor(b.y0 / ch + 0.5)); r < Math.min(ROWS, Math.floor(b.y1 / ch + 0.5)); r++) {
+      for (let c = Math.max(0, Math.floor(b.x0 / cw + 0.5)); c < Math.min(COLS, Math.floor(b.x1 / cw + 0.5)); c++) grid[r * COLS + c] = 1;
+    }
+  };
+  const big = (b: Box) => b.x1 - b.x0 > 12 && b.y1 - b.y0 > 12;
+  for (const f of raw.fills) if (f.color !== WHITE && big(f)) mark(f);
+  for (const d of [...raw.drawings, ...raw.backdrops]) if (big(d)) mark(d);
+  for (const image of raw.images) if (raw.segs.some((s) => centerIn(s, image))) mark(image);
+  const covered = grid.reduce((n, v) => n + v, 0) / grid.length;
+  if (covered < 0.45) return false;
+  const on = raw.segs.filter((s) => {
+    const c = Math.min(COLS - 1, Math.max(0, Math.floor((s.x0 + s.x1) / 2 / cw)));
+    const r = Math.min(ROWS - 1, Math.max(0, Math.floor((s.y0 + s.y1) / 2 / ch)));
+    return grid[r * COLS + c] === 1;
+  }).length;
+  return on >= raw.segs.length * 0.6;
+}
+
 /** Dessins vectoriels proches les uns des autres → une seule figure. */
 function groupDrawings(drawings: Box[]): Box[] {
   if (drawings.length > 4000) return [union(drawings)];
@@ -1409,7 +1464,8 @@ function shift(blocks: Block[], dx: number, right: number) {
   for (const b of blocks) {
     b.left -= dx;
     if (b.kind === "p") {
-      b.right = Math.max(0, b.right - right);
+      // Une ligne seule alignée à gauche n'a pas de limite à droite : elle peut s'allonger jusqu'à la marge
+      b.right = b.lines === 1 && b.align === "left" ? 0 : Math.max(0, b.right - right);
       b.tabs = b.tabs.map((t) => ({ ...t, pos: t.pos - dx }));
     } else if (b.kind === "rule") b.right = Math.max(0, b.right - right);
   }
@@ -1419,11 +1475,20 @@ const leftEdge = (b: Block) => (b.kind === "p" ? b.left + Math.min(0, b.first) :
 const rightGap = (b: Block, width: number) =>
   b.kind === "p" || b.kind === "rule" ? b.right : width - b.left - (b.kind === "table" ? b.widths.reduce((s, w) => s + w, 0) : b.kind === "columns" ? b.cols.reduce((s, c) => s + c.width, 0) : b.width);
 
+/**
+ * Marge droite de la page : l'espace libre à droite du contenu, sans dépasser la marge gauche. Une page presque
+ * vide (page de titre, quelques lignes courtes) garde ainsi des marges normales au lieu d'une marge droite immense.
+ */
+function pageRightMargin(blocks: Block[], width: number, left: number): number {
+  const free = Math.max(0, Math.min(...blocks.map((b) => rightGap(b, width))));
+  return Math.min(free, Math.max(left, 36));
+}
+
 async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, images: ImageStore): Promise<PageLayout> {
   const raw = readPage(m, page);
   const { width, height } = raw;
   const pageBox: Box = { x0: 0, y0: 0, x1: width, y1: height };
-  const ctx: Ctx = { fills: raw.fills.filter((f) => area(f) < area(pageBox) * 0.98 || f.color !== WHITE), page: pageBox };
+  const ctx: Ctx = { fills: raw.fills.filter((f) => area(f) < area(pageBox) * 0.98 || f.color !== WHITE), page: pageBox, used: new Set() };
   const layout: PageLayout = { width, height, margin: { top: 0, right: 0, bottom: 0, left: 0 }, blocks: [] };
 
   // Rendu de la page, calculé seulement si une figure ou un repli en image en a besoin
@@ -1461,7 +1526,70 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     return { ...layout, blocks: [picture] };
   };
 
+  // Décor de la page sans son texte : fond des pages très graphiques, et source des petites icônes
+  let decor: { data: Buffer; width: number; height: number; scale: number } | null = null;
+  const renderDecor = () => {
+    if (decor) return decor;
+    // L'image de la page avec son texte est prise d'abord : après, le texte n'est plus dans la page
+    render();
+    // Le texte est retiré de la page par le moteur PDF lui-même (rien d'autre n'est touché : ni images, ni tracés),
+    // puis la page est rendue. Le document ouvert n'est qu'une copie en mémoire : le fichier du visiteur est intact.
+    const pdfPage = page as MuPDF.PDFPage;
+    if (typeof pdfPage.createAnnotation === "function") {
+      const [x0, y0, x1, y1] = page.getBounds();
+      const annot = pdfPage.createAnnotation("Redact");
+      annot.setRect([x0 - 2, y0 - 2, x1 + 2, y1 + 2]);
+      pdfPage.applyRedactions(false, m.PDFPage.REDACT_IMAGE_NONE, m.PDFPage.REDACT_LINE_ART_NONE, m.PDFPage.REDACT_TEXT_REMOVE);
+    }
+    const scale = Math.min(IMAGE_DPI / 72, 3200 / Math.max(width, height));
+    const [bx0, by0] = page.getBounds();
+    const pixmap = page.toPixmap(m.Matrix.concat(m.Matrix.translate(-bx0, -by0), m.Matrix.scale(scale, scale)), m.ColorSpace.DeviceRGB, false, false);
+    try {
+      const w = pixmap.getWidth();
+      const h = pixmap.getHeight();
+      const stride = pixmap.getStride();
+      const pixels = pixmap.getPixels();
+      const data = Buffer.alloc(w * h * 3);
+      for (let y = 0; y < h; y++) data.set(pixels.subarray(y * stride, y * stride + w * 3), y * w * 3);
+      return (decor = { data, width: w, height: h, scale });
+    } finally {
+      pixmap.destroy();
+    }
+  };
+  /** Morceau du décor, posé derrière le texte à sa place exacte dans la page. */
+  const decorPicture = async (box: Box): Promise<Picture> => {
+    const r = renderDecor();
+    const left = Math.max(0, Math.floor(box.x0 * r.scale));
+    const top = Math.max(0, Math.floor(box.y0 * r.scale));
+    const w = Math.max(1, Math.min(r.width - left, Math.ceil((box.x1 - box.x0) * r.scale)));
+    const h = Math.max(1, Math.min(r.height - top, Math.ceil((box.y1 - box.y0) * r.scale)));
+    const cut = sharp(r.data, { raw: { width: r.width, height: r.height, channels: 3 }, limitInputPixels: false }).extract({ left, top, width: w, height: h });
+    const photo = w * h > 250_000;
+    const data = new Uint8Array(photo ? await cut.jpeg({ quality: 90, mozjpeg: true }).toBuffer() : await cut.png({ compressionLevel: 9 }).toBuffer());
+    const ext = photo ? "jpeg" : "png";
+    return { kind: "image", top: top / r.scale, bottom: (top + h) / r.scale, left: left / r.scale, width: w / r.scale, data: images.add(data, ext), ext, behind: true };
+  };
+
   const turnedChars = raw.turned.length;
+  if (raw.segs.length && !turnedChars && isDesigned(raw, pageBox)) {
+    // Page mise en page par un graphiste (affiche, diapositive, certificat) : tout le décor reste en image de fond,
+    // et le texte est reposé par-dessus, modifiable, à sa place et dans ses couleurs.
+    for (const link of raw.links) {
+      for (const seg of raw.segs) {
+        if (seg.base < link.y0 || seg.base > link.y1 + 2) continue;
+        for (const ch of seg.chars) if ((ch.x0 + ch.x1) / 2 >= link.x0 && (ch.x0 + ch.x1) / 2 <= link.x1) ch.link = link.uri;
+      }
+    }
+    const items: Item[] = raw.segs.map((seg) => ({ ...seg, seg }));
+    const extent = union(items);
+    const blocks = layoutRegion(items, { x0: 0, x1: width, tx0: extent.x0, tx1: extent.x1 }, { fills: [], page: pageBox, onBackground: true, used: new Set() }, "", 0, 0, height);
+    const left = Math.max(0, Math.min(...blocks.map(leftEdge)));
+    const right = pageRightMargin(blocks, width, left);
+    shift(blocks, left, right);
+    const top = Math.max(0, Math.min(...blocks.map((b) => b.top)));
+    const bottom = Math.max(0, height - Math.max(...blocks.map((b) => b.bottom)));
+    return { ...layout, margin: { top, left, right, bottom }, blocks: [await decorPicture(pageBox), ...blocks] };
+  }
   if (!raw.segs.length) {
     if (!raw.images.length && !raw.drawings.length && !raw.strokes.length && !turnedChars) return layout;
     // Page sans texte lisible (scan, plan, photo) : gardée en image, à l'identique
@@ -1504,19 +1632,21 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
   // Figures : dessins vectoriels, texte tourné, images inclinées. Rendues en image avec le texte qu'elles contiennent
   // (légendes d'un graphique), sauf si la zone est surtout du texte : c'est alors un décor, qu'on laisse de côté.
   const figures: Box[] = [];
+  const icons: Box[] = [];
   for (const box of groupDrawings([...raw.drawings, ...grids.drawings, ...raw.turned])) {
     const w = box.x1 - box.x0;
     const h = box.y1 - box.y0;
-    if (w < 14 && h < 14) {
-      // Petit dessin rond ou carré juste devant un texte : c'est une puce
+    if (w <= 28 && h <= 28) {
+      // Petit dessin juste devant un texte, nettement plus petit que les lettres : c'est une puce
       const seg = segs.find((s) => s.x0 - box.x1 > 0 && s.x0 - box.x1 < s.size * 2.5 && box.y1 > s.base - s.size && box.y0 < s.base);
       // … sauf s'il suit de près un autre texte de la même ligne : il est alors au milieu d'une phrase
       const before = seg && segs.some((s) => s !== seg && Math.abs(s.base - seg.base) < 2 && s.x1 <= box.x0 + 1 && box.x0 - s.x1 < s.size * 2);
-      if (seg && !before && w < seg.size && h < seg.size) {
+      if (seg && !before && Math.max(w, h) <= seg.size * 0.62) {
         const c0 = seg.chars[0];
         seg.chars.unshift({ ...c0, c: "•", x0: box.x0, x1: box.x1, font: { ...c0.font, bold: false, italic: false } }, { ...c0, c: " ", x0: box.x1, x1: c0.x0 });
         seg.x0 = box.x0;
-      }
+      } else if (Math.max(w, h) >= 5) icons.push(box);
+      // Sinon c'est une icône (téléphone, courriel, logo de réseau) : gardée en petite image, à sa place
       continue;
     }
     if (w < 6 || h < 6) continue;
@@ -1542,6 +1672,7 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
 
   // Images
   const behind: Picture[] = [];
+  for (const box of icons) behind.push(await decorPicture({ x0: Math.max(0, box.x0 - 0.5), y0: Math.max(0, box.y0 - 0.5), x1: Math.min(width, box.x1 + 0.5), y1: Math.min(height, box.y1 + 0.5) }));
   for (const image of pictures) {
     const box = inter(image, pageBox);
     if (box.x1 - box.x0 < 2 || box.y1 - box.y0 < 2) continue;
@@ -1564,9 +1695,17 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
   const text = union(items);
   const blocks = layoutRegion(items, { x0: 0, x1: width, tx0: text.x0, tx1: text.x1 }, ctx, "", 0, 0, height);
 
+  // Aplats de couleur qui ne sont le fond d'aucune cellule ni d'aucune colonne (encadrés, bandeaux, pastilles,
+  // formes pleines) : gardés tels quels, en image derrière le texte, à leur place exacte.
+  const loose = ctx.fills.filter(
+    (f) => f.color !== WHITE && !ctx.used.has(f) && Math.min(f.x1 - f.x0, f.y1 - f.y0) >= 3 && area(f) < area(pageBox) * 0.98 && ![...grids.boxes, ...figures].some((b) => centerIn(f, b)),
+  );
+  const patches = groupDrawings(loose).sort((a, b) => area(b) - area(a)).slice(0, 40);
+  for (const box of patches) behind.push(await decorPicture(box));
+
   // Marges de la page : l'espace libre autour du contenu
   const left = Math.max(0, Math.min(...blocks.map(leftEdge)));
-  const right = Math.max(0, Math.min(...blocks.map((b) => rightGap(b, width))));
+  const right = pageRightMargin(blocks, width, left);
   shift(blocks, left, right);
   const top = Math.max(0, Math.min(...blocks.map((b) => b.top)));
   const bottom = Math.max(0, height - Math.max(...blocks.map((b) => b.bottom)));

@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import JSZip from "jszip";
 import { limits } from "@/config/limits";
 import { formatError, loadMessages, localeFromRequest } from "@/i18n/load";
@@ -145,6 +146,9 @@ async function handle(toolId: ToolId, incoming: Incoming[], options: OptionValue
   } catch (err) {
     if (err instanceof UserError) return fail(err.key, 422, err.params, err.file);
     console.error(`[pdffusion] ${toolId}:`, err);
+    // Erreur interne du moteur PDF (WebAssembly) : sa mémoire n'est plus fiable. Sur Vercel, ce serveur est arrêté
+    // une fois la réponse partie ; la demande suivante est servie par un serveur neuf, sans risque d'erreur en chaîne.
+    if (err instanceof WebAssembly.RuntimeError && process.env.VERCEL) after(() => process.exit(1));
     return fail("unexpected", 500);
   }
 }

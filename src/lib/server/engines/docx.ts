@@ -260,7 +260,7 @@ class Writer {
       // Page gardée en image : très légèrement réduite pour laisser la place au paragraphe de fin de page
       const scale = Math.min(1, (page.height - margin.top - 6) / (whole.bottom - whole.top));
       xml += this.picture({ ...whole, left: whole.left + (whole.width * (1 - scale)) / 2 }, 0, scale);
-    } else xml += this.flow(blocks, margin.top, false, page.height - bottom - 4, Math.max(0, margin.right - 12));
+    } else xml += this.flow(blocks, margin.top, false, page.height - bottom - 1.5, Math.max(0, margin.right - 12));
     return last ? `${xml}${tiny()}${section}` : `${xml}${tiny(1, section)}`;
   }
 }

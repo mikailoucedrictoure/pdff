@@ -163,3 +163,44 @@ describe("PDF → Word", () => {
     expect(xml).not.toContain("Rapport d'activite 1");
   });
 });
+
+describe("PDF → Word : pages graphiques et fonds de couleur", () => {
+  it("affiche sur fond de couleur : le décor reste en image de fond, le texte reste du texte, dans sa couleur", async () => {
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.HelveticaBold);
+    const page = doc.addPage([595, 842]);
+    page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: rgb(0.2, 0.1, 0.5) });
+    page.drawCircle({ x: 480, y: 720, size: 140, color: rgb(0.9, 0.3, 0.6) });
+    page.drawText("Portes ouvertes 2026", { x: 60, y: 700, size: 36, font, color: rgb(1, 1, 1) });
+    page.drawText("Samedi 14 novembre", { x: 60, y: 660, size: 16, font, color: rgb(1, 1, 1) });
+    const [docx] = await runTool("convertir", [{ name: "affiche.pdf", data: await doc.save() }], { target: "docx" });
+    const { xml, zip } = await documentXml(docx);
+    // Une seule image, derrière le texte, à la taille de la page
+    expect(xml.match(/behindDoc="1"/g)).toHaveLength(1);
+    expect(Object.keys(zip.files).filter((n) => n.startsWith("word/media/") && !n.endsWith("/"))).toHaveLength(1);
+    expect(paragraphs(xml)).toEqual(["Portes ouvertes 2026", "Samedi 14 novembre"]);
+    expect(xml).toContain(`<w:color w:val="FFFFFF"/>`);
+    // Pas de fond gris ajouté sous le texte clair : le décor est déjà derrière lui
+    expect(xml).not.toContain("<w:shd");
+    expect(xml.match(/<w:sectPr>/g)).toHaveLength(1);
+  });
+
+  it("encadré de couleur dans une page ordinaire : gardé tel quel derrière son texte", async () => {
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const page = doc.addPage([595, 842]);
+    page.drawText("Un paragraphe ordinaire, sur fond blanc.", { x: 60, y: 760, size: 12, font });
+    page.drawRectangle({ x: 60, y: 660, width: 240, height: 60, color: rgb(0.1, 0.15, 0.3) });
+    page.drawText("Texte clair dans un encadre", { x: 75, y: 685, size: 12, font, color: rgb(1, 1, 1) });
+    page.drawText("Un autre paragraphe ordinaire.", { x: 60, y: 620, size: 12, font });
+    const { xml } = await documentXml((await runTool("convertir", [{ name: "encadre.pdf", data: await doc.save() }], { target: "docx" }))[0]);
+    expect(xml.match(/behindDoc="1"/g)).toHaveLength(1);
+    expect(paragraphs(xml)).toEqual(["Un paragraphe ordinaire, sur fond blanc.", "Texte clair dans un encadre", "Un autre paragraphe ordinaire."]);
+    // L'encadré est posé à sa place exacte dans la page (60 points du bord gauche, 122 du haut)
+    const [x, y] = [...xml.matchAll(/<wp:posOffset>(-?[0-9]+)<.wp:posOffset>/g)].map((m) => Number(m[1]) / 12700);
+    expect(Math.abs(x - 60)).toBeLessThan(1);
+    expect(Math.abs(y - 122)).toBeLessThan(1);
+    // Page peu remplie : des marges normales, pas une marge droite immense
+    expect(xml).toContain(`w:right="1200" w:bottom=`);
+  });
+});

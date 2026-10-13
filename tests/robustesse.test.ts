@@ -117,3 +117,69 @@ describe("PDF réparables et protégés", () => {
     }
   });
 });
+
+describe("PDF produits : aucune référence cassée dans le fichier", () => {
+  /** Renvois internes vers des objets qui n'existent pas (un lecteur strict les signale comme des erreurs). */
+  async function dangling(file: FileData): Promise<string[]> {
+    const { PDFArray, PDFDict, PDFRef } = await import("pdf-lib");
+    const doc = await PDFDocument.load(file.data, { updateMetadata: false });
+    const found: string[] = [];
+    const scan = (value: unknown, where: string) => {
+      if (value instanceof PDFRef) {
+        if (doc.context.lookup(value) === undefined) found.push(`${where} → ${value.toString()}`);
+      } else if (value instanceof PDFArray) value.asArray().forEach((v, i) => scan(v, `${where}[${i}]`));
+      else if (value instanceof PDFDict) for (const [k, v] of value.entries()) scan(v, `${where}${k.toString()}`);
+      else if (value && typeof value === "object" && "dict" in value && value.dict instanceof PDFDict) for (const [k, v] of value.dict.entries()) scan(v, `${where}${k.toString()}`);
+    };
+    for (const [ref, obj] of doc.context.enumerateIndirectObjects()) scan(obj, `${ref.toString()} `);
+    return found;
+  }
+
+  async function form(): Promise<FileData> {
+    const doc = await PDFDocument.create();
+    const page = doc.addPage([400, 400]);
+    const fields = doc.getForm();
+    fields.createTextField("nom").addToPage(page, { x: 20, y: 340, width: 200, height: 24 });
+    fields.createCheckBox("accord").addToPage(page, { x: 20, y: 300, width: 16, height: 16 });
+    return { name: "formulaire.pdf", data: await doc.save() };
+  }
+
+  it("formulaire verrouillé : champs figés, sans reste des anciens champs", async () => {
+    const [out] = await runTool("remplir", [await form()], { values: JSON.stringify({ nom: "Awa Diallo", accord: true }), lock: true });
+    expect(await dangling(out)).toEqual([]);
+    const doc = await PDFDocument.load(out.data);
+    expect(doc.getPage(0).node.has((await import("pdf-lib")).PDFName.of("Annots"))).toBe(false);
+  });
+
+  it.each(["fusionner", "extraire", "organiser", "pivoter", "numeroter", "filigrane", "compresser", "metadonnees", "signer", "caviarder", "proteger"])("%s", async (tool) => {
+    const [out] = await runTool(tool, [await makePdf("doc.pdf", ["page 1", "page 2", "page 3"])], OPTIONS[tool] as never);
+    if (tool !== "proteger") expect(await dangling(out)).toEqual([]);
+    expect(isPdf(out)).toBe(true);
+  });
+});
+
+describe("fiabilité dans la durée", () => {
+  it("un PDF à dégradés converti de nombreuses fois de suite ne dérègle pas le moteur", async () => {
+    const { PDFName, PDFOperator } = await import("pdf-lib");
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont("Helvetica");
+    const page = doc.addPage([400, 300]);
+    const fn = doc.context.obj({ FunctionType: 2, Domain: [0, 1], C0: [0.2, 0.1, 0.5], C1: [0.9, 0.2, 0.5], N: 1 });
+    const shading = doc.context.obj({ ShadingType: 2, ColorSpace: "DeviceRGB", Coords: [0, 0, 400, 300], Function: fn, Extend: [true, true] });
+    const resources = page.node.Resources()!;
+    resources.set(PDFName.of("Shading"), doc.context.obj({ Sh0: shading }));
+    page.pushOperators(PDFOperator.of("sh" as never, [PDFName.of("Sh0")]));
+    page.drawText("Texte sur un degrade", { x: 40, y: 150, size: 20, font });
+    const gradient = { name: "degrade.pdf", data: await doc.save() };
+    const plain = await makePdf("doc.pdf", ["page 1", "page 2"]);
+    for (let i = 0; i < 30; i++) {
+      const [docx] = await runTool("convertir", [gradient], { target: i % 2 ? "docx" : "pptx" });
+      expect(docx.data.byteLength).toBeGreaterThan(1000);
+      // Chaque tour laisse des objets à libérer : c'est leur libération qui révélait le défaut
+      void new Array(20_000).fill(0).map((_, k) => ({ k }));
+    }
+    expect(await runTool("diviser", [plain], { mode: "each" })).toHaveLength(2);
+    const [png] = await runTool("convertir", [gradient], { target: "png", dpi: 72 });
+    expect(png.data[1]).toBe(0x50);
+  }, 120_000);
+});

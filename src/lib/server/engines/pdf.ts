@@ -522,6 +522,16 @@ export async function fillForm(doc: PDFDocument, values: FormValues, lock: boole
   if (lock) {
     if (!appearances) throw new UserError("formLockUnicode");
     form.flatten();
+    // Les champs figés laissent derrière eux des renvois vers des objets supprimés (liste des annotations de
+    // chaque page, formulaire vide) : on les retire, sinon le fichier contient des références cassées.
+    for (const page of doc.getPages()) {
+      const annots = page.node.lookup(PDFName.of("Annots"));
+      if (!(annots instanceof PDFArray)) continue;
+      const kept = annots.asArray().filter((item) => !(item instanceof PDFRef) || doc.context.lookup(item) !== undefined);
+      if (kept.length) page.node.set(PDFName.of("Annots"), doc.context.obj(kept));
+      else page.node.delete(PDFName.of("Annots"));
+    }
+    if (!form.getFields().length) doc.catalog.delete(PDFName.of("AcroForm"));
   }
   return { data: await save(doc), filled };
 }
