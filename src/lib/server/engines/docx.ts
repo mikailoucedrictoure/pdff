@@ -103,7 +103,9 @@ class Writer {
   private paragraph(p: Paragraph, before: number, spare: number): string {
     let left = Math.max(0, p.left);
     let right = Math.max(0, p.right);
-    if (p.lines > 1) right = Math.max(-spare, right - 2.5);
+    // Un paragraphe sur fond de couleur garde sa largeur : le fond ne doit pas déborder
+    if (p.shade) right = Math.max(0, right);
+    else if (p.lines > 1) right = Math.max(-spare, right - 2.5);
     else if (p.align === "right") left = Math.max(0, left - 36);
     else if (p.align === "center") {
       const give = Math.min(36, left, right);

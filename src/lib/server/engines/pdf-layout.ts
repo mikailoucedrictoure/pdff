@@ -869,7 +869,7 @@ function tabbedParagraph(row: Row, frame: Frame, ctx: Ctx, bg: string): Paragrap
   const shade = shadeAt(ctx, { x0: row.x0, y0: top + 1, x1: row.x1, y1: row.base }) || (under[0] && under.every((u) => u === under[0]) ? under[0] : "");
   return {
     kind: "p", top, bottom: row.base + line * 0.2, runs: runsOf(chars, row.size, row.base, ctx, shade || bg), align: "left",
-    left: row.x0 - frame.x0, right: 0, first: 0, line, tabs, shade: shade === bg ? "" : shade, rtl: isRtl(textOf(chars)), lines: 1,
+    left: row.x0 - frame.x0, right: shade && shade !== bg ? Math.max(0, frame.x1 - row.x1 - 3) : 0, first: 0, line, tabs, shade: shade === bg ? "" : shade, rtl: isRtl(textOf(chars)), lines: 1,
   };
 }
 

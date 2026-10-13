@@ -99,7 +99,7 @@ class Slide {
     let x0 = frame.x + (p.align === "left" || p.align === "both" ? p.left + Math.min(0, p.first) : 0);
     let x1 = frame.x + frame.width - p.right;
     if (p.align === "center" || p.align === "right") x0 = frame.x + p.left;
-    const slack = single ? Math.max(12, (x1 - x0) * 0.3) : 3;
+    const slack = p.shade ? 3 : single ? Math.max(12, (x1 - x0) * 0.3) : 3;
     if (p.align === "right") x0 -= slack;
     else if (p.align === "center") {
       x0 -= slack / 2;
