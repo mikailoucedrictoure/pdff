@@ -631,6 +631,15 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
         {rejected.length > 0 && (
           <p role="alert" className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">{fmt(w.rejected, { files: rejected.join(", ") })}</p>
         )}
+        {/* Scan déposé dans une fonction qui a besoin de texte : on conseille « Lire un scan », bien en vue sous le fichier */}
+        {scanned.length > 0 && (
+          <p role="status" className="mt-3 rounded-2xl bg-warn-soft px-4 py-3 text-sm text-warn-ink">
+            {fmt(w.scanHint, { files: scanned.map((i) => i.file.name).join(", ") })}{" "}
+            <a href={href("/outils/ocr")} className="font-semibold underline">
+              {w.scanHintLink}
+            </a>
+          </p>
+        )}
 
         {items.length > 0 &&
           (status.kind === "done" && tool.id !== "comparer" ? (
@@ -732,14 +741,6 @@ export function Workspace({ toolId, caps }: { toolId: string; caps: Capabilities
           <p className="mt-4 text-sm text-muted">{w.noSettings}</p>
         )}
 
-        {scanned.length > 0 && (
-          <p role="status" className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">
-            {fmt(w.scanHint, { files: scanned.map((i) => i.file.name).join(", ") })}{" "}
-            <a href={href("/outils/ocr")} className="font-semibold underline">
-              {w.scanHintLink}
-            </a>
-          </p>
-        )}
         {approximate && !scanned.length && <p className="mt-4 rounded-xl bg-warn-soft px-3 py-2.5 text-xs text-warn-ink">{w.approximate}</p>}
 
         <RunButton label={toolText.name} busy={busy} disabled={!canRun} onClick={run} w={w} className="mt-6 hidden lg:flex" />
