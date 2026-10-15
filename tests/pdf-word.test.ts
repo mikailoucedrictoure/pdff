@@ -204,3 +204,80 @@ describe("PDF → Word : pages graphiques et fonds de couleur", () => {
     expect(xml).toContain(`w:right="1200" w:bottom=`);
   });
 });
+
+describe("PDF → Word : diapositives (cours exporté de PowerPoint)", () => {
+  /** Diapositive 780 × 540 : bandeau d'image sur toute la hauteur à gauche, logo en haut à droite, titre, liste. */
+  async function slide(draw?: (page: ReturnType<PDFDocument["addPage"]>, font: Awaited<ReturnType<PDFDocument["embedFont"]>>) => void): Promise<FileData> {
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const band = await doc.embedPng((await makePng("bandeau.png", 95, 540)).data);
+    const logo = await doc.embedPng((await makePng("logo.png", 200, 100)).data);
+    for (let n = 0; n < 2; n++) {
+      const page = doc.addPage([780, 540]);
+      page.drawImage(band, { x: 0, y: 0, width: 95, height: 540 });
+      page.drawImage(logo, { x: 573, y: 438, width: 207, height: 101 });
+      page.drawText(`About Me ${n + 1}`, { x: 119, y: 496, size: 24, font, color: rgb(0, 0.14, 0.49) });
+      ["Penetration Tests", "Webapp Checks", "Architecture Reviews"].forEach((item, i) => {
+        page.drawText("•", { x: 165, y: 380 - i * 23, size: 16, font });
+        page.drawText(item, { x: 190, y: 380 - i * 23, size: 16, font });
+      });
+      page.drawText("© Compass", { x: 119, y: 15, size: 12, font });
+      draw?.(page, font);
+    }
+    return { name: "cours.pdf", data: await doc.save() };
+  }
+
+  it("bandeau et logo à côté du texte : accrochés à leur place, jamais dans le fil du texte", async () => {
+    const { xml } = await documentXml((await runTool("convertir", [await slide()], { target: "docx" }))[0]);
+    // Dans le fil du texte, le bandeau (toute la hauteur) repoussait le texte sur les pages suivantes
+    expect(xml).not.toContain("<wp:inline ");
+    expect(xml.match(/<wp:anchor /g)).toHaveLength(4);
+    expect(xml.match(/<w:sectPr>/g)).toHaveLength(2);
+    // Le texte reste du texte, dans l'ordre
+    const texts = paragraphs(xml);
+    expect(texts[0]).toBe("About Me 1");
+    expect(texts.filter((t) => t.startsWith("•"))).toHaveLength(6);
+  });
+
+  it("texte barré : reste du texte barré, pas un trait à part", async () => {
+    const pdf = await slide((page, font) => {
+      const width = font.widthOfTextAtSize("Hacking", 16);
+      page.drawText("Interested in Hacking", { x: 119, y: 250, size: 16, font });
+      const x = 119 + font.widthOfTextAtSize("Interested in ", 16);
+      page.drawLine({ start: { x, y: 255 }, end: { x: x + width, y: 255 }, thickness: 1 });
+    });
+    const { xml } = await documentXml((await runTool("convertir", [pdf], { target: "docx" }))[0]);
+    expect(/<w:strike\/>(?:(?!<\/w:r>).)*<w:t[^>]*>Hacking<\/w:t>/.test(xml)).toBe(true);
+    expect(xml).not.toContain("<w:pBdr>");
+  });
+
+  it("texte recouvert par une image : invisible dans le PDF, absent du Word", async () => {
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const shot = await doc.embedPng((await makePng("capture.png", 700, 500)).data);
+    const page = doc.addPage([780, 540]);
+    page.drawText("Titre cache", { x: 119, y: 496, size: 24, font });
+    page.drawImage(shot, { x: 60, y: 20, width: 700, height: 500 });
+    page.drawText("Texte visible", { x: 100, y: 260, size: 24, font, color: rgb(1, 1, 1) });
+    const { xml } = await documentXml((await runTool("convertir", [{ name: "capture.pdf", data: await doc.save() }], { target: "docx" }))[0]);
+    expect(paragraphs(xml)).toEqual(["Texte visible"]);
+  });
+
+  it("schéma de cadres qui se chevauchent : la page garde son dessin en fond, le texte reste modifiable", async () => {
+    const pdf = await slide((page, font) => {
+      ["Windows Exploiting", "Fuzzing", "Browser Security", "Kernel Exploits"].forEach((label, i) => {
+        page.drawRectangle({ x: 125, y: 400 - i * 75 - 20, width: 220, height: 45, borderWidth: 1.5, borderColor: rgb(0.3, 0.3, 0.8) });
+        page.drawText(label, { x: 140, y: 400 - i * 75, size: 20, font });
+      });
+      ["Secure Coding", "Linux Hardening", "Case Studies"].forEach((label, i) => {
+        page.drawRectangle({ x: 400, y: 362 - i * 75 - 20, width: 220, height: 45, borderWidth: 1.5, borderColor: rgb(0.3, 0.3, 0.8) });
+        page.drawText(label, { x: 415, y: 362 - i * 75, size: 20, font });
+      });
+    });
+    const { xml } = await documentXml((await runTool("convertir", [pdf], { target: "docx" }))[0]);
+    expect(xml.match(/<w:sectPr>/g)).toHaveLength(2);
+    const texts = paragraphs(xml).join(" | ");
+    for (const label of ["Windows Exploiting", "Fuzzing", "Kernel Exploits", "Secure Coding", "Case Studies"]) expect(texts).toContain(label);
+    expect(xml).not.toContain("<wp:inline ");
+  });
+});

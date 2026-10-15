@@ -67,6 +67,7 @@ class Writer {
       `<w:rFonts w:ascii="${font}" w:hAnsi="${font}" w:eastAsia="${font}" w:cs="${font}"/>` +
       (run.bold ? "<w:b/><w:bCs/>" : "") +
       (run.italic ? "<w:i/><w:iCs/>" : "") +
+      (run.strike ? "<w:strike/>" : "") +
       (run.color !== "000000" ? `<w:color w:val="${run.color}"/>` : "") +
       `<w:sz w:val="${size}"/><w:szCs w:val="${size}"/>` +
       (run.underline ? `<w:u w:val="single"/>` : "") +

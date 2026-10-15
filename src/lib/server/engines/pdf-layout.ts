@@ -21,6 +21,7 @@ export interface Run {
   bold: boolean;
   italic: boolean;
   underline: boolean;
+  strike: boolean;
   /** 1 : exposant, -1 : indice. */
   script: number;
   /** Couleur du texte (hexadécimal sans #). */
@@ -139,6 +140,7 @@ interface Ch {
   font: FontInfo;
   color: string;
   underline?: boolean;
+  strike?: boolean;
   link?: string;
 }
 
@@ -185,10 +187,11 @@ interface RawPage {
 }
 
 const WHITE = "FFFFFF";
-const BULLETS = "•◦▪■□●○‣⁃∙·–—*➢✓✔❖◆►▶→»›-";
+const BULLETS = "•◦▪■□●○‣⁃∙·–—*➢✓✔❖◆►▶→»›✦★☑-";
 /** Puces des polices de symboles (Symbol, Wingdings), rangées dans la zone à usage privé d'Unicode. */
 const SYMBOL_CHARS: Record<number, string> = {
   0xf0b7: "•", 0xf0a7: "▪", 0xf0d8: "➢", 0xf0fc: "✓", 0xf06c: "●", 0xf06e: "■", 0xf0a8: "◆", 0xf076: "❖", 0xf0e0: "→", 0xf02d: "–", 0xf071: "□", 0xf0a1: "○",
+  0xf0aa: "✦", 0xf0ab: "★", 0xf0fe: "☑",
 };
 
 /** Polices courantes des PDF → police équivalente présente dans Word (mêmes largeurs de caractères). */
@@ -705,6 +708,7 @@ function runsOf(chars: Ch[], lineSize: number, lineBase: number, ctx: Ctx, bg: s
       bold: ch.font.bold,
       italic: ch.font.italic,
       underline: !!ch.underline,
+      strike: !!ch.strike,
       script,
       color: ch.color,
       highlight,
@@ -756,7 +760,7 @@ function toRows(segs: Seg[]): Row[] {
       const prev = merged[merged.length - 1];
       const gap = prev ? seg.x0 - prev.x1 : Infinity;
       if (prev && gap <= row.size * 0.6) {
-        const space: Ch[] = gap > row.size * 0.2 ? [{ ...prev.chars[prev.chars.length - 1], c: " ", x0: prev.x1, x1: seg.x0, underline: false }] : [];
+        const space: Ch[] = gap > row.size * 0.2 ? [{ ...prev.chars[prev.chars.length - 1], c: " ", x0: prev.x1, x1: seg.x0, underline: false, strike: false }] : [];
         const joined = makeSeg([...prev.chars, ...space, ...seg.chars]);
         const main = prev.size >= seg.size ? prev : seg;
         merged[merged.length - 1] = { ...joined, size: main.size, base: main.base, y0: main.y0, y1: main.y1 };
@@ -779,13 +783,19 @@ function findMarker(row: Row) {
   const [first, second] = row.segs;
   const head = textOf(first.chars);
   if (row.segs.length === 2 && MARKER.test(head) && second.x0 - first.x1 < row.size * 4) {
-    const tab: Ch = { ...first.chars[first.chars.length - 1], c: "\t", x0: first.x1, x1: second.x0, underline: false };
+    const tab: Ch = { ...first.chars[first.chars.length - 1], c: "\t", x0: first.x1, x1: second.x0, underline: false, strike: false };
     const joined = makeSeg([...first.chars, tab, ...second.chars]);
     row.segs = [{ ...joined, size: second.size, base: second.base }];
     row.marker = { bullet: BULLETS.includes(head), textX: second.x0, count: first.chars.length };
     return;
   }
   if (row.segs.length !== 1) return;
+  // Puce collée au texte dans le même morceau, séparée seulement par un blanc (puce Wingdings de PowerPoint)
+  const [bullet, after] = first.chars;
+  if (after && BULLETS.includes(bullet.c) && bullet.c !== "-" && after.x0 - bullet.x1 > row.size * 0.25) {
+    row.marker = { bullet: true, textX: after.x0, count: 1 };
+    return;
+  }
   const match = /^(\S{1,6})\s+\S/.exec(head);
   if (!match || !MARKER.test(match[1])) return;
   const next = first.chars.findIndex((c, i) => i >= match[1].length && c.c.trim());
@@ -811,7 +821,7 @@ function makeParagraph(lines: Row[], frame: Frame, ctx: Ctx, bg: string, edge: n
     if (i === 0 && marker && !lineChars.some((c) => c.c === "\t")) {
       // « 1.   Texte » → « 1. » + tabulation + « Texte » : le texte reste aligné quelle que soit la police
       const start = lineChars.findIndex((c, k) => k >= marker.count && c.c.trim());
-      lineChars = [...lineChars.slice(0, marker.count), { ...lineChars[marker.count - 1], c: "\t", underline: false }, ...lineChars.slice(start)];
+      lineChars = [...lineChars.slice(0, marker.count), { ...lineChars[marker.count - 1], c: "\t", underline: false, strike: false }, ...lineChars.slice(start)];
     }
     if (i > 0) {
       const prev = parts[i - 1].chars[parts[i - 1].chars.length - 1];
@@ -819,8 +829,8 @@ function makeParagraph(lines: Row[], frame: Frame, ctx: Ctx, bg: string, edge: n
       const glued = prev.c === "-" || (cjk.test(prev.c) && cjk.test(lineChars[0].c));
       // Ligne nettement plus courte que les autres (« Jean » au-dessus de « Tremblay ») : le retour à la ligne est voulu, on le garde
       const short = lines[i - 1].x1 < edge - Math.max((edge - body) * 0.25, size * 3);
-      if (short) parts[i - 1].chars.push({ ...prev, c: "\n", underline: false });
-      else if (!glued) parts[i - 1].chars.push({ ...prev, c: " ", underline: prev.underline && lineChars[0].underline });
+      if (short) parts[i - 1].chars.push({ ...prev, c: "\n", underline: false, strike: false });
+      else if (!glued) parts[i - 1].chars.push({ ...prev, c: " ", underline: prev.underline && lineChars[0].underline, strike: prev.strike && lineChars[0].strike });
     }
     parts.push({ chars: lineChars, row: l });
   });
@@ -876,7 +886,7 @@ function tabbedParagraph(row: Row, frame: Frame, ctx: Ctx, bg: string): Paragrap
   row.segs.forEach((seg, i) => {
     if (i > 0) {
       const prev = row.segs[i - 1];
-      chars.push({ ...prev.chars[prev.chars.length - 1], c: "\t", underline: false });
+      chars.push({ ...prev.chars[prev.chars.length - 1], c: "\t", underline: false, strike: false });
       const last = i === row.segs.length - 1;
       if (last && frame.tx1 - seg.x1 <= 2 && seg.x0 - prev.x1 > 20) tabs.push({ pos: frame.tx1 - frame.x0, kind: "right" });
       else tabs.push({ pos: seg.x0 - frame.x0, kind: "left" });
@@ -1384,6 +1394,10 @@ function layoutRegion(items: Item[], frame: Frame, ctx: Ctx, bg: string, depth: 
       const extra = col.width - only.left - only.cols.reduce((s, c) => s + c.width, 0);
       return only.cols.map((c, k) => ({ ...c, width: c.width + (k === 0 ? only.left : 0) + (k === only.cols.length - 1 ? extra : 0) }));
     });
+    // Le haut de la zone est celui de son premier bloc : un paragraphe qui commencerait au-dessus serait descendu
+    // d'autant, et tout ce qui le suit avec lui
+    top = Math.min(top, ...flat.flatMap((c) => c.blocks.map((b) => b.top)));
+    bottom = Math.max(bottom, ...flat.flatMap((c) => c.blocks.map((b) => b.bottom)));
     blocks.push({ kind: "columns", top, bottom, left: left - frame.x0, cols: flat });
   });
   return blocks.sort((a, b) => a.top - b.top);
@@ -1570,17 +1584,43 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     return { kind: "image", top: top / r.scale, bottom: (top + h) / r.scale, left: left / r.scale, width: w / r.scale, data: images.add(data, ext), ext, behind: true };
   };
 
-  const turnedChars = raw.turned.length;
-  if (raw.segs.length && !turnedChars && isDesigned(raw, pageBox)) {
-    // Page mise en page par un graphiste (affiche, diapositive, certificat) : tout le décor reste en image de fond,
-    // et le texte est reposé par-dessus, modifiable, à sa place et dans ses couleurs.
+  // Texte caché sous une image posée par-dessus (titre recouvert par une capture d'écran sur une diapositive) :
+  // il ne se voit pas dans le PDF, il ne doit pas apparaître dans le document. On compare la page rendue avec
+  // et sans son texte : là où rien ne change, le texte est invisible.
+  const underImage = raw.segs.filter((s) => raw.images.some((i) => centerIn(s, i)));
+  if (underImage.length) {
+    const withText = render();
+    const without = renderDecor();
+    const hidden = new Set(
+      underImage.filter((s) => {
+        const x0 = Math.max(0, Math.floor(s.x0 * withText.scale));
+        const x1 = Math.min(withText.width, Math.ceil(s.x1 * withText.scale));
+        const y0 = Math.max(0, Math.floor(s.y0 * withText.scale));
+        const y1 = Math.min(withText.height, Math.ceil(s.y1 * withText.scale));
+        for (let y = y0; y < y1; y++) {
+          for (let i = (y * withText.width + x0) * 3, end = (y * withText.width + x1) * 3; i < end; i++) {
+            if (Math.abs(withText.data[i] - without.data[i]) > 24) return false;
+          }
+        }
+        return true;
+      }),
+    );
+    // (la couche de texte invisible des scans OCR est déjà écartée à la lecture : ici, c'est du texte recouvert)
+    if (hidden.size) raw.segs = raw.segs.filter((s) => !hidden.has(s));
+  }
+
+  /**
+   * Page mise en page par un graphiste (affiche, diapositive, certificat, schéma) : tout le décor reste en image de
+   * fond, et le texte est reposé par-dessus, modifiable, à sa place et dans ses couleurs.
+   */
+  const designed = async (segs: Seg[]): Promise<PageLayout> => {
     for (const link of raw.links) {
-      for (const seg of raw.segs) {
+      for (const seg of segs) {
         if (seg.base < link.y0 || seg.base > link.y1 + 2) continue;
         for (const ch of seg.chars) if ((ch.x0 + ch.x1) / 2 >= link.x0 && (ch.x0 + ch.x1) / 2 <= link.x1) ch.link = link.uri;
       }
     }
-    const items: Item[] = raw.segs.map((seg) => ({ ...seg, seg }));
+    const items: Item[] = segs.map((seg) => ({ ...seg, seg }));
     const extent = union(items);
     const blocks = layoutRegion(items, { x0: 0, x1: width, tx0: extent.x0, tx1: extent.x1 }, { fills: [], page: pageBox, onBackground: true, used: new Set() }, "", 0, 0, height);
     const left = Math.max(0, Math.min(...blocks.map(leftEdge)));
@@ -1589,7 +1629,12 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     const top = Math.max(0, Math.min(...blocks.map((b) => b.top)));
     const bottom = Math.max(0, height - Math.max(...blocks.map((b) => b.bottom)));
     return { ...layout, margin: { top, left, right, bottom }, blocks: [await decorPicture(pageBox), ...blocks] };
-  }
+  };
+
+  const turnedChars = raw.turned.length;
+  if (raw.segs.length && !turnedChars && isDesigned(raw, pageBox)) return designed(raw.segs);
+  // Copie intacte du texte, au cas où la page doive finalement être traitée comme une page graphique
+  const pristine = raw.segs.map((s) => ({ ...s, chars: s.chars.map((c) => ({ ...c })) }));
   if (!raw.segs.length) {
     if (!raw.images.length && !raw.drawings.length && !raw.strokes.length && !turnedChars) return layout;
     // Page sans texte lisible (scan, plan, photo) : gardée en image, à l'identique
@@ -1605,6 +1650,16 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     const seg = segs.find((g) => s.pos > g.base && s.pos < g.base + g.size * 0.35 && s.a >= g.x0 - 1.5 && s.b <= g.x1 + 1.5);
     if (!seg) return true;
     for (const ch of seg.chars) if ((ch.x0 + ch.x1) / 2 >= s.a - 0.5 && (ch.x0 + ch.x1) / 2 <= s.b + 0.5) ch.underline = true;
+    return false;
+  });
+  // Texte barré : un trait fin à mi-hauteur des lettres, sur une partie de la ligne
+  strokes = strokes.filter((s) => {
+    if (!s.horizontal || s.width > 4) return true;
+    const seg = segs.find((g) => s.pos > g.base - g.size * 0.5 && s.pos < g.base - g.size * 0.12 && s.a >= g.x0 - 3 && s.b <= g.x1 + 3);
+    if (!seg) return true;
+    const hit = seg.chars.filter((ch) => ch.c.trim() && (ch.x0 + ch.x1) / 2 >= s.a - 0.5 && (ch.x0 + ch.x1) / 2 <= s.b + 0.5);
+    if (!hit.length) return true;
+    for (const ch of seg.chars) if ((ch.x0 + ch.x1) / 2 >= s.a - 0.5 && (ch.x0 + ch.x1) / 2 <= s.b + 0.5) ch.strike = true;
     return false;
   });
   for (const link of raw.links) {
@@ -1662,16 +1717,31 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     if (labels.length && (textArea > area(figure) * 0.3 || area(figure) > area(pageBox) * 0.6)) continue;
     figures.push(figure);
   }
+  /**
+   * Image posée à côté du texte (bandeau décoratif sur toute la hauteur, logo en haut d'une diapositive, photo
+   * à côté d'un paragraphe) : dans le fil du texte, elle repousserait ce texte sous elle, jusqu'à plusieurs pages
+   * plus loin. Elle est donc accrochée à sa place exacte dans la page, et le texte garde la sienne.
+   */
+  const besideText = (box: Box) =>
+    segs.some((s) => {
+      const overlap = Math.min(s.y1, box.y1) - Math.max(s.y0, box.y0);
+      return overlap > (s.y1 - s.y0) * 0.5 && (s.x1 <= box.x0 + 1 || s.x0 >= box.x1 - 1);
+    }) ||
+    // Deux images à la même hauteur (logo au-dessus d'une capture, photos côte à côte) : mises l'une sous
+    // l'autre, elles dépasseraient la page
+    [...pictures, ...figures].some((o) => o !== box && Math.min(o.y1, box.y1) - Math.max(o.y0, box.y0) > 2 && area(inter(o, box)) < area(box) * 0.9);
+  const behind: Picture[] = [];
+
   for (const box of figures) {
     segs = segs.filter((s) => !centerIn(s, box));
     pictures = pictures.filter((p) => !centerIn(p, box));
     strokes = strokes.filter((s) => !centerIn(strokeBox(s), box));
     const picture = await snapshot({ x0: Math.max(0, box.x0 - 1), y0: Math.max(0, box.y0 - 1), x1: Math.min(width, box.x1 + 1), y1: Math.min(height, box.y1 + 1) }, false);
-    items.push({ x0: box.x0, y0: box.y0, x1: box.x1, y1: box.y1, block: picture });
+    if (besideText(box)) behind.push({ ...picture, behind: true });
+    else items.push({ x0: box.x0, y0: box.y0, x1: box.x1, y1: box.y1, block: picture });
   }
 
   // Images
-  const behind: Picture[] = [];
   for (const box of icons) behind.push(await decorPicture({ x0: Math.max(0, box.x0 - 0.5), y0: Math.max(0, box.y0 - 0.5), x1: Math.min(width, box.x1 + 0.5), y1: Math.min(height, box.y1 + 0.5) }));
   for (const image of pictures) {
     const box = inter(image, pageBox);
@@ -1681,8 +1751,8 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
     const picture: Picture = encoded
       ? { kind: "image", top: image.y0, bottom: image.y1, left: image.x0, width: image.x1 - image.x0, data: images.add(encoded.data, encoded.ext), ext: encoded.ext, behind: false }
       : await snapshot(box, true);
-    if (covered && area(box) > area(pageBox) * 0.3) {
-      // Grande image sous le texte (fond de page, papier à en-tête) : placée derrière le texte
+    if ((covered && area(box) > area(pageBox) * 0.3) || besideText(box)) {
+      // Grande image sous le texte (fond de page, papier à en-tête) ou image à côté du texte : accrochée à sa place
       behind.push({ ...picture, behind: true });
     } else items.push({ x0: image.x0, y0: image.y0, x1: image.x1, y1: image.y1, block: picture });
   }
@@ -1694,6 +1764,24 @@ async function analysePage(m: typeof MuPDF, page: MuPDF.Page | MuPDF.PDFPage, im
   if (!items.length) return { ...layout, blocks: behind };
   const text = union(items);
   const blocks = layoutRegion(items, { x0: 0, x1: width, tx0: text.x0, tx1: text.x1 }, ctx, "", 0, 0, height);
+
+  // Blocs qui se chevauchent (schéma fait de cadres et de flèches) : mis l'un sous l'autre, ils déborderaient
+  // sur plusieurs pages. La page est alors gardée telle quelle en fond, avec son texte modifiable par-dessus.
+  const overlapping = (list: Block[]): boolean => {
+    let reach = -Infinity;
+    let reachHeight = 0;
+    for (const b of [...list].sort((a, c) => a.top - c.top)) {
+      const overlap = reach - b.top;
+      if (overlap > 4 && overlap > Math.min(reachHeight, b.bottom - b.top) * 0.25) return true;
+      if (b.kind === "columns" && b.cols.some((c) => overlapping(c.blocks))) return true;
+      if (b.bottom > reach) {
+        reach = b.bottom;
+        reachHeight = b.bottom - b.top;
+      }
+    }
+    return false;
+  };
+  if (!turnedChars && pristine.length && overlapping(blocks)) return designed(pristine);
 
   // Aplats de couleur qui ne sont le fond d'aucune cellule ni d'aucune colonne (encadrés, bandeaux, pastilles,
   // formes pleines) : gardés tels quels, en image derrière le texte, à leur place exacte.

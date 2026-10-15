@@ -63,7 +63,7 @@ class Slide {
     const font = esc(run.font);
     const link = run.link ? this.relation(`link:${run.link}`, (id) => `<Relationship Id="${id}" Type="${R}/hyperlink" Target="${esc(run.link)}" TargetMode="External"/>`) : "";
     const props =
-      `<a:rPr lang="fr-FR" sz="${Math.max(100, Math.round(run.size * this.scale * 100))}" b="${run.bold ? 1 : 0}" i="${run.italic ? 1 : 0}"${run.underline ? ` u="sng"` : ""}` +
+      `<a:rPr lang="fr-FR" sz="${Math.max(100, Math.round(run.size * this.scale * 100))}" b="${run.bold ? 1 : 0}" i="${run.italic ? 1 : 0}"${run.underline ? ` u="sng"` : ""}${run.strike ? ` strike="sngStrike"` : ""}` +
       `${run.script ? ` baseline="${run.script > 0 ? 30000 : -25000}"` : ""} dirty="0">` +
       `<a:solidFill><a:srgbClr val="${run.color}"/></a:solidFill>` +
       (run.highlight ? `<a:highlight><a:srgbClr val="${run.highlight}"/></a:highlight>` : "") +
