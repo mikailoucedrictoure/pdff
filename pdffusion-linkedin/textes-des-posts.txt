@@ -1,0 +1,171 @@
+PDFFUSION — SÉRIE LINKEDIN (6 publications)
+=============================================
+
+COMMENT PUBLIER UN CARROUSEL SUR LINKEDIN
+1. Sur LinkedIn, cliquez sur « Commencer un post ».
+2. Cliquez sur le « + » (ou les trois points), puis sur « Ajouter un document ».
+3. Choisissez le fichier PDF du dossier (ex. : 1-le-projet\pdffusion-1-le-projet.pdf).
+4. Donnez un titre au document (proposé ci-dessous pour chaque post).
+5. Collez le texte du post, puis « Publier ».
+Les images PNG du même dossier servent si vous préférez publier des images, ou pour d'autres réseaux.
+
+RYTHME CONSEILLÉ
+Une publication tous les 2 ou 3 jours, dans l'ordre (1 à 6), le matin en semaine.
+Répondez aux commentaires dans la première heure : c'est ce qui fait monter un post.
+
+
+---------------------------------------------
+POST 1 — LE PROJET
+Fichier : 1-le-projet\pdffusion-1-le-projet.pdf
+Titre du document : pdffusion : tous vos documents dans un seul outil
+---------------------------------------------
+Un site pour fusionner. Un autre pour convertir. Un troisième pour signer.
+
+Et trop souvent, avant d'obtenir son fichier : un compte à créer, une limite gratuite, un filigrane.
+
+En tant qu'étudiant, je perdais du temps à chaque dossier. Alors j'ai construit l'outil que je cherchais.
+
+Il s'appelle pdffusion :
+→ 20 outils au même endroit (fusionner, convertir, compresser, signer, protéger…)
+→ 29 formats reconnus : PDF, Word, Excel, PowerPoint, images
+→ gratuit, sans inscription, sans filigrane ajouté
+→ vos fichiers sont supprimés dès que le traitement est terminé
+→ le code source est ouvert
+
+Il fonctionne dans le navigateur, sur téléphone comme sur ordinateur.
+
+C'est un projet étudiant, développé pour servir. J'ai besoin de vos retours pour l'améliorer : essayez-le et dites-moi ce qui manque.
+
+👉 https://pdffusion.app
+✉️ contact@pdffusion.app
+
+Dans les prochains jours, je vous montre 5 usages concrets, un par publication.
+
+#ProjetÉtudiant #PDF #Productivité #OpenSource #DéveloppementWeb
+
+
+---------------------------------------------
+POST 2 — FUSIONNER
+Fichier : 2-fusionner\pdffusion-2-fusionner.pdf
+Titre du document : Envoyer tout un dossier en un seul PDF
+---------------------------------------------
+« Merci d'envoyer votre dossier en un seul PDF. »
+
+CV, lettre de motivation, relevé de notes, attestation : quatre fichiers, et une consigne qui revient dans presque toutes les démarches.
+
+Avec pdffusion, cela tient en trois gestes :
+1. Déposez vos fichiers (PDF, Word, Excel, images : vous pouvez les mélanger).
+2. Mettez-les dans l'ordre.
+3. Téléchargez un seul PDF, avec un signet par document.
+
+Utile pour un dossier d'inscription, une candidature, un mémoire en plusieurs chapitres ou des photos de documents prises au téléphone.
+
+Gratuit, sans inscription, sans filigrane ajouté.
+
+👉 https://pdffusion.app
+✉️ Un retour ? contact@pdffusion.app
+
+Usage 1 sur 5 de ma série sur pdffusion, mon projet étudiant.
+
+#PDF #Candidature #VieÉtudiante #Productivité #ProjetÉtudiant
+
+
+---------------------------------------------
+POST 3 — CONVERTIR
+Fichier : 3-convertir\pdffusion-3-convertir.pdf
+Titre du document : PDF, Word, images : changer de format sans rien installer
+---------------------------------------------
+PDF → Word pour modifier un texte.
+Word → PDF pour qu'il s'affiche partout pareil.
+Photo → PDF pour l'envoyer à un organisme.
+
+On a tous besoin de changer de format, rarement au bon moment.
+
+Dans pdffusion, vous déposez le fichier, et seuls les formats possibles s'affichent. Vous choisissez, vous téléchargez.
+
+29 formats sont reconnus : PDF, Word, Excel, PowerPoint, OpenDocument, JPG, PNG, photos d'iPhone (HEIC), EPUB et d'autres.
+
+Un point d'honnêteté : quand on part d'un PDF, la mise en page est reconstruite. Relisez toujours le résultat avant de l'envoyer.
+
+👉 https://pdffusion.app
+✉️ Un format qui vous manque ? contact@pdffusion.app
+
+Usage 2 sur 5 de ma série sur pdffusion, mon projet étudiant.
+
+#PDF #Word #Bureautique #Productivité #ProjetÉtudiant
+
+
+---------------------------------------------
+POST 4 — COMPRESSER
+Fichier : 4-compresser\pdffusion-4-compresser.pdf
+Titre du document : PDF trop lourd : l'alléger en trois gestes
+---------------------------------------------
+« Fichier trop volumineux. »
+
+Le portail refuse votre PDF. Le courriel ne part pas. Et l'échéance est ce soir.
+
+Dans pdffusion :
+1. Déposez votre PDF : son poids s'affiche tout de suite.
+2. Choisissez le niveau : Léger, Recommandé ou Maximum.
+3. Téléchargez la version allégée : le poids avant et après est affiché.
+
+Dans mon essai, un rapport rempli de captures d'écran est passé de 14,8 Mo à 474 ko. Le gain dépend du contenu : un PDF déjà optimisé ne maigrit presque pas, et l'outil vous le dit.
+
+Gratuit, sans inscription.
+
+👉 https://pdffusion.app
+✉️ Un PDF qui résiste ? contact@pdffusion.app
+
+Usage 3 sur 5 de ma série sur pdffusion, mon projet étudiant.
+
+#PDF #Productivité #Démarches #VieÉtudiante #ProjetÉtudiant
+
+
+---------------------------------------------
+POST 5 — SIGNER
+Fichier : 5-signer\pdffusion-5-signer.pdf
+Titre du document : Signer un PDF sans imprimer ni scanner
+---------------------------------------------
+Imprimer. Signer. Scanner. Renvoyer.
+
+Quatre étapes pour une signature, quand on n'a ni imprimante ni scanneur.
+
+Avec pdffusion, vous signez directement sur le PDF :
+1. Déposez le document.
+2. Créez votre signature : dessinez-la au doigt, écrivez votre nom ou importez une image.
+3. Choisissez la page et l'endroit.
+
+Cela fonctionne aussi depuis le téléphone.
+
+Bon à savoir : c'est une signature électronique simple, comme une signature manuscrite scannée. Elle suffit dans la plupart des démarches courantes ; certains actes exigent une signature qualifiée, avec un certificat.
+
+👉 https://pdffusion.app
+✉️ Un retour ? contact@pdffusion.app
+
+Usage 4 sur 5 de ma série sur pdffusion, mon projet étudiant.
+
+#Signature #PDF #Démarches #Productivité #ProjetÉtudiant
+
+
+---------------------------------------------
+POST 6 — PROTÉGER
+Fichier : 6-proteger\pdffusion-6-proteger.pdf
+Titre du document : Trois façons de protéger un document avant de l'envoyer
+---------------------------------------------
+Bulletin de salaire, contrat, relevé bancaire : certains documents ne regardent que vous.
+
+Trois façons de les protéger avec pdffusion avant de les envoyer :
+1. Protéger : un mot de passe sur le PDF (chiffrement AES-256). Le mot de passe n'est jamais enregistré.
+2. Caviarder : noms, courriels, téléphones sont supprimés du fichier, pas seulement recouverts.
+3. Filigrane : « COPIE » ou « CONFIDENTIEL » en travers de chaque page.
+
+Et de mon côté : aucun document conservé, aucune analyse, des connexions chiffrées, et un code source ouvert que chacun peut vérifier.
+
+C'était le dernier usage de la série. Merci à celles et ceux qui ont testé et commenté.
+
+Quel outil dois-je ajouter ensuite ?
+
+👉 https://pdffusion.app
+✉️ contact@pdffusion.app
+
+#Confidentialité #PDF #Sécurité #OpenSource #ProjetÉtudiant

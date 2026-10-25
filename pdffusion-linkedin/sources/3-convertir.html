@@ -1,0 +1,164 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>3-convertir</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Onest:wght@400..700&display=block');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#0b0920}
+body{font-family:'Onest',sans-serif;-webkit-font-smoothing:antialiased}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;isolation:isolate}
+.d{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-0.025em;line-height:1}
+
+/* Fonds */
+.dark{background:#120f36;color:#fff}
+.dark .bg{position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(820px 720px at -8% -6%, rgba(109,92,255,.85), transparent 62%),
+  radial-gradient(640px 560px at 108% -4%, rgba(229,50,45,.38), transparent 62%),
+  radial-gradient(900px 760px at 92% 104%, rgba(46,78,230,.55), transparent 62%),
+  #120f36}
+.brand{background:#3a2bd6;color:#fff}
+.brand .bg{position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(900px 800px at -10% -10%, #8f82ff, transparent 62%),
+  radial-gradient(700px 600px at 110% 0%, rgba(229,50,45,.45), transparent 62%),
+  radial-gradient(1000px 800px at 60% 115%, #120f36, transparent 65%),
+  #4a36f0}
+.light{background:#f3f2ff;color:#17143a}
+.light .bg{position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(760px 620px at 104% -6%, rgba(143,130,255,.42), transparent 62%),
+  radial-gradient(700px 600px at -10% 104%, rgba(143,130,255,.30), transparent 62%),
+  #f3f2ff}
+/* Sol quadrillé du site */
+.floor{position:absolute;left:-40%;right:-40%;bottom:-6%;height:46%;z-index:-1;opacity:.5;
+  background-image:linear-gradient(rgba(160,150,255,.5) 2px, transparent 2px),linear-gradient(90deg, rgba(160,150,255,.5) 2px, transparent 2px);
+  background-size:120px 120px;transform:perspective(900px) rotateX(64deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top, #000 10%, transparent 85%)}
+.light .floor{opacity:.28;background-image:linear-gradient(rgba(90,72,240,.55) 2px, transparent 2px),linear-gradient(90deg, rgba(90,72,240,.55) 2px, transparent 2px)}
+
+/* En-tête et pied */
+.top{position:absolute;top:60px;left:72px;right:72px;display:flex;align-items:center;justify-content:space-between}
+.mark{display:flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque';font-weight:700;font-size:36px;letter-spacing:-.02em}
+.tag{font-size:23px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:13px 24px;border-radius:999px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.22)}
+.light .tag{background:#fff;border-color:#e1def7;color:#5a48f0}
+.foot{position:absolute;bottom:54px;left:72px;right:72px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.url{font-size:27px;font-weight:600;opacity:.85}
+.dots{display:flex;gap:10px;align-items:center}
+.dots i{width:12px;height:12px;border-radius:99px;background:currentColor;opacity:.28}
+.dots i.on{width:44px;opacity:1}
+.next{display:flex;align-items:center;gap:12px;font-size:27px;font-weight:700;padding:15px 26px 15px 30px;border-radius:999px;background:#fff;color:#17143a;box-shadow:0 14px 30px -12px rgba(0,0,0,.5)}
+.light .next{background:#6d5cff;color:#fff;box-shadow:0 16px 30px -12px rgba(74,54,240,.7)}
+.footpad{background:linear-gradient(to top, var(--fade) 60%, transparent);position:absolute;left:0;right:0;bottom:0;height:200px;z-index:4}
+.dark{--fade:#120f36}.light{--fade:#f3f2ff}.brand{--fade:#1a1466}
+
+.col{position:absolute;inset:176px 0 0 0;display:flex;flex-direction:column;align-items:center}
+.body{align-self:stretch;margin:0 72px;flex:none}
+.body.fill{flex:1;display:flex;flex-direction:column;margin-bottom:176px;min-height:0}
+.body.fill .cards,.body.fill .grid{flex:1}
+.body.fill .card{flex:1}
+em{font-style:normal;color:#b3aaff}
+.light em{color:#5a48f0}
+.brand em{color:#ffd7d5}
+.kick{display:inline-flex;align-items:center;gap:12px;font-size:25px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:14px 26px;border-radius:999px;background:#fff;color:#4a36f0;margin-bottom:38px}
+.kick b{width:12px;height:12px;border-radius:9px;background:#e5322d}
+.h1{font-size:104px}
+.h2{font-size:80px}
+.sub{font-size:36px;line-height:1.38;margin-top:34px;opacity:.9;max-width:900px}
+.light .sub{color:#4b4772;opacity:1}
+
+/* Téléphone */
+.pw{position:relative;flex:none;margin-top:58px}
+.phone{width:640px;border-radius:84px;padding:16px;background:#0b0920;
+  box-shadow:0 0 0 2px rgba(255,255,255,.22), 0 70px 120px -30px rgba(8,5,40,.75), 0 30px 60px -30px rgba(8,5,40,.6)}
+.light .phone{box-shadow:0 0 0 2px rgba(23,20,58,.5), 0 70px 110px -34px rgba(60,45,190,.55), 0 30px 60px -30px rgba(23,20,58,.35)}
+.screen{border-radius:68px;overflow:hidden;background:#f3f2ff;position:relative}
+.screen img{display:block;width:100%;position:absolute;left:0}
+/* Navigateur */
+.browser{flex:none;margin-top:64px;border-radius:28px;overflow:hidden;background:#0b0920;box-shadow:0 0 0 2px rgba(255,255,255,.22), 0 70px 120px -30px rgba(8,5,40,.8)}
+.light .browser{box-shadow:0 0 0 2px rgba(23,20,58,.35), 0 70px 110px -34px rgba(60,45,190,.5)}
+.bar{height:58px;display:flex;align-items:center;gap:10px;padding:0 24px;background:#0b0920}
+.bar i{width:14px;height:14px;border-radius:9px;background:#3a3670}
+.bar span{margin-left:18px;flex:1;height:34px;border-radius:99px;background:#1d1852;color:#a6a1d4;font-size:18px;display:flex;align-items:center;padding:0 20px}
+.browser img{display:block;width:100%}
+
+/* Étapes */
+.num{font-family:'Bricolage Grotesque';font-weight:800;font-size:30px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:16px;margin-bottom:26px;color:#5a48f0}
+.dark .num{color:#b3aaff}
+.num b{display:inline-flex;align-items:center;justify-content:center;width:74px;height:74px;border-radius:24px;background:linear-gradient(135deg,#8f82ff,#4a36f0);color:#fff;font-size:38px;letter-spacing:0;box-shadow:0 18px 30px -14px rgba(74,54,240,.8)}
+.chip{position:absolute;z-index:6;display:flex;align-items:center;gap:14px;padding:18px 26px 18px 20px;border-radius:26px;background:#fff;color:#17143a;font-size:27px;font-weight:700;line-height:1.2;box-shadow:0 30px 50px -18px rgba(23,20,58,.55), 0 0 0 1.5px rgba(23,20,58,.08)}
+.chip s{text-decoration:none;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:17px;background:#e0f5ec;color:#13865a;flex:none}
+.chip.v s{background:#eceaff;color:#5a48f0}
+.chip small{display:block;font-size:21px;font-weight:500;color:#625e86}
+
+/* Listes et tuiles */
+.cards{display:flex;flex-direction:column;gap:22px;margin-top:46px}
+.card{display:flex;gap:26px;align-items:center;padding:34px 36px;border-radius:38px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.18);font-size:34px;line-height:1.32;font-weight:500}
+.light .card{background:#fff;border-color:#e1def7;box-shadow:0 24px 50px -30px rgba(40,30,140,.4)}
+.card s{text-decoration:none;flex:none;width:76px;height:76px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8f82ff,#4a36f0);color:#fff;font-family:'Bricolage Grotesque';font-weight:800;font-size:36px}
+.card b{display:block;font-family:'Bricolage Grotesque';font-weight:700;font-size:42px;letter-spacing:-.02em;margin-bottom:6px}
+.card span{opacity:.85}
+.light .card span{color:#4b4772;opacity:1}
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:24px;margin-top:46px}
+.tile{display:flex;flex-direction:column;justify-content:center;padding:40px 38px 38px;border-radius:40px;background:#fff;border:1.5px solid #e1def7;box-shadow:0 24px 50px -30px rgba(40,30,140,.4)}
+.tile .n{font-family:'Bricolage Grotesque';font-weight:800;font-size:178px;line-height:.9;letter-spacing:-.05em;background:linear-gradient(135deg,#8f82ff,#4a36f0 70%);-webkit-background-clip:text;color:transparent}
+.tile p{font-size:38px;font-weight:600;margin-top:14px;line-height:1.25}
+.tile small{display:block;font-size:27px;line-height:1.3;color:#625e86;font-weight:500;margin-top:8px}
+.pills{display:flex;flex-wrap:wrap;gap:16px;margin-top:46px}
+.pill{font-size:34px;font-weight:700;padding:20px 32px;border-radius:999px;background:#fff;border:1.5px solid #e1def7;color:#17143a}
+.dark .pill{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff}
+.pill.x{text-decoration:line-through;text-decoration-thickness:4px;text-decoration-color:#e5322d;color:#8a86ad}
+.note{margin-top:24px;font-size:30px;line-height:1.4;padding:26px 30px;border-radius:28px;background:#fff3d1;color:#7a5300;font-weight:500}
+.dark .note{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2)}
+
+/* Dernière diapositive */
+.cta{position:absolute;left:72px;right:72px;top:20px;bottom:176px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.cta>*{margin-top:0!important;margin-bottom:0!important}
+.cta .mail{align-self:stretch}
+.site{font-size:136px}
+.trust{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.trust span{display:flex;align-items:center;gap:10px;font-size:30px;font-weight:600;padding:15px 24px 15px 18px;border-radius:999px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.26)}
+.trust svg{width:26px;height:26px}
+.mail{margin-top:46px;padding:38px 40px;border-radius:40px;background:#fff;color:#17143a;box-shadow:0 40px 70px -30px rgba(8,5,40,.7)}
+.mail p{font-size:30px;color:#4b4772;line-height:1.35}
+.mail b{display:block;font-family:'Bricolage Grotesque';font-weight:800;font-size:62px;letter-spacing:-.03em;color:#4a36f0;margin-top:10px}
+.by{margin-top:38px;font-size:30px;line-height:1.45;opacity:.92}
+.by b{font-weight:700}
+.nextep{margin-top:26px;display:inline-flex;gap:12px;align-items:center;font-size:28px;font-weight:700;color:#ffd7d5}
+</style><body>
+<section class="s dark"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="body"><div class="kick"><b></b>Usage n° 2 · Convertir</div><h1 class="d h1" style="font-size:112px">PDF <em>→</em> Word.<br>Word <em>→</em> PDF.<br>Photo <em>→</em> PDF.</h1><p class="sub">Un seul outil pour changer de format, sans rien installer.</p></div><div class="pw" style="margin-top:76px;transform:translateX(-10px) rotate(4deg)"><div class="phone"><div class="screen" style="height:1125.5794871794872px"><img src="file:///C:/Users/VICTUS/AppData/Local/Temp/claude/C--Publicus-Group-clients-pdff/93f6fea6-a507-4f38-b6da-63f2bd84dfbd/scratchpad/shots/m-convertir-2b.png" style="top:-121.6px"></div></div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="next">Glissez <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+</section>
+<section class="s light"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="body"><div class="num"><b>1</b>ÉTAPE 1 SUR 3</div><h2 class="d h2">Déposez votre fichier</h2><p class="sub">Document, tableur, présentation ou image.</p></div><div class="pw" style="transform:translateX(0px) rotate(0deg)"><div class="phone"><div class="screen" style="height:1013.3333333333334px"><img src="file:///C:/Users/VICTUS/AppData/Local/Temp/claude/C--Publicus-Group-clients-pdff/93f6fea6-a507-4f38-b6da-63f2bd84dfbd/scratchpad/shots/m-convertir-1.png" style="top:-233.84615384615384px"></div></div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="next">Glissez <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+</section>
+<section class="s light"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="body"><div class="num"><b>2</b>ÉTAPE 2 SUR 3</div><h2 class="d h2">Choisissez le format</h2><p class="sub">Seuls les formats possibles pour votre fichier s'affichent.</p></div><div class="pw" style="transform:translateX(0px) rotate(0deg)"><div class="phone"><div class="screen" style="height:1047.6307692307691px"><img src="file:///C:/Users/VICTUS/AppData/Local/Temp/claude/C--Publicus-Group-clients-pdff/93f6fea6-a507-4f38-b6da-63f2bd84dfbd/scratchpad/shots/m-convertir-2b.png" style="top:-199.54871794871795px"></div></div><div class="chip v" style="right:-140px;top:330px"><s><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></s><div>PDF vers Word<small>pour modifier le texte</small></div></div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="next">Glissez <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+</section>
+<section class="s light"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="body"><div class="num"><b>3</b>ÉTAPE 3 SUR 3</div><h2 class="d h2">Téléchargez le résultat</h2><p class="sub">Depuis un PDF, la mise en page est reconstruite : relisez avant d'envoyer.</p></div><div class="pw" style="transform:translateX(0px) rotate(0deg)"><div class="phone"><div class="screen" style="height:720.2461538461539px"><img src="file:///C:/Users/VICTUS/AppData/Local/Temp/claude/C--Publicus-Group-clients-pdff/93f6fea6-a507-4f38-b6da-63f2bd84dfbd/scratchpad/shots/m-convertir-3.png" style="top:-526.9333333333334px"></div></div><div class="chip" style="right:-140px;top:150px"><s><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></s><div>CV.docx<small>prêt à modifier dans Word</small></div></div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="next">Glissez <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+</section>
+<section class="s dark"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="body fill"><h2 class="d h2"><em>29 formats</em> reconnus</h2><p class="sub">Ceux qui circulent vraiment dans les administrations, les écoles et les entreprises.</p>
+        <div class="pills" style="gap:18px"><span class="pill" style="font-size:38px;padding:24px 38px">PDF</span><span class="pill" style="font-size:38px;padding:24px 38px">Word</span><span class="pill" style="font-size:38px;padding:24px 38px">Excel</span><span class="pill" style="font-size:38px;padding:24px 38px">PowerPoint</span><span class="pill" style="font-size:38px;padding:24px 38px">OpenDocument</span><span class="pill" style="font-size:38px;padding:24px 38px">JPG</span><span class="pill" style="font-size:38px;padding:24px 38px">PNG</span><span class="pill" style="font-size:38px;padding:24px 38px">HEIC (iPhone)</span><span class="pill" style="font-size:38px;padding:24px 38px">WebP</span><span class="pill" style="font-size:38px;padding:24px 38px">TIFF</span><span class="pill" style="font-size:38px;padding:24px 38px">SVG</span><span class="pill" style="font-size:38px;padding:24px 38px">CSV</span><span class="pill" style="font-size:38px;padding:24px 38px">EPUB</span><span class="pill" style="font-size:38px;padding:24px 38px">RTF</span><span class="pill" style="font-size:38px;padding:24px 38px">TXT</span><span class="pill" style="font-size:38px;padding:24px 38px">HTML</span></div>
+        <div style="flex:1"></div><div class="note">Les photos d'iPhone (HEIC) sont converties directement dans votre navigateur.</div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class=""></i></div><div class="next">Glissez <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div>
+</section>
+<section class="s brand"><div class="bg"></div><div class="floor"></div>
+  <div class="top"><div class="mark"><svg viewBox="0 0 32 32" width="52" height="52"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f82ff"/><stop offset="1" stop-color="#4a36f0"/></linearGradient></defs><rect x="9" y="3" width="18" height="23" rx="4" fill="#e5322d" opacity="0.9" transform="rotate(12 18 14)"/><rect x="5" y="6" width="18" height="23" rx="4" fill="url(#lg)"/><path d="M10 13h8M10 17h8M10 21h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>pdffusion</div><div class="tag">Usage 2 · Convertir</div></div>
+  <div class="col"><div class="cta"><div class="kick"><b></b>Projet étudiant</div><p class="sub" style="margin-top:0;font-size:40px;opacity:1;font-weight:500">Le bon format, sans logiciel à installer.</p><div class="d site">pdffusion<em>.app</em></div>
+  <div class="trust"><span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Gratuit</span><span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Sans inscription</span><span><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Sans filigrane ajouté</span></div>
+  <div class="mail"><p>Un format qui vous manque ? Dites-le-moi :</p><b>contact@pdffusion.app</b></div>
+  <p class="by">Conçu et développé par <b>Mikailou Cedric Toure</b>.<br>Le code source est ouvert (licence MIT).</p>
+  <div class="nextep">Prochain usage : alléger un PDF trop lourd <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></div>
+  <div class="footpad"></div>
+  <div class="foot"><div class="url">pdffusion.app</div><div class="dots"><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i></div><div class="url">contact@pdffusion.app</div></div>
+</section></body></html>
